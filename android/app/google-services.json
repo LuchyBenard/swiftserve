@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "196630437796",
+    "project_id": "swiftserve-c6d4e",
+    "storage_bucket": "swiftserve-c6d4e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196630437796:android:add19d4c2109f651536b31",
+        "android_client_info": {
+          "package_name": "com.example.swiftserve"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4QYr26jPLWZurCRnCBfvHvzCsXWCEcQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196630437796:android:4f280e4883c57be6536b31",
+        "android_client_info": {
+          "package_name": "com.luchyapp.swiftserve"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4QYr26jPLWZurCRnCBfvHvzCsXWCEcQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

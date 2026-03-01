@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../pages/provider/provider_active_jobs_page.dart';
 import '../pages/provider/provider_earnings_page.dart';
 import '../pages/provider/provider_availability_page.dart';
+import '../pages/provider/provider_schedule_page.dart';
 
 class ProviderBottomNav extends StatefulWidget {
   const ProviderBottomNav({super.key});
@@ -15,7 +16,7 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
 
   final List<Widget> _pages = [
     const ProviderActiveJobsPage(),
-    const Center(child: Text("Schedule", style: TextStyle(color: Colors.white))),
+    const ProviderSchedulePage(),
     const ProviderEarningsPage(),
     const ProviderAvailabilityPage(),
   ];
@@ -51,7 +52,15 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
             Positioned(
               top: 0,
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Create New Service Request (Mock UI Coming Soon!)"),
+                      backgroundColor: Color(0xFF142216),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
                 child: Container(
                   width: 56,
                   height: 56,

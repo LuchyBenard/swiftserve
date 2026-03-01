@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../pages/bottomnav.dart';
-import '../pages/auth/sign_up_page.dart';
+import '../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../pages/auth/forgot_password_page.dart';
+import '../pages/auth/sign_up_page.dart';
+import '../pages/auth/worker_registration_page.dart';
+import '../pages/bottomnav.dart';
 
 class WelcomePage extends StatefulWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -145,22 +148,40 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                      
                      const SizedBox(height: 40),
                      
-                     // Form
-                     _buildInput(
-                       controller: _emailController,
-                       icon: Icons.mail_outline,
-                       hint: 'Email address',
-                       inputBg: inputBg,
-                       neonGreen: neonGreen,
-                     ),
-                     const SizedBox(height: 20),
-                     _buildInput(
-                       controller: _passwordController,
-                       icon: Icons.lock_outline,
-                       hint: 'Password',
-                       inputBg: inputBg,
-                       neonGreen: neonGreen,
-                       isPassword: true,
+                     DefaultTabController(
+                       length: 2,
+                       child: Column(
+                         children: [
+                           TabBar(
+                             indicatorColor: neonGreen,
+                             labelColor: neonGreen,
+                             unselectedLabelColor: Colors.grey[600],
+                             labelStyle: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+                             tabs: const [
+                               Tab(text: 'CLIENT'),
+                               Tab(text: 'PROVIDER'),
+                             ],
+                           ),
+                           const SizedBox(height: 30),
+                           // Form
+                           _buildInput(
+                             controller: _emailController,
+                             icon: Icons.mail_outline,
+                             hint: 'Email address',
+                             inputBg: inputBg,
+                             neonGreen: neonGreen,
+                           ),
+                           const SizedBox(height: 20),
+                           _buildInput(
+                             controller: _passwordController,
+                             icon: Icons.lock_outline,
+                             hint: 'Password',
+                             inputBg: inputBg,
+                             neonGreen: neonGreen,
+                             isPassword: true,
+                           ),
+                         ],
+                       ),
                      ),
                      
                      const SizedBox(height: 10),
@@ -191,12 +212,45 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                        width: double.infinity,
                        height: 60,
                        child: ElevatedButton(
-                         onPressed: () {
-                             // Login Logic -> Navigate to Home
-                             Navigator.pushReplacement(
-                               context,
-                               MaterialPageRoute(builder: (context) => const BottomNavPage()),
+                         onPressed: () async {
+                           if (_emailController.text.trim().isEmpty || _passwordController.text.trim().isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Please enter both email and password')),
+                              );
+                              return;
+                           }
+
+                           try {
+                             showDialog(
+                               context: context,
+                               barrierDismissible: false,
+                               builder: (context) => const Center(child: CircularProgressIndicator(color: Color(0xFF25F46A))),
                              );
+
+                             await AuthService().signIn(
+                               _emailController.text.trim(),
+                               _passwordController.text.trim(),
+                             );
+
+                             if (context.mounted) {
+                               Navigator.pop(context); // Close loading dialog
+                               // AuthGate will handle navigation automatically
+                             }
+                           } on FirebaseAuthException catch (e) {
+                             if (context.mounted) {
+                               Navigator.pop(context); // Close loading dialog
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                 SnackBar(content: Text(e.message ?? 'Login failed')),
+                               );
+                             }
+                           } catch (e) {
+                             if (context.mounted) {
+                               Navigator.pop(context); // Close loading dialog
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                 const SnackBar(content: Text('An unexpected error occurred')),
+                               );
+                             }
+                           }
                          },
                          style: ElevatedButton.styleFrom(
                            backgroundColor: neonGreen,
@@ -274,12 +328,32 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                                 MaterialPageRoute(builder: (context) => const SignUpPage()),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Sign Up',
                               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                             ),
                           )
                        ],
+                     ),
+                     const SizedBox(height: 12),
+                     
+                     // Provider Link
+                     TextButton(
+                       onPressed: () {
+                         Navigator.push(
+                           context,
+                           MaterialPageRoute(builder: (context) => const WorkerRegistrationPage()),
+                         );
+                       },
+                       child: Text(
+                         'BECOME A SERVICE PROVIDER',
+                         style: GoogleFonts.spaceGrotesk(
+                           color: neonGreen,
+                           fontSize: 12,
+                           fontWeight: FontWeight.bold,
+                           letterSpacing: 1.2,
+                         ),
+                       ),
                      ),
                   ],
                 ),
@@ -298,6 +372,7 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
     required Color inputBg,
     required Color neonGreen,
     bool isPassword = false,
+    TextInputType? keyboardType,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -314,6 +389,7 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
       child: TextField(
         controller: controller,
         obscureText: isPassword ? !_isPasswordVisible : false,
+        keyboardType: keyboardType,
         style: const TextStyle(color: Colors.white),
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Colors.grey[600]),
@@ -346,24 +422,40 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
     );
   }
 
-  void _handleSocialLogin(String provider) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Continuing with $provider...'),
-        backgroundColor: const Color(0xFF25F46A),
-        duration: const Duration(seconds: 1),
-      ),
-    );
-    
-    // Simulate successful login after a short delay
-    Future.delayed(const Duration(milliseconds: 800), () {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const BottomNavPage()),
+  Future<void> _handleSocialLogin(String provider) async {
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => const Center(child: CircularProgressIndicator(color: Color(0xFF25F46A))),
+      );
+
+      UserCredential? credential;
+      if (provider == 'Google') {
+        credential = await AuthService().signInWithGoogle();
+      } else {
+        credential = await AuthService().signInWithApple();
+      }
+
+      if (context.mounted) {
+        Navigator.pop(context); // Close loading dialog
+        if (credential == null) {
+          // User cancelled
+          return;
+        }
+        // AuthGate will handle navigation automatically
+      }
+    } catch (e) {
+      if (context.mounted) {
+        Navigator.pop(context); // Close loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login with $provider failed: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
-    });
+    }
   }
 
   Widget _buildSocialButton(IconData icon, Color color, {required VoidCallback onTap}) {

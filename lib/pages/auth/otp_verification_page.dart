@@ -2,10 +2,16 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'reset_password_page.dart';
 
 class OTPVerificationPage extends StatefulWidget {
   final String email;
-  const OTPVerificationPage({super.key, this.email = "swift***@gmail.com"});
+  final bool isPasswordReset;
+  const OTPVerificationPage({
+    super.key, 
+    this.email = "swift***@gmail.com",
+    this.isPasswordReset = false,
+  });
 
   @override
   State<OTPVerificationPage> createState() => _OTPVerificationPageState();
@@ -207,7 +213,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                           const SizedBox(height: 32),
                           // Text Section
                           Text(
-                            "Verify Email",
+                            widget.isPasswordReset ? "Reset Password" : "Verify Email",
                             style: GoogleFonts.spaceGrotesk(
                               color: Colors.white,
                               fontSize: 32,
@@ -355,7 +361,18 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                       ),
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: Implement Verification Logic
+                          if (widget.isPasswordReset) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const ResetPasswordPage()),
+                            );
+                          } else {
+                            // Signup success - go to home or success screen
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Account verified successfully!')),
+                            );
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primaryGreen,

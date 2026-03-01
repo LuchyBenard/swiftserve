@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../services/auth_service.dart';
 
 class WorkerRegistrationPage extends StatefulWidget {
   const WorkerRegistrationPage({super.key});
@@ -16,6 +18,10 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
   
   String? _selectedCategory;
   String? _selectedLocation;
@@ -37,11 +43,15 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
     _experienceController.dispose();
     _priceController.dispose();
     _bioController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
   void _nextStep() {
-    if (_currentStep < 2) {
+    if (_currentStep < 3) {
       setState(() => _currentStep++);
     } else {
       _submitRegistration();
@@ -54,26 +64,65 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
     }
   }
 
-  void _submitRegistration() {
+  void _submitRegistration() async {
     if (_formKey.currentState!.validate()) {
-      // Logic would go here to save the data
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          backgroundColor: const Color(0xFF101010),
-          title: Text('Success!', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold)),
-          content: Text('Your provider application has been submitted successfully.', style: GoogleFonts.spaceGrotesk(color: Colors.grey[400])),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // Close dialog
-                Navigator.pop(context); // Go back from registration
-              },
-              child: const Text('GREAT', style: TextStyle(color: Color(0xFF25F46A))),
-            )
-          ],
-        ),
-      );
+      try {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => const Center(child: CircularProgressIndicator(color: Color(0xFF25F46A))),
+        );
+
+        await AuthService().signUpProvider(
+          name: _nameController.text.trim(),
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+          phone: _phoneController.text.trim(),
+          category: _selectedCategory ?? 'Other',
+          experience: _experienceController.text.trim(),
+          price: _priceController.text.trim(),
+          bio: _bioController.text.trim(),
+          location: _selectedLocation ?? 'Enugu',
+        );
+
+        await AuthService().signOut();
+
+        if (context.mounted) {
+          Navigator.pop(context); // Close loading dialog
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              backgroundColor: const Color(0xFF101010),
+              title: Text('Success!', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold)),
+              content: Text('Your provider application has been submitted successfully. Please log in to your account.', style: GoogleFonts.spaceGrotesk(color: Colors.grey[400])),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close dialog
+                    Navigator.pop(context); // Go back from registration
+                  },
+                  child: const Text('GREAT', style: TextStyle(color: Color(0xFF25F46A))),
+                )
+              ],
+            ),
+          );
+        }
+      } on FirebaseAuthException catch (e) {
+        if (context.mounted) {
+          Navigator.pop(context); // Close loading dialog
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.message ?? 'Registration failed')),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          Navigator.pop(context); // Close loading dialog
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('An unexpected error occurred')),
+          );
+        }
+      }
     }
   }
 
@@ -116,7 +165,7 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
-                      child: Text(_currentStep == 2 ? 'SUBMIT' : 'CONTINUE', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold)),
+                      child: Text(_currentStep == 3 ? 'SUBMIT' : 'CONTINUE', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold)),
                     ),
                   ),
                   if (_currentStep > 0) ...[
@@ -138,7 +187,7 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
             );
           },
           steps: [
-            Step(
+             Step(
               title: const Text(''),
               isActive: _currentStep >= 0,
               state: _currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -147,12 +196,18 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _buildStepTitle('Professional Info'),
-                    _buildLabel('Select Category'),
-                    _buildDropdown(_categories, _selectedCategory, (val) => setState(() => _selectedCategory = val)),
-                    const SizedBox(height: 20),
-                    _buildLabel('Experience (Years)'),
-                    _buildTextField(_experienceController, 'e.g. 5', TextInputType.number),
+                    _buildStepTitle('Account Details'),
+                    _buildLabel('Full Name'),
+                    _buildTextField(_nameController, 'Your Name', TextInputType.name),
+                    const SizedBox(height: 16),
+                    _buildLabel('Email Address'),
+                    _buildTextField(_emailController, 'email@example.com', TextInputType.emailAddress),
+                    const SizedBox(height: 16),
+                    _buildLabel('Phone Number'),
+                    _buildTextField(_phoneController, '+123...', TextInputType.phone),
+                    const SizedBox(height: 16),
+                    _buildLabel('Password'),
+                    _buildTextField(_passwordController, '••••••••', TextInputType.visiblePassword),
                   ],
                 ),
               ),
@@ -161,6 +216,22 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
               title: const Text(''),
               isActive: _currentStep >= 1,
               state: _currentStep > 1 ? StepState.complete : StepState.indexed,
+              content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildStepTitle('Professional Info'),
+                  _buildLabel('Select Category'),
+                  _buildDropdown(_categories, _selectedCategory, (val) => setState(() => _selectedCategory = val)),
+                  const SizedBox(height: 20),
+                  _buildLabel('Experience (Years)'),
+                  _buildTextField(_experienceController, 'e.g. 5', TextInputType.number),
+                ],
+              ),
+            ),
+            Step(
+              title: const Text(''),
+              isActive: _currentStep >= 2,
+              state: _currentStep > 2 ? StepState.complete : StepState.indexed,
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -175,7 +246,7 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
             ),
             Step(
               title: const Text(''),
-              isActive: _currentStep >= 2,
+              isActive: _currentStep >= 3,
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

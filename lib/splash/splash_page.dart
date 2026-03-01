@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 // Determine if available or use fallback
-import '../onboarding/onboarding_page.dart';
+import '../widgets/auth_gate.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -37,11 +37,11 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     )..repeat();
 
     // Navigation Timer
-    Timer(const Duration(seconds: 4), () {
+    Timer(const Duration(seconds: 7), () {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const OnboardingPage()),
+          MaterialPageRoute(builder: (context) => const AuthGate()),
         );
       }
     });

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'otp_verification_page.dart';
+import '../../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -104,13 +107,56 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Simulate sending email
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Reset link sent to your email!')),
-                        );
-                        Navigator.pop(context);
+                        try {
+                           showDialog(
+                             context: context,
+                             barrierDismissible: false,
+                             builder: (context) => const Center(child: CircularProgressIndicator(color: Color(0xFF25F46A))),
+                           );
+
+                           await AuthService().resetPassword(_emailController.text.trim());
+
+                           if (context.mounted) {
+                             Navigator.pop(context); // Close loading
+                             // Show success dialog
+                             showDialog(
+                               context: context,
+                               builder: (context) => AlertDialog(
+                                 backgroundColor: const Color(0xFF101010),
+                                 title: Text('Email Sent', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold)),
+                                 content: Text(
+                                   'We have sent a password reset link to ${_emailController.text}. Please check your inbox.', 
+                                   style: GoogleFonts.spaceGrotesk(color: Colors.grey[400])
+                                 ),
+                                 actions: [
+                                   TextButton(
+                                     onPressed: () {
+                                       Navigator.pop(context); // Close dialog
+                                       Navigator.pop(context); // Go back to login
+                                     },
+                                     child: const Text('OK', style: TextStyle(color: Color(0xFF25F46A))),
+                                   )
+                                 ],
+                               ),
+                             );
+                           }
+                        } on FirebaseAuthException catch (e) {
+                          if (context.mounted) {
+                            Navigator.pop(context); // Close loading
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(e.message ?? 'Failed to send reset email')),
+                            );
+                          }
+                        } catch (e) {
+                           if (context.mounted) {
+                            Navigator.pop(context); // Close loading
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('An unexpected error occurred')),
+                            );
+                          }
+                        }
                       }
                     },
                     style: ElevatedButton.styleFrom(

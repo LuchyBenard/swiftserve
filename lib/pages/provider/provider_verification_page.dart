@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -351,7 +350,6 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
   }
 
   Widget _buildServicesCard() {
-    const primaryGreen = Color(0xFF25F46A);
     const darkSurface = Color(0xFF0F1A12);
     return Container(
       width: double.infinity,
@@ -377,7 +375,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: primaryGreen.withOpacity(0.15),
+        color: primaryGreen.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: primaryGreen.withOpacity(0.3)),
         boxShadow: [

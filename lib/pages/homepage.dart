@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 92,
       distance: '2.1 mi',
       priceStart: 60,
-      imageUrl: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&w=400&q=80',
+      imageUrl: 'https://images.pexels.com/photos/1181681/pexels-photo-1181681.jpeg?auto=compress&cs=tinysrgb&w=400',
       about: 'Expert hair stylist with a focus on modern cuts and color treatments.',
       services: ['Hair Coloring', 'Modern Cuts', 'Styling', 'Treatment'],
     ),
@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 45,
       distance: '1.8 mi',
       priceStart: 50,
-      imageUrl: 'https://images.unsplash.com/photo-1540560914876-a69739489830?auto=format&fit=crop&w=400&q=80',
+      imageUrl: 'https://images.pexels.com/photos/327072/pexels-photo-327072.jpeg?auto=compress&cs=tinysrgb&w=400',
       about: 'Emergency plumbing and general maintenance for homes and offices.',
       services: ['Leak Repair', 'Installation', 'Drain Cleaning', 'Emergency'],
     ),
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 210,
       distance: '0.3 mi',
       priceStart: 30,
-      imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6958?auto=format&fit=crop&w=400&q=80',
+      imageUrl: 'https://images.pexels.com/photos/3768910/pexels-photo-3768910.jpeg?auto=compress&cs=tinysrgb&w=400',
       about: 'Premium cleaning services for residential and commercial properties.',
       services: ['Deep Clean', 'Office Cleaning', 'Post-Construction', 'Daily Maid'],
     ),
@@ -370,6 +370,14 @@ class _HomePageState extends State<HomePage> {
                   height: 192,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 192,
+                      width: double.infinity,
+                      color: Colors.grey[900],
+                      child: Icon(Icons.broken_image, color: Colors.grey[700]),
+                    );
+                  },
                 ),
                 Positioned.fill(
                   child: Container(

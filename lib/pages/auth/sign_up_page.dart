@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'otp_verification_page.dart';
+import '../../services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'worker_registration_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -164,15 +166,52 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate() && _agreedToTerms) {
-                         // Perform Sign Up Logic
-                         Navigator.push(
-                           context,
-                           MaterialPageRoute(
-                             builder: (context) => OTPVerificationPage(email: _emailController.text),
-                           ),
-                         );
+                         try {
+                           showDialog(
+                             context: context,
+                             barrierDismissible: false,
+                             builder: (context) => const Center(child: CircularProgressIndicator(color: neonGreen)),
+                           );
+
+                           await AuthService().signUpClient(
+                             name: _nameController.text.trim(),
+                             email: _emailController.text.trim(),
+                             password: _passwordController.text.trim(),
+                             phone: _phoneController.text.trim(),
+                           );
+
+                           await AuthService().signOut();
+
+                           if (context.mounted) {
+                             Navigator.pop(context); // Close loading dialog
+                             ScaffoldMessenger.of(context).showSnackBar(
+                               const SnackBar(
+                                 content: Text(
+                                   'Account created successfully! Please log in.',
+                                   style: TextStyle(color: Colors.black),
+                                 ),
+                                 backgroundColor: neonGreen,
+                               ),
+                             );
+                             Navigator.pop(context); // Return to WelcomePage (login)
+                           }
+                         } on FirebaseAuthException catch (e) {
+                           if (context.mounted) {
+                             Navigator.pop(context); // Close loading dialog
+                             ScaffoldMessenger.of(context).showSnackBar(
+                               SnackBar(content: Text(e.message ?? 'Sign up failed')),
+                             );
+                           }
+                         } catch (e) {
+                           if (context.mounted) {
+                             Navigator.pop(context); // Close loading dialog
+                             ScaffoldMessenger.of(context).showSnackBar(
+                               SnackBar(content: Text('An unexpected error occurred')),
+                             );
+                           }
+                         }
                       } else if (!_agreedToTerms) {
                          ScaffoldMessenger.of(context).showSnackBar(
                            const SnackBar(content: Text('Please agree to the Terms of Service.')),
@@ -199,27 +238,41 @@ class _SignUpPageState extends State<SignUpPage> {
 
                 const SizedBox(height: 24),
                 
-                // Footer
+                const SizedBox(height: 32),
+                
+                // Provider Link
                 Center(
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: RichText(
-                      text: TextSpan(
-                        text: 'Already have an account? ',
-                        style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 14),
-                        children: [
-                          TextSpan(
-                            text: 'Log In',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: neonGreen,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                  child: Column(
+                    children: [
+                      Text(
+                        'Want to offer your services?',
+                        style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 13),
                       ),
-                    ),
+                      const SizedBox(height: 4),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const WorkerRegistrationPage()),
+                          );
+                        },
+                        child: Text(
+                          'Join as a Service Provider',
+                          style: GoogleFonts.spaceGrotesk(
+                            color: neonGreen,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
+                const SizedBox(height: 32),
+                
+                // Footer
                 
                 const SizedBox(height: 40),
               ],

@@ -35,7 +35,6 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
   Widget build(BuildContext context) {
     const primaryGreen = Color(0xFF25F46A);
     const pitchBlack = Color(0xFF050505);
-    const darkSurface = Color(0xFF0F1A12);
 
     return Scaffold(
       backgroundColor: pitchBlack,
@@ -50,7 +49,7 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.05),
+                color: primaryGreen.withOpacity(0.08),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -70,7 +69,9 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.chevron_left, color: Colors.white),
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          // Optional: define behavior or leave empty for bottom nav persistence
+                        },
                       ),
                       Text(
                         "Availability",
@@ -131,7 +132,15 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
                             ],
                           ),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Preferences Saved Successfully!", style: GoogleFonts.spaceGrotesk(color: Colors.black, fontWeight: FontWeight.bold)),
+                                  backgroundColor: primaryGreen,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryGreen,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -172,7 +181,7 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF142216).withOpacity(0.6),
+        color: const Color(0xFF142216).withOpacity(0.4),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: primaryGreen.withOpacity(0.1)),
       ),
@@ -201,11 +210,11 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               trackHeight: 4,
-              activeTrackColor: primaryGreen.withOpacity(0.5),
+              activeTrackColor: primaryGreen.withOpacity(0.3),
               inactiveTrackColor: Colors.white.withOpacity(0.1),
               thumbColor: primaryGreen,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
-              overlayColor: primaryGreen.withOpacity(0.2),
+              overlayColor: primaryGreen.withOpacity(0.1),
             ),
             child: Slider(
               value: _radius,
@@ -233,9 +242,9 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isActive ? Colors.transparent : Colors.white.withOpacity(0.02),
+        color: isActive ? Colors.transparent : Colors.white.withOpacity(0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isActive ? primaryGreen.withOpacity(0.1) : Colors.white.withOpacity(0.05)),
+        border: Border.all(color: isActive ? primaryGreen.withOpacity(0.2) : Colors.white.withOpacity(0.05)),
         image: isActive ? null : null, // Transparent build panels in HTML
       ),
       child: Row(
@@ -267,7 +276,7 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
             child: Switch(
               value: isActive,
               onChanged: (val) => setState(() => _schedule[day] = val),
-              activeColor: primaryGreen,
+              activeThumbColor: primaryGreen,
               activeTrackColor: primaryGreen.withOpacity(0.3),
               inactiveThumbColor: Colors.grey[600],
               inactiveTrackColor: Colors.white.withOpacity(0.1),

@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../welcome/welcome_page.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -55,6 +56,17 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
     super.dispose();
   }
 
+  Future<void> _completeOnboarding() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('onboarding_completed', true);
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const WelcomePage()),
+      );
+    }
+  }
+
   void _nextPage() {
     if (_currentPage < 2) {
       _pageController.nextPage(
@@ -62,10 +74,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
         curve: Curves.easeInOut,
       );
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const WelcomePage()),
-      );
+      _completeOnboarding();
     }
   }
 
@@ -113,12 +122,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
             top: 50,
             right: 20,
             child: TextButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => const WelcomePage()),
-                );
-              },
+              onPressed: _completeOnboarding,
               child: Text(
                 'Skip',
                 style: GoogleFonts.spaceGrotesk(

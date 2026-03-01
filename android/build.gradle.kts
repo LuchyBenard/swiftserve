@@ -1,9 +1,4 @@
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+// pluginManagement removed (moved to settings.gradle.kts)
 
 val newBuildDir: Directory =
     rootProject.layout.buildDirectory

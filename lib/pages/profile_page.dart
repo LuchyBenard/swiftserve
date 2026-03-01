@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'auth/worker_registration_page.dart';
+import '../widgets/provider_bottom_nav.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -365,10 +366,9 @@ class _ProfilePageState extends State<ProfilePage> {
                             if (val) {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const WorkerRegistrationPage()),
+                                MaterialPageRoute(builder: (context) => const ProviderBottomNav()),
                               ).then((_) {
-                                // If they come back without completing, maybe toggle off
-                                // For now just leave it.
+                                setState(() => _isProviderMode = false);
                               });
                             }
                           },

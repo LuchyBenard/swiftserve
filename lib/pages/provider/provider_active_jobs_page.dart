@@ -17,7 +17,6 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
     const primaryGreen = Color(0xFF25F46A);
     const pitchBlack = Color(0xFF050505);
     const darkSurface = Color(0xFF0F1A12);
-    const cardDark = Color(0xFF161B17);
 
     return Scaffold(
       backgroundColor: pitchBlack,
@@ -32,7 +31,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
               height: 350,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.05),
+                color: primaryGreen.withOpacity(0.08),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -80,7 +79,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                               decoration: BoxDecoration(
                                 color: primaryGreen,
                                 shape: BoxShape.circle,
-                                boxShadow: [BoxShadow(color: primaryGreen.withOpacity(0.5), blurRadius: 4)],
+                                boxShadow: [BoxShadow(color: primaryGreen.withOpacity(0.3), blurRadius: 4)],
                               ),
                             ),
                           ),
@@ -117,11 +116,11 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     children: [
                       _buildJobCard(
-                        title: "AC Repair",
+                        title: "Fade & Lineup",
                         ticketId: "#8392",
                         address: "42 Westbury Lane, Downtown",
                         distance: "2.4 km away",
-                        icon: Icons.ac_unit,
+                        icon: Icons.content_cut,
                         isUrgent: true,
                         isPrimaryNavigate: true,
                       ),
@@ -130,15 +129,15 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                         ticketId: "#8401",
                         address: "105 Park Avenue, Suite 4B",
                         distance: "5.1 km away",
-                        icon: Icons.content_cut,
+                        icon: Icons.face,
                         timeTag: "14:00 PM",
                       ),
                       _buildJobCard(
-                        title: "Pipe Leakage",
+                        title: "Home Hair Styling",
                         ticketId: "#8415",
                         address: "88 Green Street, Suburbs",
                         distance: "12.8 km away",
-                        icon: Icons.plumbing,
+                        icon: Icons.brush,
                         timeTag: "16:30 PM",
                       ),
                       const SizedBox(height: 100),
@@ -192,7 +191,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: isUrgent ? const Color(0xFF102216).withOpacity(0.6) : cardDark,
+        color: isUrgent ? const Color(0xFF102216).withOpacity(0.4) : cardDark,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: isUrgent ? primaryGreen.withOpacity(0.1) : Colors.white.withOpacity(0.05)),
       ),
@@ -247,7 +246,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                           decoration: BoxDecoration(
                             color: primaryGreen.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: primaryGreen.withOpacity(0.2)),
+                            border: Border.all(color: primaryGreen.withOpacity(0.1)),
                           ),
                           child: const Text("URGENT", style: TextStyle(color: primaryGreen, fontSize: 10, fontWeight: FontWeight.bold)),
                         )
@@ -288,7 +287,15 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Launching Google Maps to $address...", style: GoogleFonts.spaceGrotesk()),
+                              backgroundColor: primaryGreen.withOpacity(0.9),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: isPrimaryNavigate ? primaryGreen : Colors.transparent,
                           foregroundColor: isPrimaryNavigate ? Colors.black : primaryGreen,
@@ -297,7 +304,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                             side: isPrimaryNavigate ? BorderSide.none : const BorderSide(color: primaryGreen, width: 1.5),
                           ),
                           elevation: isPrimaryNavigate ? 10 : 0,
-                          shadowColor: primaryGreen.withOpacity(0.5),
+                          shadowColor: primaryGreen.withOpacity(0.3),
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         ),
                         child: Row(

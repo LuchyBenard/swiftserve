@@ -34,6 +34,24 @@ class ProviderDetailsPage extends StatelessWidget {
               child: Image.network(
                 provider.imageUrl,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[900],
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.broken_image, color: Colors.grey[700], size: 48),
+                          const SizedBox(height: 12),
+                          Text(
+                            "Image unavailable",
+                            style: GoogleFonts.spaceGrotesk(color: Colors.grey[700], fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
