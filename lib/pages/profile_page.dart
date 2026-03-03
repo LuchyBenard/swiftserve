@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'auth/worker_registration_page.dart';
 import '../widgets/provider_bottom_nav.dart';
+import 'admin/admin_dashboard_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -15,6 +15,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   static const neonGreen = Color(0xFF25F46A);
   bool _isProviderMode = false;
+  bool _isAdminMode = false;
   bool _isEditing = false;
   late TextEditingController _nameController;
   late TextEditingController _emailController;
@@ -377,6 +378,71 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   
+                  const SizedBox(height: 16),
+                  
+                  // Switch to Admin
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF101010),
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(color: Colors.grey[900]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[900],
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.admin_panel_settings, color: Colors.white, size: 24),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Admin Portal',
+                                style: GoogleFonts.spaceGrotesk(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'MANAGE PLATFORM',
+                                style: GoogleFonts.spaceGrotesk(
+                                  color: Colors.grey[500],
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Switch(
+                          value: _isAdminMode,
+                          activeThumbColor: neonGreen,
+                          activeTrackColor: neonGreen.withValues(alpha: 0.2),
+                          inactiveThumbColor: Colors.grey[400],
+                          inactiveTrackColor: Colors.grey[800],
+                          onChanged: (val) {
+                            setState(() => _isAdminMode = val);
+                            if (val) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const AdminDashboardPage()),
+                              ).then((_) {
+                                setState(() => _isAdminMode = false);
+                              });
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 32),
                   
                   // Menu Items

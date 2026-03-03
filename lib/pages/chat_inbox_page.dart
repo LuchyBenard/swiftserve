@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/conversation.dart';
@@ -96,7 +95,7 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 40, 24, 24), // Matches top padding roughly
+      padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -108,16 +107,38 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: const Color.fromRGBO(37, 244, 106, 0.2), width: 2),
-            ),
-            child: const CircleAvatar(
-              radius: 18,
-              backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b'),
-            ),
+          Row(
+            children: [
+              // New Chat Icon
+              GestureDetector(
+                onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Start a new conversation...')),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF25F46A).withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.2)),
+                  ),
+                  child: const Icon(Icons.add, color: Color(0xFF25F46A), size: 24),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Container(
+                padding: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: const Color.fromRGBO(37, 244, 106, 0.2), width: 2),
+                ),
+                child: const CircleAvatar(
+                  radius: 18,
+                  backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -166,7 +187,7 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
           );
         },
         borderRadius: BorderRadius.circular(24),
-        hoverColor: const Color(0xFF25F46A).withOpacity(0.05),
+        hoverColor: const Color(0xFF25F46A).withValues(alpha: 0.05),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(

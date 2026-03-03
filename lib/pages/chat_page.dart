@@ -124,64 +124,69 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildHeader(Color neonGreen) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.5),
-        border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.05))),
+        color: Colors.black,
+        border: Border(bottom: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
       ),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
             onPressed: () => Navigator.pop(context),
           ),
-          const SizedBox(width: 4),
-          Stack(
-            children: [
-              _buildAvatar(widget.conversation),
-              if (widget.conversation.isOnline)
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 12,
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: neonGreen,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.black, width: 2),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(
-                  widget.conversation.providerName,
-                  style: GoogleFonts.spaceGrotesk(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  widget.conversation.isOnline ? 'Online' : 'Offline',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: widget.conversation.isOnline ? neonGreen : Colors.grey,
-                    fontSize: 12,
-                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          widget.conversation.providerName,
+                          style: GoogleFonts.spaceGrotesk(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (widget.conversation.isOnline) ...[
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 8,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: neonGreen,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: neonGreen.withValues(alpha: 0.5),
+                                  blurRadius: 4,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      widget.conversation.isOnline ? 'ONLINE' : 'OFFLINE',
+                      style: GoogleFonts.spaceGrotesk(
+                        color: widget.conversation.isOnline ? neonGreen : Colors.grey,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.more_vert, color: Colors.white),
-            onPressed: () {},
-          ),
+          _buildAvatar(widget.conversation),
         ],
       ),
     );
@@ -189,9 +194,17 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildAvatar(Conversation c) {
     if (c.avatarUrl.isNotEmpty) {
-      return CircleAvatar(
-        radius: 20,
-        backgroundImage: NetworkImage(c.avatarUrl),
+      return Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.2), width: 1),
+          image: DecorationImage(
+            image: NetworkImage(c.avatarUrl),
+            fit: BoxFit.cover,
+          ),
+        ),
       );
     } else {
       IconData icon = Icons.person;
@@ -199,11 +212,12 @@ class _ChatPageState extends State<ChatPage> {
       if (c.providerIcon == 'cleaning_services') icon = Icons.cleaning_services;
       
       return Container(
-        width: 40,
-        height: 40,
+        width: 44,
+        height: 44,
         decoration: BoxDecoration(
-          color: Colors.grey[800],
+          color: Colors.grey[900],
           shape: BoxShape.circle,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
         ),
         child: Icon(icon, color: Colors.grey[400], size: 20),
       );
@@ -236,13 +250,14 @@ class _ChatPageState extends State<ChatPage> {
             ),
             constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
             decoration: BoxDecoration(
-              color: message.isMe ? neonGreen : const Color(0xFF1A1A1A),
+              color: message.isMe ? const Color(0xFF1A1A1A) : neonGreen.withValues(alpha: 0.1),
               borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(20),
                 topRight: const Radius.circular(20),
                 bottomLeft: Radius.circular(message.isMe ? 20 : 4),
                 bottomRight: Radius.circular(message.isMe ? 4 : 20),
               ),
+              border: message.isMe ? null : Border.all(color: neonGreen.withValues(alpha: 0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,8 +283,8 @@ class _ChatPageState extends State<ChatPage> {
                   Text(
                     message.text,
                     style: GoogleFonts.spaceGrotesk(
-                      color: message.isMe ? Colors.black : Colors.white,
-                      fontSize: 14,
+                      color: Colors.white,
+                      fontSize: 15,
                     ),
                   ),
               ],
@@ -293,38 +308,44 @@ class _ChatPageState extends State<ChatPage> {
 
   Widget _buildInputArea(Color neonGreen) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
       decoration: BoxDecoration(
         color: Colors.black,
-        border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05))),
+        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
       ),
       child: Row(
         children: [
           Container(
+            width: 48,
+            height: 48,
             decoration: BoxDecoration(
-              color: const Color(0xFF1A1A1A),
-              shape: BoxShape.circle,
+              color: const Color(0xFF121212),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
             child: IconButton(
-              icon: const Icon(Icons.add, color: Colors.white),
+              icon: const Icon(Icons.add, color: Colors.white, size: 24),
               onPressed: () {},
             ),
           ),
           const SizedBox(width: 12),
           Expanded(
             child: Container(
+              height: 48,
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: const Color(0xFF1A1A1A),
-                borderRadius: BorderRadius.circular(30),
+                color: const Color(0xFF121212),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
               child: TextField(
                 controller: _messageController,
-                style: const TextStyle(color: Colors.white),
+                style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 14),
                 decoration: InputDecoration(
                   hintText: 'Type a message...',
-                  hintStyle: TextStyle(color: Colors.grey[600]),
+                  hintStyle: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 14),
                   border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
                 onSubmitted: (_) => _sendMessage(),
               ),
@@ -338,16 +359,16 @@ class _ChatPageState extends State<ChatPage> {
               height: 48,
               decoration: BoxDecoration(
                 color: neonGreen,
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: neonGreen.withOpacity(0.3),
-                    blurRadius: 10,
-                    spreadRadius: 1,
+                    color: neonGreen.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    spreadRadius: 2,
                   ),
                 ],
               ),
-              child: const Icon(Icons.send, color: Colors.black, size: 20),
+              child: const Icon(Icons.arrow_forward, color: Colors.black, size: 24),
             ),
           ),
         ],
