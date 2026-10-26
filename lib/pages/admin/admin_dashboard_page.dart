@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'admin_user_management_page.dart';
+import 'admin_moderation_page.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({super.key});
@@ -17,77 +19,180 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     const primaryGreen = Color(0xFF25F46A);
     const pitchBlack = Color(0xFF000000);
     const backgroundDark = Color(0xFF050505);
-    const darkSurface = Color(0xFF0F1A12);
-    const darkAccent = Color(0xFF1A2E20);
 
     return Scaffold(
       backgroundColor: backgroundDark,
       body: Stack(
         children: [
-          // Background Glows
-          Positioned(
-            top: -150,
-            right: -50,
-            child: Container(
-              width: 400,
-              height: 400,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: primaryGreen.withValues(alpha: 0.05),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 120, sigmaY: 120),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
+          IndexedStack(
+            index: _currentIndex,
+            children: [
+              _AdminOverview(onIndexChanged: (i) => setState(() => _currentIndex = i)),
+              const AdminUserManagementPage(),
+              const AdminUserManagementPage(), // Same for providers for now
+              _buildDummyPage("Categories"),
+              const AdminModerationPage(),
+            ],
           ),
-          Positioned(
-            bottom: 100,
-            left: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: primaryGreen.withValues(alpha: 0.05),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-          ),
-
-          SafeArea(
-            child: Column(
-              children: [
-                _buildHeader(primaryGreen, darkSurface, darkAccent),
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 12),
-                        _buildStatsScroll(primaryGreen),
-                        const SizedBox(height: 32),
-                        _buildRevenueOverview(primaryGreen, darkSurface),
-                        const SizedBox(height: 32),
-                        _buildLiveJobActivity(primaryGreen, darkSurface),
-                        const SizedBox(height: 100), // Bottom Nav Spacer
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           // Bottom Navigation
           _buildBottomNav(primaryGreen, pitchBlack),
         ],
       ),
+    );
+  }
+
+  Widget _buildDummyPage(String title) {
+    return Center(child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 24)));
+  }
+
+  Widget _buildBottomNav(Color primary, Color pitchBlack) {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: Container(
+        height: 90,
+        decoration: BoxDecoration(
+          color: pitchBlack.withValues(alpha: 0.9),
+          border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
+        ),
+        child: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _navItem(Icons.dashboard, "Overview", 0, primary),
+                  _navItem(Icons.people_outline, "Users", 1, primary),
+                  _navItem(Icons.engineering_outlined, "Providers", 2, primary),
+                  _navItem(Icons.category_outlined, "Cats", 3, primary),
+                  _navItem(Icons.gavel_outlined, "Mod", 4, primary),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _navItem(IconData icon, String label, int index, Color primary) {
+    bool isActive = _currentIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => _currentIndex = index),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isActive)
+              Container(
+                width: 24,
+                height: 3,
+                margin: const EdgeInsets.only(bottom: 8),
+                decoration: BoxDecoration(
+                  color: primary,
+                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(3)),
+                  boxShadow: [BoxShadow(color: primary, blurRadius: 10)],
+                ),
+              )
+            else
+              const SizedBox(height: 11),
+            Icon(
+              icon,
+              color: isActive ? primary : Colors.grey[600],
+              size: 26,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: GoogleFonts.spaceGrotesk(
+                color: isActive ? primary : Colors.grey[600],
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AdminOverview extends StatelessWidget {
+  final Function(int) onIndexChanged;
+  const _AdminOverview({required this.onIndexChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    const primaryGreen = Color(0xFF25F46A);
+    const darkSurface = Color(0xFF0F1A12);
+    const darkAccent = Color(0xFF1A2E20);
+
+    return Stack(
+      children: [
+        // Background Glows
+        Positioned(
+          top: -150,
+          right: -50,
+          child: Container(
+            width: 400,
+            height: 400,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: primaryGreen.withValues(alpha: 0.05),
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 120, sigmaY: 120),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 100,
+          left: -100,
+          child: Container(
+            width: 300,
+            height: 300,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: primaryGreen.withValues(alpha: 0.05),
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
+              child: Container(color: Colors.transparent),
+            ),
+          ),
+        ),
+
+        SafeArea(
+          child: Column(
+            children: [
+              _buildHeader(primaryGreen, darkSurface, darkAccent),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 12),
+                      _buildStatsScroll(primaryGreen),
+                      const SizedBox(height: 32),
+                      _buildRevenueOverview(primaryGreen, darkSurface),
+                      const SizedBox(height: 32),
+                      _buildLiveJobActivity(primaryGreen, darkSurface),
+                      const SizedBox(height: 100), // Bottom Nav Spacer
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
@@ -629,81 +734,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBottomNav(Color primary, Color pitchBlack) {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      child: Container(
-        height: 90,
-        decoration: BoxDecoration(
-          color: pitchBlack.withValues(alpha: 0.9),
-          border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
-        ),
-        child: ClipRRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _navItem(Icons.dashboard, "Overview", 0, primary),
-                  _navItem(Icons.people_outline, "Users", 1, primary),
-                  _navItem(Icons.engineering_outlined, "Providers", 2, primary),
-                  _navItem(Icons.category_outlined, "Cats", 3, primary),
-                  _navItem(Icons.gavel_outlined, "Mod", 4, primary),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _navItem(IconData icon, String label, int index, Color primary) {
-    bool isActive = _currentIndex == index;
-    return GestureDetector(
-      onTap: () => setState(() => _currentIndex = index),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (isActive)
-              Container(
-                width: 24,
-                height: 3,
-                margin: const EdgeInsets.only(bottom: 8),
-                decoration: BoxDecoration(
-                  color: primary,
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(3)),
-                  boxShadow: [BoxShadow(color: primary, blurRadius: 10)],
-                ),
-              )
-            else
-              const SizedBox(height: 11),
-            Icon(
-              icon,
-              color: isActive ? primary : Colors.grey[600],
-              size: 26,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.spaceGrotesk(
-                color: isActive ? primary : Colors.grey[600],
-                fontSize: 10,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
