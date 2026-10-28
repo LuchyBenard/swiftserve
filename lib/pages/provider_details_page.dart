@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/provider.dart';
+import '../services/favorites_service.dart';
 import 'request/create_request_flow.dart';
 
 class ProviderDetailsPage extends StatelessWidget {
@@ -66,9 +67,34 @@ class ProviderDetailsPage extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                 ),
                 actions: [
-                  IconButton(
-                    icon: const Icon(Icons.favorite_border, color: Colors.white),
-                    onPressed: () {},
+                  ValueListenableBuilder<Set<String>>(
+                    valueListenable: FavoritesService().favoritesNotifier,
+                    builder: (context, favoriteIds, _) {
+                      final isFav = favoriteIds.contains(provider.id);
+                      return IconButton(
+                        icon: Icon(
+                          isFav ? Icons.favorite : Icons.favorite_border,
+                          color: isFav ? Colors.redAccent : Colors.white,
+                        ),
+                        onPressed: () async {
+                          final added = await FavoritesService().toggleFavorite(provider.id);
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  added
+                                      ? '${provider.name} added to Saved Providers'
+                                      : '${provider.name} removed from Saved Providers',
+                                ),
+                                duration: const Duration(seconds: 2),
+                                behavior: SnackBarBehavior.floating,
+                                backgroundColor: const Color(0xFF1F1F1F),
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
                   ),
                 ],
                 expandedHeight: 300,
