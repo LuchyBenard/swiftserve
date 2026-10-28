@@ -2,9 +2,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/provider.dart';
+import '../models/saved_address.dart';
+import '../services/address_service.dart';
+import '../services/favorites_service.dart';
+import '../widgets/address_picker_sheet.dart';
 import 'provider_details_page.dart';
 import 'provider_list_page.dart';
 import 'profile_page.dart';
+import 'saved_providers_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +20,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String _selectedCategory = 'Phone Tech';
+
+  @override
+  void initState() {
+    super.initState();
+    FavoritesService().init();
+    AddressService().init();
+  }
 
   // Mock Data
   final List<Provider> _providers = [
@@ -153,24 +165,87 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              const SizedBox(height: 6),
+              ValueListenableBuilder<SavedAddress?>(
+                valueListenable: AddressService().selectedAddressNotifier,
+                builder: (context, activeAddr, _) {
+                  final label = activeAddr != null
+                      ? '${activeAddr.title}: ${activeAddr.addressLine}'
+                      : 'Independence Layout, Enugu';
+                  return GestureDetector(
+                    onTap: () => AddressPickerSheet.show(context: context),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF161616),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.white12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.location_on, color: Color(0xFF25F46A), size: 12),
+                          const SizedBox(width: 4),
+                          ConstrainedBox(
+                            constraints: const BoxConstraints(maxWidth: 160),
+                            child: Text(
+                              label,
+                              style: GoogleFonts.spaceGrotesk(
+                                color: Colors.white,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          const Icon(Icons.keyboard_arrow_down, color: Colors.white60, size: 14),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ],
           ),
-          GestureDetector(
-            onTap: () {
-               // Functional Profile Avatar
-               Navigator.push(
-                 context,
-                 MaterialPageRoute(builder: (context) => const ProfilePage()),
-               );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: const Color.fromRGBO(37, 244, 106, 0.2), width: 2),
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SavedProvidersPage(allProviders: _providers),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.only(right: 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF141414),
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white12),
+                  ),
+                  child: const Icon(Icons.favorite_border, color: Colors.white, size: 18),
+                ),
               ),
-              child: const CircleAvatar(
-                radius: 18,
+              GestureDetector(
+                onTap: () {
+                   // Functional Profile Avatar
+                   Navigator.push(
+                     context,
+                     MaterialPageRoute(builder: (context) => const ProfilePage()),
+                   );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: const Color.fromRGBO(37, 244, 106, 0.2), width: 2),
+                  ),
+                  child: const CircleAvatar(
+                    radius: 18,
                 backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b'),
               ),
             ),

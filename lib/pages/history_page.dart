@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/booking.dart';
+import '../widgets/cancel_booking_dialog.dart';
 import 'tracking/job_tracking_page.dart';
 import 'rating/rate_provider_page.dart';
 
@@ -384,8 +385,102 @@ class _BookingCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ],
-                ),
+                if (booking.status == 'In Progress' || booking.status == 'Confirmed') ...[
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => JobTrackingPage(
+                                  providerName: booking.providerName,
+                                  serviceType: booking.serviceType,
+                                  providerImageUrl: booking.imageUrl.isNotEmpty
+                                      ? booking.imageUrl
+                                      : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
+                                ),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF25F46A).withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.3)),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Track Job',
+                                style: GoogleFonts.spaceGrotesk(
+                                  color: const Color(0xFF25F46A),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      GestureDetector(
+                        onTap: () async {
+                          final reason = await CancelBookingDialog.show(
+                            context: context,
+                            providerName: booking.providerName,
+                            serviceType: booking.serviceType,
+                          );
+                          if (reason != null && mounted) {
+                            setState(() {
+                              final idx = _allBookings.indexWhere((b) => b.id == booking.id);
+                              if (idx != -1) {
+                                _allBookings[idx] = Booking(
+                                  id: booking.id,
+                                  providerName: booking.providerName,
+                                  serviceType: booking.serviceType,
+                                  status: 'Canceled',
+                                  date: booking.date,
+                                  time: booking.time,
+                                  location: booking.location,
+                                  price: booking.price,
+                                  imageUrl: booking.imageUrl,
+                                );
+                              }
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Booking canceled: $reason'),
+                                backgroundColor: const Color(0xFFFF5252),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.red.withValues(alpha: 0.08),
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Cancel',
+                              style: GoogleFonts.spaceGrotesk(
+                                color: Colors.redAccent,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
                 if (booking.status == 'Completed') ...[
                   const SizedBox(height: 20),
                   GestureDetector(
