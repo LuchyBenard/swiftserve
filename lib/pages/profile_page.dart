@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/provider_bottom_nav.dart';
+import '../widgets/address_picker_sheet.dart';
 import 'admin/admin_dashboard_page.dart';
+import 'saved_providers_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -446,6 +448,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 32),
                   
                   // Menu Items
+                  _buildMenuItem(
+                    Icons.favorite,
+                    'Saved Providers',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const SavedProvidersPage()),
+                      );
+                    },
+                  ),
+                  _buildMenuItem(
+                    Icons.location_on,
+                    'Saved Addresses',
+                    onTap: () {
+                      AddressPickerSheet.show(context: context);
+                    },
+                  ),
                   _buildMenuItem(Icons.event_note, 'My Bookings'),
                   _buildMenuItem(Icons.payment, 'Payment'),
                   _buildMenuItem(Icons.notifications, 'Notifications', hasAlert: true),
@@ -554,42 +573,45 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, {bool hasAlert = false}) {
+  Widget _buildMenuItem(IconData icon, String title, {bool hasAlert = false, VoidCallback? onTap}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: const Color(0xFF050505),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.grey[900]!),
-        ),
-        child: Row(
-          children: [
-            Icon(icon, color: const Color(0xFF25F46A), size: 24),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Text(
-                title,
-                style: GoogleFonts.spaceGrotesk(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: const Color(0xFF050505),
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: Colors.grey[900]!),
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: const Color(0xFF25F46A), size: 24),
+              const SizedBox(width: 20),
+              Expanded(
+                child: Text(
+                  title,
+                  style: GoogleFonts.spaceGrotesk(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
-            if (hasAlert)
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
+              if (hasAlert)
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
                 ),
-              ),
-            if (hasAlert) const SizedBox(width: 12),
-            Icon(Icons.chevron_right, color: Colors.grey[600]),
-          ],
+              if (hasAlert) const SizedBox(width: 12),
+              Icon(Icons.chevron_right, color: Colors.grey[600]),
+            ],
+          ),
         ),
       ),
     );

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../widgets/address_picker_sheet.dart';
 
 class Step1Details extends StatefulWidget {
   final VoidCallback onNext;
@@ -56,164 +57,22 @@ class _Step1DetailsState extends State<Step1Details> {
     });
   }
 
-  void _showLocationDialog() {
-    final List<String> neighborhoods = [
-      'Independence Layout',
-      'Trans Ekulu',
-      'Enugu GRA',
-      'Abakpa Nike',
-      'New Haven',
-      'Achara Layout',
-      'Uwani',
-      'Emene',
-      'Coal Camp',
-      'Thinkers Corner',
-      'Ogui New Layout',
-      'Amechi Awkunanaw',
-      'Gariki',
-    ];
-
-    showModalBottomSheet(
+  void _showLocationDialog() async {
+    final selected = await AddressPickerSheet.show(
       context: context,
-      backgroundColor: const Color(0xFF0F0F0F),
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-      ),
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModalState) {
-          final String currentSearch = widget.data['_locationSearch'] ?? '';
-          final filteredList = neighborhoods
-              .where((n) => n.toLowerCase().contains(currentSearch.toLowerCase()))
-              .toList();
-
-          return Container(
-            padding: EdgeInsets.only(
-              left: 24, 
-              right: 24, 
-              top: 32, 
-              bottom: MediaQuery.of(context).viewInsets.bottom + 32,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'SELECT YOUR AREA',
-                      style: GoogleFonts.spaceGrotesk(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.close, color: Colors.white54),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Currently available in Enugu',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: Colors.grey[500],
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 24),
-                
-                // Search field
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
-                  ),
-                  child: TextField(
-                    onChanged: (val) {
-                      setModalState(() {
-                        widget.data['_locationSearch'] = val;
-                      });
-                    },
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Search for your neighborhood...',
-                      hintStyle: TextStyle(color: Colors.grey[600]),
-                      prefixIcon: const Icon(Icons.search, color: Colors.white54),
-                      border: InputBorder.none,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                  ),
-                ),
-                
-                const SizedBox(height: 24),
-
-                Flexible(
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      // List of neighborhoods
-                      ...filteredList.map((name) {
-                        final isSelected = widget.data['location']?.contains(name) ?? false;
-                        return Column(
-                          children: [
-                            ListTile(
-                              onTap: () {
-                                setState(() {
-                                  widget.data['location'] = '$name, Enugu';
-                                  widget.data['_locationSearch'] = null;
-                                });
-                                Navigator.pop(context);
-                              },
-                              contentPadding: EdgeInsets.zero,
-                              title: Text(
-                                name,
-                                style: GoogleFonts.spaceGrotesk(
-                                  color: isSelected ? const Color(0xFF25F46A) : Colors.white,
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                ),
-                              ),
-                              trailing: isSelected 
-                                ? const Icon(Icons.check_circle, color: Color(0xFF25F46A))
-                                : Icon(Icons.chevron_right, color: Colors.grey[800]),
-                            ),
-                            Divider(color: Colors.white.withOpacity(0.05), height: 1),
-                          ],
-                        );
-                      }).toList(),
-
-                      // Custom location option if search is active and not an exact match
-                      if (currentSearch.isNotEmpty && !neighborhoods.any((n) => n.toLowerCase() == currentSearch.toLowerCase()))
-                        ListTile(
-                          onTap: () {
-                            setState(() {
-                              widget.data['location'] = '$currentSearch, Enugu';
-                              widget.data['_locationSearch'] = null;
-                            });
-                            Navigator.pop(context);
-                          },
-                          contentPadding: EdgeInsets.zero,
-                          leading: const Icon(Icons.add_location_alt, color: Color(0xFF25F46A)),
-                          title: Text(
-                            'Use "$currentSearch"',
-                            style: GoogleFonts.spaceGrotesk(
-                              color: const Color(0xFF25F46A),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-      ),
+      onAddressSelected: (addr) {
+        setState(() {
+          widget.data['location'] = addr.addressLine;
+          widget.data['location_title'] = addr.title;
+        });
+      },
     );
+    if (selected != null) {
+      setState(() {
+        widget.data['location'] = selected.addressLine;
+        widget.data['location_title'] = selected.title;
+      });
+    }
   }
 
   @override
