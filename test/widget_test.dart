@@ -328,7 +328,7 @@ void main() {
         ),
       );
 
-      expect(find.text('Cancel Booking'), findsOneWidget);
+      expect(find.text('Cancel Booking'), findsNWidgets(2));
       expect(find.text('John D. • Master Barber'), findsOneWidget);
       expect(find.text('Schedule conflict / Need to reschedule'), findsOneWidget);
       expect(find.text('Keep Booking'), findsOneWidget);

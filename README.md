@@ -8,16 +8,20 @@ An on-demand service booking and marketplace mobile application built with **Flu
 
 ### 👤 Client Experience
 - **Interactive Onboarding & Welcome:** Engaging onboarding flow featuring smooth page indicators and liquid swipe transitions.
-- **Service Discovery & Search:** Browse diverse service categories (e.g., Tech Repair, Barbering, Styling, Plumbing) with real-time filters and search.
+- **Service Discovery & Search:** Browse diverse service categories (e.g., Tech Repair, Barbering, Styling, Plumbing) with real-time text search and filters.
+- **Advanced Search & Filter:** Dynamic modal bottom sheet to filter providers by minimum rating (4.0+, 4.5+, 4.8+), price cap, maximum distance, and availability today, plus multi-criteria sorting (Rating, Price, Distance).
+- **Favorites & Saved Providers:** Heart and bookmark favorite service professionals directly from cards or profiles, with reactive local persistence and a dedicated "Saved Providers" screen.
+- **Address & GPS Location Picker:** Manage multiple saved addresses (Home, Work, Other) or auto-detect current coordinates via simulated satellite GPS.
 - **Provider Profiles & Portfolios:** Comprehensive provider profiles displaying ratings, review counts, distances, hourly/base pricing, bios, and service offerings.
 - **Multi-Step Booking Flow:**
-  - **Step 1 — Details:** Select services and describe requirements.
+  - **Step 1 — Details:** Select services, specify address with location picker, and describe requirements.
   - **Step 2 — Schedule:** Choose booking date and convenient time slots.
   - **Step 3 — Review & Checkout:** Verify request details, view cost breakdowns, and finalize booking.
 - **Live Job Tracking:** Monitor ongoing service requests with status stages (`In Progress`, `Confirmed`, `Completed`, `Canceled`).
+- **Structured Booking Cancellation:** Cancel active bookings through a dedicated modal with categorized reasons and notes.
 - **In-App Messaging:** Real-time 1-on-1 chat between clients and providers for direct communication.
 - **Ratings & Reviews:** Leave 5-star ratings and written feedback once a job is complete.
-- **Profile & History:** Manage personal details and track historical bookings.
+- **Profile & History:** Manage personal details, saved addresses, favorite providers, and historical bookings.
 
 ### 🛠️ Service Provider Portal
 - **Provider Registration & Verification:** Onboarding workflow for professionals to submit their category, experience, base rates, bio, and verification documents.
@@ -76,6 +80,8 @@ swiftserve/
 │   │   ├── conversation.dart  # Chat inbox conversations
 │   │   ├── message.dart       # Individual chat messages
 │   │   ├── provider.dart      # Service provider profile model
+│   │   ├── provider_filter.dart# Filter & sorting criteria model
+│   │   ├── saved_address.dart # Saved service address model
 │   │   └── user.dart          # User account model
 │   ├── onboarding/            # Onboarding walkthrough screens
 │   ├── pages/                 # UI screens and navigation flows
@@ -90,12 +96,22 @@ swiftserve/
 │   │   ├── chat_page.dart     # Direct message chat room
 │   │   ├── chat_inbox_page.dart# Recent conversations inbox
 │   │   ├── homepage.dart      # Main client dashboard & categories
-│   │   └── profile_page.dart  # User profile management
+│   │   ├── profile_page.dart  # User profile management
+│   │   ├── provider_list_page.dart# Search & filtered provider directory
+│   │   └── saved_providers_page.dart# Dedicated favorite providers view
 │   ├── services/              # External services & business logic
-│   │   └── auth_service.dart  # Firebase Auth & Firestore user sync
+│   │   ├── address_service.dart# Saved addresses & GPS auto-detection
+│   │   ├── auth_service.dart  # Firebase Auth & Firestore user sync
+│   │   └── favorites_service.dart# Favorite provider persistence & reactive state
 │   ├── splash/                # Startup splash screen
 │   ├── welcome/               # Post-onboarding welcome screen
-│   └── widgets/               # Reusable widgets (AuthGate, clippers, navbars)
+│   └── widgets/               # Reusable widgets
+│       ├── address_picker_sheet.dart# Bottom sheet for location selection
+│       ├── auth_gate.dart     # Role-based route gatekeeper
+│       ├── cancel_booking_dialog.dart# Booking cancellation modal
+│       ├── clippers/          # Geometric and wave shape clippers
+│       ├── provider_bottom_nav.dart# Provider navigation bar
+│       └── provider_filter_sheet.dart# Filter & sort bottom sheet
 ├── test/                      # Unit and widget tests
 ├── pubspec.yaml               # Project dependencies and asset definitions
 └── README.md                  # Project documentation
