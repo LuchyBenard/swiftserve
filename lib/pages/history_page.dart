@@ -1,10 +1,17 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/booking.dart';
 import '../widgets/cancel_booking_dialog.dart';
 import 'tracking/job_tracking_page.dart';
 import 'rating/rate_provider_page.dart';
+
+const Color _kGreen = Color(0xFF25F46A);
+
+const String _kFallbackProviderImage =
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS';
+
+const String _kUserAvatar =
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({super.key});
@@ -26,7 +33,8 @@ class _HistoryPageState extends State<HistoryPage> {
       time: '2:00 PM',
       location: '123 Market St, SF',
       price: 120.0,
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
+      imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
     ),
     Booking(
       id: '2',
@@ -37,18 +45,18 @@ class _HistoryPageState extends State<HistoryPage> {
       time: '10:00 AM',
       location: 'Provider Shop',
       price: 45.0,
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
+      imageUrl: _kFallbackProviderImage,
     ),
     Booking(
       id: '3',
-      providerName: 'Mike\'s Plumbing',
+      providerName: "Mike's Plumbing",
       serviceType: 'Leak Fix',
       status: 'Completed',
       date: 'Oct 24',
       time: '4:30 PM',
       location: '',
       price: 150.0,
-      imageUrl: '', // Using icon placeholder logic
+      imageUrl: '', // Uses icon placeholder
     ),
     Booking(
       id: '4',
@@ -59,16 +67,46 @@ class _HistoryPageState extends State<HistoryPage> {
       time: '9:00 AM',
       location: '',
       price: 80.0,
-      imageUrl: '', // Using icon placeholder logic
+      imageUrl: '', // Uses icon placeholder
     ),
   ];
 
   List<Booking> get _filteredBookings {
     if (_showActive) {
-      return _allBookings.where((b) => b.status == 'In Progress' || b.status == 'Confirmed').toList();
-    } else {
-      return _allBookings.where((b) => b.status == 'Completed' || b.status == 'Canceled').toList();
+      return _allBookings
+          .where((b) => b.status == 'In Progress' || b.status == 'Confirmed')
+          .toList();
     }
+    return _allBookings
+        .where((b) => b.status == 'Completed' || b.status == 'Canceled')
+        .toList();
+  }
+
+  void _cancelBooking(Booking booking, String reason) {
+    setState(() {
+      final idx = _allBookings.indexWhere((b) => b.id == booking.id);
+      if (idx != -1) {
+        _allBookings[idx] = Booking(
+          id: booking.id,
+          providerName: booking.providerName,
+          serviceType: booking.serviceType,
+          status: 'Canceled',
+          date: booking.date,
+          time: booking.time,
+          location: booking.location,
+          price: booking.price,
+          imageUrl: booking.imageUrl,
+        );
+      }
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Booking canceled: $reason'),
+        backgroundColor: const Color(0xFFFF5252),
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
@@ -121,11 +159,14 @@ class _HistoryPageState extends State<HistoryPage> {
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: const Color.fromRGBO(37, 244, 106, 0.2), width: 2),
+              border: Border.all(
+                color: _kGreen.withValues(alpha: 0.2),
+                width: 2,
+              ),
             ),
             child: const CircleAvatar(
               radius: 18,
-              backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b'),
+              backgroundImage: NetworkImage(_kUserAvatar),
             ),
           ),
         ],
@@ -139,9 +180,9 @@ class _HistoryPageState extends State<HistoryPage> {
       child: Container(
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(255, 255, 255, 0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: Row(
           children: [
@@ -151,15 +192,15 @@ class _HistoryPageState extends State<HistoryPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                    color: _showActive ? const Color(0xFF25F46A) : Colors.transparent,
+                    color: _showActive ? _kGreen : Colors.transparent,
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: _showActive
                         ? [
-                            BoxShadow(
-                              color: const Color(0xFF25F46A).withOpacity(0.3),
-                              blurRadius: 15,
-                            )
-                          ]
+                      BoxShadow(
+                        color: _kGreen.withValues(alpha: 0.3),
+                        blurRadius: 15,
+                      ),
+                    ]
                         : null,
                   ),
                   alignment: Alignment.center,
@@ -180,7 +221,9 @@ class _HistoryPageState extends State<HistoryPage> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   decoration: BoxDecoration(
-                    color: !_showActive ? const Color.fromRGBO(255, 255, 255, 0.05) : Colors.transparent,
+                    color: !_showActive
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.transparent,
                     borderRadius: BorderRadius.circular(24),
                   ),
                   alignment: Alignment.center,
@@ -211,7 +254,11 @@ class _HistoryPageState extends State<HistoryPage> {
         itemCount: bookings.length,
         separatorBuilder: (context, index) => const SizedBox(height: 16),
         itemBuilder: (context, index) {
-          return _BookingCard(booking: bookings[index]);
+          final booking = bookings[index];
+          return _BookingCard(
+            booking: booking,
+            onCancelled: (reason) => _cancelBooking(booking, reason),
+          );
         },
       ),
     );
@@ -220,8 +267,15 @@ class _HistoryPageState extends State<HistoryPage> {
 
 class _BookingCard extends StatelessWidget {
   final Booking booking;
+  final ValueChanged<String> onCancelled;
 
-  const _BookingCard({required this.booking});
+  const _BookingCard({
+    required this.booking,
+    required this.onCancelled,
+  });
+
+  String get _providerImage =>
+      booking.imageUrl.isNotEmpty ? booking.imageUrl : _kFallbackProviderImage;
 
   Color _getStatusColor() {
     switch (booking.status) {
@@ -230,7 +284,7 @@ class _BookingCard extends StatelessWidget {
       case 'Confirmed':
         return Colors.blue;
       case 'Completed':
-        return const Color(0xFF25F46A);
+        return _kGreen;
       case 'Canceled':
         return Colors.red;
       default:
@@ -238,40 +292,69 @@ class _BookingCard extends StatelessWidget {
     }
   }
 
+  void _openTracking(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => JobTrackingPage(
+          providerName: booking.providerName,
+          serviceType: booking.serviceType,
+          providerImageUrl: _providerImage,
+        ),
+      ),
+    );
+  }
+
+  void _openRating(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RateProviderPage(
+          providerName: booking.providerName,
+          providerRole: booking.serviceType,
+          providerImageUrl: _providerImage,
+          serviceDescription: 'Standard Service',
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleCancel(BuildContext context) async {
+    final reason = await CancelBookingDialog.show(
+      context: context,
+      providerName: booking.providerName,
+      serviceType: booking.serviceType,
+    );
+    if (reason != null && context.mounted) {
+      onCancelled(reason);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final statusColor = _getStatusColor();
     final isCanceled = booking.status == 'Canceled';
+    final isActive =
+        booking.status == 'In Progress' || booking.status == 'Confirmed';
+    final isCompleted = booking.status == 'Completed';
 
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF080808),
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => JobTrackingPage(
-                  providerName: booking.providerName,
-                  serviceType: booking.serviceType,
-                  providerImageUrl: booking.imageUrl.isNotEmpty 
-                      ? booking.imageUrl 
-                      : 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2rC0jTUAzlbWZb9L6KQ87L1pOOJM3JGf2QQ5U9yc3GxyHKieh_lzQ2QwbRBLHFq86YShsjQqioBqk1WO0mn0FsfGMzJtfc7mTd5BIiid_rfQ6Vm2lqFkSYCHvfNjP_sMRBLptPVdg2tSRJ5hLdf1zUzXLb4-2OaF5Q_KsGq58Dk73VnUqWPFbBTumHh8J7JevvFKPnrtDuP0m4NaEk-9ITeRB1wrx39AbwC-8vhcy0KoLxqdbU9pGWneDYeXOkcjBaRc5AYYmRmKa',
-                ),
-              ),
-            );
-          },
+          onTap: () => _openTracking(context),
           borderRadius: BorderRadius.circular(32),
-          hoverColor: const Color(0xFF25F46A).withOpacity(0.05),
+          hoverColor: _kGreen.withValues(alpha: 0.05),
           child: Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                // Header: provider info + status chip
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,11 +386,16 @@ class _BookingCard extends StatelessWidget {
                       ],
                     ),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.1),
+                        color: statusColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: statusColor.withOpacity(0.2)),
+                        border: Border.all(
+                          color: statusColor.withValues(alpha: 0.2),
+                        ),
                       ),
                       child: Text(
                         booking.status.toUpperCase(),
@@ -322,8 +410,13 @@ class _BookingCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Container(height: 1, color: const Color.fromRGBO(255, 255, 255, 0.05)),
+                Container(
+                  height: 1,
+                  color: Colors.white.withValues(alpha: 0.05),
+                ),
                 const SizedBox(height: 16),
+
+                // Details: date/location + price
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -333,7 +426,11 @@ class _BookingCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.calendar_today, size: 16, color: Colors.grey[400]),
+                            Icon(
+                              Icons.calendar_today,
+                              size: 16,
+                              color: Colors.grey[400],
+                            ),
                             const SizedBox(width: 6),
                             Text(
                               '${booking.date}, ${booking.time}',
@@ -348,7 +445,11 @@ class _BookingCard extends StatelessWidget {
                           const SizedBox(height: 4),
                           Row(
                             children: [
-                              Icon(Icons.location_on, size: 16, color: Colors.grey[400]),
+                              Icon(
+                                Icons.location_on,
+                                size: 16,
+                                color: Colors.grey[400],
+                              ),
                               const SizedBox(width: 6),
                               Text(
                                 booking.location,
@@ -376,47 +477,45 @@ class _BookingCard extends StatelessWidget {
                         Text(
                           '\$${booking.price.toInt()}',
                           style: GoogleFonts.spaceGrotesk(
-                            color: isCanceled ? Colors.white.withOpacity(0.5) : const Color(0xFF25F46A),
+                            color: isCanceled
+                                ? Colors.white.withValues(alpha: 0.5)
+                                : _kGreen,
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            decoration: isCanceled ? TextDecoration.lineThrough : null,
-                            decorationColor: Colors.white.withOpacity(0.5),
+                            decoration: isCanceled
+                                ? TextDecoration.lineThrough
+                                : null,
+                            decorationColor:
+                            Colors.white.withValues(alpha: 0.5),
                           ),
                         ),
                       ],
                     ),
-                if (booking.status == 'In Progress' || booking.status == 'Confirmed') ...[
+                  ],
+                ),
+
+                // Actions for active bookings
+                if (isActive) ...[
                   const SizedBox(height: 16),
                   Row(
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JobTrackingPage(
-                                  providerName: booking.providerName,
-                                  serviceType: booking.serviceType,
-                                  providerImageUrl: booking.imageUrl.isNotEmpty
-                                      ? booking.imageUrl
-                                      : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
-                                ),
-                              ),
-                            );
-                          },
+                          onTap: () => _openTracking(context),
                           child: Container(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF25F46A).withValues(alpha: 0.1),
+                              color: _kGreen.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.3)),
+                              border: Border.all(
+                                color: _kGreen.withValues(alpha: 0.3),
+                              ),
                             ),
                             child: Center(
                               child: Text(
                                 'Track Job',
                                 style: GoogleFonts.spaceGrotesk(
-                                  color: const Color(0xFF25F46A),
+                                  color: _kGreen,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
                                 ),
@@ -427,44 +526,18 @@ class _BookingCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
                       GestureDetector(
-                        onTap: () async {
-                          final reason = await CancelBookingDialog.show(
-                            context: context,
-                            providerName: booking.providerName,
-                            serviceType: booking.serviceType,
-                          );
-                          if (reason != null && mounted) {
-                            setState(() {
-                              final idx = _allBookings.indexWhere((b) => b.id == booking.id);
-                              if (idx != -1) {
-                                _allBookings[idx] = Booking(
-                                  id: booking.id,
-                                  providerName: booking.providerName,
-                                  serviceType: booking.serviceType,
-                                  status: 'Canceled',
-                                  date: booking.date,
-                                  time: booking.time,
-                                  location: booking.location,
-                                  price: booking.price,
-                                  imageUrl: booking.imageUrl,
-                                );
-                              }
-                            });
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Booking canceled: $reason'),
-                                backgroundColor: const Color(0xFFFF5252),
-                                behavior: SnackBarBehavior.floating,
-                              ),
-                            );
-                          }
-                        },
+                        onTap: () => _handleCancel(context),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.red.withValues(alpha: 0.08),
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+                            border: Border.all(
+                              color: Colors.red.withValues(alpha: 0.3),
+                            ),
                           ),
                           child: Center(
                             child: Text(
@@ -481,37 +554,27 @@ class _BookingCard extends StatelessWidget {
                     ],
                   ),
                 ],
-                if (booking.status == 'Completed') ...[
+
+                // Action for completed bookings
+                if (isCompleted) ...[
                   const SizedBox(height: 20),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => RateProviderPage(
-                            providerName: booking.providerName,
-                            providerRole: booking.serviceType,
-                            providerImageUrl: booking.imageUrl.isNotEmpty 
-                                ? booking.imageUrl 
-                                : 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
-                            serviceDescription: 'Standard Service',
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => _openRating(context),
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF25F46A).withOpacity(0.1),
+                        color: _kGreen.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFF25F46A).withOpacity(0.3)),
+                        border: Border.all(
+                          color: _kGreen.withValues(alpha: 0.3),
+                        ),
                       ),
                       child: Center(
                         child: Text(
                           'Rate Service',
                           style: GoogleFonts.spaceGrotesk(
-                            color: const Color(0xFF25F46A),
+                            color: _kGreen,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),
@@ -529,6 +592,8 @@ class _BookingCard extends StatelessWidget {
   }
 
   Widget _buildThumbnail() {
+    final border = Border.all(color: Colors.white.withValues(alpha: 0.1));
+
     if (booking.imageUrl.isNotEmpty) {
       return Container(
         width: 48,
@@ -540,25 +605,26 @@ class _BookingCard extends StatelessWidget {
             image: NetworkImage(booking.imageUrl),
             fit: BoxFit.cover,
           ),
-          border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+          border: border,
         ),
-      );
-    } else {
-      // Placeholder based on service type
-      IconData icon = Icons.work;
-      if (booking.serviceType.contains('Plumbing')) icon = Icons.plumbing;
-      if (booking.serviceType.contains('Cleaning')) icon = Icons.cleaning_services;
-
-      return Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: Colors.grey[800],
-          shape: BoxShape.circle,
-          border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
-        ),
-        child: Icon(icon, color: Colors.grey[400], size: 24),
       );
     }
+
+    // Placeholder icon based on provider name / service type
+    final text = '${booking.providerName} ${booking.serviceType}';
+    IconData icon = Icons.work;
+    if (text.contains('Plumbing')) icon = Icons.plumbing;
+    if (text.contains('Clean')) icon = Icons.cleaning_services;
+
+    return Container(
+      width: 48,
+      height: 48,
+      decoration: BoxDecoration(
+        color: Colors.grey[800],
+        shape: BoxShape.circle,
+        border: border,
+      ),
+      child: Icon(icon, color: Colors.grey[400], size: 24),
+    );
   }
 }
