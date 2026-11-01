@@ -11,6 +11,11 @@ import 'provider_list_page.dart';
 import 'profile_page.dart';
 import 'saved_providers_page.dart';
 
+const Color _kGreen = Color(0xFF25F46A);
+
+const String _kUserAvatar =
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -28,7 +33,7 @@ class _HomePageState extends State<HomePage> {
     AddressService().init();
   }
 
-  // Mock Data
+  // Mock data
   final List<Provider> _providers = [
     Provider(
       id: '1',
@@ -38,8 +43,10 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 128,
       distance: '0.5 mi',
       priceStart: 40,
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
-      about: 'Experienced barber with over 10 years of experience. Specializing in fading and beard trims. I provide a premium service with hot towel shave and facial massage.',
+      imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
+      about:
+      'Experienced barber with over 10 years of experience. Specializing in fading and beard trims. I provide a premium service with hot towel shave and facial massage.',
       services: ['Haircut', 'Beard Trim', 'Hot Towel Shave', 'Facial'],
     ),
     Provider(
@@ -50,9 +57,16 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 85,
       distance: '1.2 mi',
       priceStart: 85,
-      imageUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
-      about: 'Certified mobile technician. We come to you! Specializing in iPhone and Samsung repairs. Fast, reliable, and affordable.',
-      services: ['Screen Repair', 'Battery Replacement', 'Water Damage', 'Diagnostic'],
+      imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
+      about:
+      'Certified mobile technician. We come to you! Specializing in iPhone and Samsung repairs. Fast, reliable, and affordable.',
+      services: [
+        'Screen Repair',
+        'Battery Replacement',
+        'Water Damage',
+        'Diagnostic',
+      ],
     ),
     Provider(
       id: '3',
@@ -62,8 +76,10 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 92,
       distance: '2.1 mi',
       priceStart: 60,
-      imageUrl: 'https://images.pexels.com/photos/1181681/pexels-photo-1181681.jpeg?auto=compress&cs=tinysrgb&w=400',
-      about: 'Expert hair stylist with a focus on modern cuts and color treatments.',
+      imageUrl:
+      'https://images.pexels.com/photos/1181681/pexels-photo-1181681.jpeg?auto=compress&cs=tinysrgb&w=400',
+      about:
+      'Expert hair stylist with a focus on modern cuts and color treatments.',
       services: ['Hair Coloring', 'Modern Cuts', 'Styling', 'Treatment'],
     ),
     Provider(
@@ -74,8 +90,10 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 45,
       distance: '1.8 mi',
       priceStart: 50,
-      imageUrl: 'https://images.pexels.com/photos/327072/pexels-photo-327072.jpeg?auto=compress&cs=tinysrgb&w=400',
-      about: 'Emergency plumbing and general maintenance for homes and offices.',
+      imageUrl:
+      'https://images.pexels.com/photos/327072/pexels-photo-327072.jpeg?auto=compress&cs=tinysrgb&w=400',
+      about:
+      'Emergency plumbing and general maintenance for homes and offices.',
       services: ['Leak Repair', 'Installation', 'Drain Cleaning', 'Emergency'],
     ),
     Provider(
@@ -86,15 +104,14 @@ class _HomePageState extends State<HomePage> {
       reviewsCount: 210,
       distance: '0.3 mi',
       priceStart: 30,
-      imageUrl: 'https://images.pexels.com/photos/3768910/pexels-photo-3768910.jpeg?auto=compress&cs=tinysrgb&w=400',
-      about: 'Premium cleaning services for residential and commercial properties.',
+      imageUrl:
+      'https://images.pexels.com/photos/3768910/pexels-photo-3768910.jpeg?auto=compress&cs=tinysrgb&w=400',
+      about:
+      'Premium cleaning services for residential and commercial properties.',
       services: ['Deep Clean', 'Office Cleaning', 'Post-Construction', 'Daily Maid'],
     ),
   ];
-  
-  // Filter providers essentially just ensures we show something relevant. 
-  // For this mock, we'll just show all of them unless a filter logic is added later.
-  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -124,6 +141,7 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          // Left side: title, tagline, address chip
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -142,15 +160,15 @@ class _HomePageState extends State<HomePage> {
                     width: 8,
                     height: 8,
                     decoration: const BoxDecoration(
-                      color: Color(0xFF25F46A),
+                      color: _kGreen,
                       shape: BoxShape.circle,
                       boxShadow: [
-                         BoxShadow(
-                          color: Color(0xFF25F46A),
+                        BoxShadow(
+                          color: _kGreen,
                           blurRadius: 8,
-                           spreadRadius: 1,
+                          spreadRadius: 1,
                         ),
-                      ]
+                      ],
                     ),
                   ),
                 ],
@@ -175,7 +193,10 @@ class _HomePageState extends State<HomePage> {
                   return GestureDetector(
                     onTap: () => AddressPickerSheet.show(context: context),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFF161616),
                         borderRadius: BorderRadius.circular(12),
@@ -184,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.location_on, color: Color(0xFF25F46A), size: 12),
+                          const Icon(Icons.location_on, color: _kGreen, size: 12),
                           const SizedBox(width: 4),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 160),
@@ -199,7 +220,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(width: 2),
-                          const Icon(Icons.keyboard_arrow_down, color: Colors.white60, size: 14),
+                          const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.white60,
+                            size: 14,
+                          ),
                         ],
                       ),
                     ),
@@ -208,6 +233,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+
+          // Right side: favorites + profile avatar
           Row(
             children: [
               GestureDetector(
@@ -215,7 +242,8 @@ class _HomePageState extends State<HomePage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SavedProvidersPage(allProviders: _providers),
+                      builder: (context) =>
+                          SavedProvidersPage(allProviders: _providers),
                     ),
                   );
                 },
@@ -227,28 +255,38 @@ class _HomePageState extends State<HomePage> {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white12),
                   ),
-                  child: const Icon(Icons.favorite_border, color: Colors.white, size: 18),
+                  child: const Icon(
+                    Icons.favorite_border,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 ),
               ),
               GestureDetector(
                 onTap: () {
-                   // Functional Profile Avatar
-                   Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => const ProfilePage()),
-                   );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ProfilePage(),
+                    ),
+                  );
                 },
                 child: Container(
                   padding: const EdgeInsets.all(2),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: const Color.fromRGBO(37, 244, 106, 0.2), width: 2),
+                    border: Border.all(
+                      color: _kGreen.withValues(alpha: 0.2),
+                      width: 2,
+                    ),
                   ),
                   child: const CircleAvatar(
                     radius: 18,
-                backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b'),
+                    backgroundImage: NetworkImage(_kUserAvatar),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -258,18 +296,19 @@ class _HomePageState extends State<HomePage> {
   Widget _buildSearchBar() {
     return GestureDetector(
       onTap: () {
-        // Functional Search Bar
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ProviderListPage(category: 'Services')),
+          MaterialPageRoute(
+            builder: (context) => const ProviderListPage(category: 'Services'),
+          ),
         );
       },
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          color: const Color.fromRGBO(255, 255, 255, 0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(20),
@@ -289,17 +328,18 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                 Container(
-                   height: 24,
-                   width: 1,
-                   color: const Color.fromRGBO(255, 255, 255, 0.1),
-                 ),
+                Container(
+                  height: 24,
+                  width: 1,
+                  color: Colors.white.withValues(alpha: 0.1),
+                ),
                 const SizedBox(width: 16),
                 IconButton(
                   onPressed: () {
-                    // Logic for filters or advanced search
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Filter options coming soon!')),
+                      const SnackBar(
+                        content: Text('Filter options coming soon!'),
+                      ),
                     );
                   },
                   icon: Icon(Icons.tune, color: Colors.grey[400], size: 20),
@@ -314,7 +354,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCategories() {
-    final categories = [
+    const categories = [
       {'icon': Icons.smartphone, 'label': 'Phone Tech'},
       {'icon': Icons.content_cut, 'label': 'Barber'},
       {'icon': Icons.face, 'label': 'Stylist'},
@@ -328,58 +368,63 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: categories.map((cat) {
-            final label = cat['label'] as String;
-            final isActive = _selectedCategory == label;
-            
-            return Padding(
-              padding: const EdgeInsets.only(right: 24),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() => _selectedCategory = label);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProviderListPage(category: label),
-                    ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      width: 72,
-                      height: 72,
-                      decoration: BoxDecoration(
-                        color: isActive ? const Color(0xFF25F46A) : const Color(0xFF0F0F0F),
-                        shape: BoxShape.circle,
-                        border: isActive ? null : Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
-                        boxShadow: isActive ? [
-                          const BoxShadow(
-                            color: Color.fromRGBO(37, 244, 106, 0.4),
-                            blurRadius: 20,
-                            offset: Offset(0, 0),
-                          )
-                        ] : null,
+          final label = cat['label'] as String;
+          final isActive = _selectedCategory == label;
+
+          return Padding(
+            padding: const EdgeInsets.only(right: 24),
+            child: GestureDetector(
+              onTap: () {
+                setState(() => _selectedCategory = label);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProviderListPage(category: label),
+                  ),
+                );
+              },
+              child: Column(
+                children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    decoration: BoxDecoration(
+                      color: isActive ? _kGreen : const Color(0xFF0F0F0F),
+                      shape: BoxShape.circle,
+                      border: isActive
+                          ? null
+                          : Border.all(
+                        color: Colors.white.withValues(alpha: 0.1),
                       ),
-                      child: Icon(
-                        cat['icon'] as IconData,
-                        color: isActive ? Colors.black : Colors.grey[400],
-                        size: 30,
-                      ),
+                      boxShadow: isActive
+                          ? [
+                        BoxShadow(
+                          color: _kGreen.withValues(alpha: 0.4),
+                          blurRadius: 20,
+                        ),
+                      ]
+                          : null,
                     ),
-                    const SizedBox(height: 12),
-                    Text(
-                      label.toUpperCase(),
-                      style: GoogleFonts.spaceGrotesk(
-                        color: isActive ? const Color(0xFF25F46A) : Colors.grey[500],
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                      ),
+                    child: Icon(
+                      cat['icon'] as IconData,
+                      color: isActive ? Colors.black : Colors.grey[400],
+                      size: 30,
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    label.toUpperCase(),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: isActive ? _kGreen : Colors.grey[500],
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ],
               ),
-            );
+            ),
+          );
         }).toList(),
       ),
     );
@@ -387,53 +432,68 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildPremiumProviders() {
     return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Premium Providers',
-                  style: GoogleFonts.spaceGrotesk(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Premium Providers',
+                style: GoogleFonts.spaceGrotesk(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                      const ProviderListPage(category: 'Services'),
+                    ),
+                  );
+                },
+                child: Text(
                   'View All',
                   style: GoogleFonts.spaceGrotesk(
-                    color: const Color(0xFF25F46A),
+                    color: _kGreen,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            ..._providers.map((provider) => Padding(
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          ..._providers.map(
+                (provider) => Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: _buildProviderCard(provider),
-            )).toList(),
-          ],
-        ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildProviderCard(Provider provider) {
     return GestureDetector(
       onTap: () {
-         Navigator.push(
-           context,
-           MaterialPageRoute(builder: (context) => ProviderDetailsPage(provider: provider)),
-         );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProviderDetailsPage(provider: provider),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(
           color: const Color(0xFF080808),
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.05)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -466,32 +526,41 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                // Rating badge (blur is clipped to the rounded badge)
                 Positioned(
                   top: 16,
                   right: 16,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: const Color.fromRGBO(0, 0, 0, 0.4),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
-                    ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.star, color: Color(0xFF25F46A), size: 14),
-                          const SizedBox(width: 4),
-                          Text(
-                            provider.rating.toString(),
-                            style: GoogleFonts.spaceGrotesk(
-                              color: Colors.white,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.4),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.1),
                           ),
-                        ],
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.star, color: _kGreen, size: 14),
+                            const SizedBox(width: 4),
+                            Text(
+                              provider.rating.toString(),
+                              style: GoogleFonts.spaceGrotesk(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -519,9 +588,12 @@ class _HomePageState extends State<HomePage> {
                       Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 2,
+                            ),
                             decoration: BoxDecoration(
-                              color: const Color.fromRGBO(255, 255, 255, 0.1),
+                              color: Colors.white.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
@@ -533,12 +605,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                           Text(
+                          Text(
                             '•',
-                            style: TextStyle(color: Colors.grey[400], fontSize: 10),
+                            style: TextStyle(
+                              color: Colors.grey[400],
+                              fontSize: 10,
+                            ),
                           ),
-                           const SizedBox(width: 8),
-                           Text(
+                          const SizedBox(width: 8),
+                          Text(
                             provider.distance,
                             style: GoogleFonts.spaceGrotesk(
                               color: Colors.grey[400],
@@ -564,7 +639,7 @@ class _HomePageState extends State<HomePage> {
                       Text(
                         '\$${provider.priceStart.toInt()}',
                         style: GoogleFonts.spaceGrotesk(
-                          color: const Color(0xFF25F46A),
+                          color: _kGreen,
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
@@ -580,4 +655,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
