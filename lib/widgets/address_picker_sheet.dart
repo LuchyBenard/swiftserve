@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/saved_address.dart';
 import '../services/address_service.dart';
 
+const Color _kGreen = Color(0xFF25F46A);
+
 class AddressPickerSheet extends StatefulWidget {
   final ValueChanged<SavedAddress>? onAddressSelected;
 
@@ -16,7 +18,8 @@ class AddressPickerSheet extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => AddressPickerSheet(onAddressSelected: onAddressSelected),
+      builder: (context) =>
+          AddressPickerSheet(onAddressSelected: onAddressSelected),
     );
   }
 
@@ -55,11 +58,21 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('📍 Location updated via GPS!'),
-            backgroundColor: Color(0xFF25F46A),
+            backgroundColor: _kGreen,
             behavior: SnackBarBehavior.floating,
           ),
         );
         Navigator.pop(context, detected);
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Could not detect location. Check GPS permissions.'),
+            backgroundColor: Colors.redAccent,
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _isDetectingGps = false);
@@ -97,8 +110,6 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryGreen = Color(0xFF25F46A);
-
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xFF0F0F0F),
@@ -121,7 +132,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.location_on, color: primaryGreen, size: 24),
+                  const Icon(Icons.location_on, color: _kGreen, size: 24),
                   const SizedBox(width: 8),
                   Text(
                     'Select Service Location',
@@ -141,7 +152,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
           ),
           const SizedBox(height: 16),
 
-          // GPS Auto Detect Button
+          // GPS auto-detect button
           GestureDetector(
             onTap: _isDetectingGps ? null : _handleGpsDetect,
             child: Container(
@@ -149,24 +160,29 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
               decoration: BoxDecoration(
                 color: const Color(0xFF161616),
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: primaryGreen.withValues(alpha: 0.4)),
+                border: Border.all(color: _kGreen.withValues(alpha: 0.4)),
               ),
               child: Row(
                 children: [
                   _isDetectingGps
                       ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: primaryGreen),
-                        )
-                      : const Icon(Icons.my_location, color: primaryGreen, size: 22),
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: _kGreen,
+                    ),
+                  )
+                      : const Icon(Icons.my_location, color: _kGreen, size: 22),
                   const SizedBox(width: 14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _isDetectingGps ? 'Detecting coordinates...' : 'Auto-Detect via GPS',
+                          _isDetectingGps
+                              ? 'Detecting coordinates...'
+                              : 'Auto-Detect via GPS',
                           style: GoogleFonts.spaceGrotesk(
                             color: Colors.white,
                             fontSize: 14,
@@ -176,19 +192,26 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                         const SizedBox(height: 2),
                         Text(
                           'Use device satellite position in Enugu',
-                          style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 11),
+                          style: GoogleFonts.spaceGrotesk(
+                            color: Colors.grey[500],
+                            fontSize: 11,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                  const Icon(Icons.arrow_forward_ios, color: Colors.white30, size: 14),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white30,
+                    size: 14,
+                  ),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 20),
 
-          // Saved Addresses Section Header
+          // Saved addresses section header
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -206,7 +229,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                 child: Text(
                   _isAddingNew ? 'Cancel' : '+ Add New',
                   style: GoogleFonts.spaceGrotesk(
-                    color: primaryGreen,
+                    color: _kGreen,
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
@@ -216,7 +239,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
           ),
           const SizedBox(height: 12),
 
-          // Inline Add Form
+          // Inline add form
           if (_isAddingNew) ...[
             Container(
               padding: const EdgeInsets.all(16),
@@ -232,8 +255,9 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                     controller: _titleController,
                     style: const TextStyle(color: Colors.white, fontSize: 14),
                     decoration: InputDecoration(
-                      hintText: 'Label (e.g. Home, Studio, Mom\'s House)',
-                      hintStyle: TextStyle(color: Colors.grey[600], fontSize: 13),
+                      hintText: "Label (e.g. Home, Studio, Mom's House)",
+                      hintStyle:
+                      TextStyle(color: Colors.grey[600], fontSize: 13),
                       isDense: true,
                     ),
                   ),
@@ -243,28 +267,37 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                     style: const TextStyle(color: Colors.white, fontSize: 14),
                     decoration: InputDecoration(
                       hintText: 'Full Address & Landmark in Enugu',
-                      hintStyle: TextStyle(color: Colors.grey[600], fontSize: 13),
+                      hintStyle:
+                      TextStyle(color: Colors.grey[600], fontSize: 13),
                       isDense: true,
                     ),
                   ),
                   const SizedBox(height: 14),
                   Row(
                     children: [
-                      _buildTagChip('home', Icons.home, primaryGreen),
+                      _buildTagChip('home', Icons.home),
                       const SizedBox(width: 8),
-                      _buildTagChip('work', Icons.work, primaryGreen),
+                      _buildTagChip('work', Icons.work),
                       const SizedBox(width: 8),
-                      _buildTagChip('other', Icons.place, primaryGreen),
+                      _buildTagChip('other', Icons.place),
                       const Spacer(),
                       ElevatedButton(
                         onPressed: _handleSaveNewAddress,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: primaryGreen,
+                          backgroundColor: _kGreen,
                           foregroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                        child: const Text('Save', style: TextStyle(fontWeight: FontWeight.bold)),
+                        child: const Text(
+                          'Save',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ],
                   ),
@@ -274,7 +307,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
             const SizedBox(height: 12),
           ],
 
-          // Addresses List
+          // Addresses list
           ValueListenableBuilder<List<SavedAddress>>(
             valueListenable: _addressService.addressesNotifier,
             builder: (context, addresses, _) {
@@ -284,7 +317,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                   return Column(
                     children: addresses.map((addr) {
                       final isSelected = selected?.id == addr.id;
-                      return _buildAddressTile(addr, isSelected, primaryGreen);
+                      return _buildAddressTile(addr, isSelected);
                     }).toList(),
                   );
                 },
@@ -296,20 +329,24 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
     );
   }
 
-  Widget _buildTagChip(String tag, IconData icon, Color primaryGreen) {
+  Widget _buildTagChip(String tag, IconData icon) {
     final selected = _selectedTag == tag;
     return GestureDetector(
       onTap: () => setState(() => _selectedTag = tag),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
-          color: selected ? primaryGreen : const Color(0xFF222222),
+          color: selected ? _kGreen : const Color(0xFF222222),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 14, color: selected ? Colors.black : Colors.white70),
+            Icon(
+              icon,
+              size: 14,
+              color: selected ? Colors.black : Colors.white70,
+            ),
             const SizedBox(width: 4),
             Text(
               tag.toUpperCase(),
@@ -325,7 +362,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
     );
   }
 
-  Widget _buildAddressTile(SavedAddress address, bool isSelected, Color primaryGreen) {
+  Widget _buildAddressTile(SavedAddress address, bool isSelected) {
     IconData icon;
     switch (address.tag) {
       case 'work':
@@ -351,7 +388,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
           color: isSelected ? const Color(0xFF19251E) : const Color(0xFF141414),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? primaryGreen : Colors.white10,
+            color: isSelected ? _kGreen : Colors.white10,
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -360,10 +397,16 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                color: isSelected ? primaryGreen.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
+                color: isSelected
+                    ? _kGreen.withValues(alpha: 0.2)
+                    : Colors.white.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: isSelected ? primaryGreen : Colors.white70, size: 18),
+              child: Icon(
+                icon,
+                color: isSelected ? _kGreen : Colors.white70,
+                size: 18,
+              ),
             ),
             const SizedBox(width: 14),
             Expanded(
@@ -383,12 +426,18 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                       if (address.isDefault) ...[
                         const SizedBox(width: 8),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white10,
                             borderRadius: BorderRadius.circular(6),
                           ),
-                          child: const Text('DEFAULT', style: TextStyle(color: Colors.white60, fontSize: 8)),
+                          child: const Text(
+                            'DEFAULT',
+                            style: TextStyle(color: Colors.white60, fontSize: 8),
+                          ),
                         ),
                       ],
                     ],
@@ -396,7 +445,10 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                   const SizedBox(height: 2),
                   Text(
                     address.addressLine,
-                    style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 12),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.grey[400],
+                      fontSize: 12,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -404,7 +456,7 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
               ),
             ),
             if (isSelected)
-              const Icon(Icons.check_circle, color: primaryGreen, size: 20),
+              const Icon(Icons.check_circle, color: _kGreen, size: 20),
           ],
         ),
       ),
