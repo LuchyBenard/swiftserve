@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/provider.dart';
 import '../services/favorites_service.dart';
+import '../services/chat_service.dart';
+import 'chat_page.dart';
 import 'request/create_request_flow.dart';
 
 class ProviderDetailsPage extends StatelessWidget {
@@ -228,49 +230,95 @@ class ProviderDetailsPage extends StatelessWidget {
             ],
           ),
           
-          // Booking Button
+          // Action Buttons: Direct Message & Book Now
           Positioned(
             bottom: 32,
             left: 24,
             right: 24,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CreateRequestFlow(provider: provider),
-                  ),
-                );
-              },
-              child: Container(
-                height: 64,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF25F46A),
-                  borderRadius: BorderRadius.circular(32),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF25F46A).withOpacity(0.4),
-                      blurRadius: 20,
-                      offset: const Offset(0, 5),
+            child: Row(
+              children: [
+                // Direct Message Provider Button
+                Container(
+                  height: 64,
+                  width: 64,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF141414),
+                    borderRadius: BorderRadius.circular(32),
+                    border: Border.all(
+                      color: const Color(0xFF25F46A).withValues(alpha: 0.3),
+                      width: 1.5,
                     ),
-                  ],
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF25F46A).withValues(alpha: 0.1),
+                        blurRadius: 16,
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.chat_bubble_outline_rounded,
+                      color: Color(0xFF25F46A),
+                      size: 26,
+                    ),
+                    tooltip: 'Message Provider',
+                    onPressed: () async {
+                      final conv = await ChatService().getOrCreateConversationForProvider(provider);
+                      if (context.mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(conversation: conv),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Book Now',
-                      style: GoogleFonts.spaceGrotesk(
-                        color: Colors.black,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                const SizedBox(width: 14),
+                // Book Now Button
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CreateRequestFlow(provider: provider),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 64,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF25F46A),
+                        borderRadius: BorderRadius.circular(32),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF25F46A).withValues(alpha: 0.4),
+                            blurRadius: 20,
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Book Now',
+                            style: GoogleFonts.spaceGrotesk(
+                              color: Colors.black,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(Icons.arrow_forward_rounded, color: Colors.black),
+                        ],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.arrow_forward_rounded, color: Colors.black),
-                  ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ],
