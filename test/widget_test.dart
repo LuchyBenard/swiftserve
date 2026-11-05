@@ -13,6 +13,8 @@ import 'package:swiftserve/services/favorites_service.dart';
 import 'package:swiftserve/services/address_service.dart';
 import 'package:swiftserve/widgets/clippers/top_wave_clipper.dart';
 import 'package:swiftserve/widgets/cancel_booking_dialog.dart';
+import 'package:swiftserve/services/chat_service.dart';
+import 'package:swiftserve/pages/chat_page.dart';
 
 void main() {
   setUp(() {
@@ -334,4 +336,135 @@ void main() {
       expect(find.text('Keep Booking'), findsOneWidget);
     });
   });
+
+  group('Interactive Chat & Messaging Feature Tests', () {
+    test('Message and Conversation JSON serialization roundtrip', () {
+      final msg = Message(
+        id: 'msg_test_1',
+        senderId: 'usr_me',
+        text: 'Can you arrive at 2 PM?',
+        timestamp: DateTime(2026, 11, 4, 14, 0),
+        isMe: true,
+        imageUrl: 'https://example.com/photo.jpg',
+      );
+
+      final json = msg.toJson();
+      final reconstructed = Message.fromJson(json);
+
+      expect(reconstructed.id, msg.id);
+      expect(reconstructed.senderId, msg.senderId);
+      expect(reconstructed.text, msg.text);
+      expect(reconstructed.isMe, msg.isMe);
+      expect(reconstructed.imageUrl, msg.imageUrl);
+
+      final conv = Conversation(
+        id: 'conv_test_1',
+        providerName: 'Elena Sparks',
+        lastMessage: 'Will be there!',
+        time: '1:45 PM',
+        avatarUrl: 'https://example.com/elena.jpg',
+        isOnline: true,
+        isUnread: true,
+        providerIcon: 'electrical_services',
+      );
+
+      final convJson = conv.toJson();
+      final reconstructedConv = Conversation.fromJson(convJson);
+
+      expect(reconstructedConv.id, conv.id);
+      expect(reconstructedConv.providerName, conv.providerName);
+      expect(reconstructedConv.lastMessage, conv.lastMessage);
+      expect(reconstructedConv.isOnline, isTrue);
+      expect(reconstructedConv.isUnread, isTrue);
+      expect(reconstructedConv.providerIcon, 'electrical_services');
+
+      final copied = conv.copyWith(isUnread: false, lastMessage: 'Updated message');
+      expect(copied.isUnread, isFalse);
+      expect(copied.lastMessage, 'Updated message');
+      expect(copied.providerName, conv.providerName);
+    });
+
+    test('ChatService initializes seed data and updates unread badge count', () async {
+      final service = ChatService();
+      await service.init();
+
+      expect(service.conversationsNotifier.value.isNotEmpty, isTrue);
+      expect(service.unreadCountNotifier.value, greaterThanOrEqualTo(1));
+
+      // Mark first conversation as read
+      final firstConv = service.conversationsNotifier.value.first;
+      await service.markAsRead(firstConv.id);
+
+      final updatedList = service.conversationsNotifier.value;
+      final updatedFirst = updatedList.firstWhere((c) => c.id == firstConv.id);
+      expect(updatedFirst.isUnread, isFalse);
+    });
+
+    test('ChatService getOrCreateConversationForProvider creates new conversation when not present', () async {
+      final service = ChatService();
+      await service.init();
+
+      final newProvider = Provider(
+        id: 'prov_custom_99',
+        name: 'Carlos Generator Specialist',
+        role: 'Generator Tech',
+        rating: 4.88,
+        reviewsCount: 32,
+        distance: '4.0 mi',
+        priceStart: 75.0,
+        imageUrl: '',
+        about: 'Expert generator maintenance.',
+        services: ['Diagnostics', 'Oil Change'],
+      );
+
+      final conv = await service.getOrCreateConversationForProvider(newProvider);
+      expect(conv.providerName, 'Carlos Generator Specialist');
+      expect(conv.id.contains('prov_custom_99'), isTrue);
+
+      final msgs = await service.getMessages(conv.id);
+      expect(msgs.isNotEmpty, isTrue);
+    });
+
+    test('ChatService sendMessage adds message and updates conversation last message', () async {
+      final service = ChatService();
+      await service.init();
+
+      final conv = service.conversationsNotifier.value.first;
+      final sent = await service.sendMessage(
+        conversationId: conv.id,
+        text: 'Hello from automated unit test!',
+      );
+
+      expect(sent.text, 'Hello from automated unit test!');
+      expect(sent.isMe, isTrue);
+
+      final messages = await service.getMessages(conv.id);
+      expect(messages.any((m) => m.text == 'Hello from automated unit test!'), isTrue);
+    });
+
+    testWidgets('ChatPage renders conversation header and message bubble UI', (WidgetTester tester) async {
+      final testConv = Conversation(
+        id: 'test_conv_widget',
+        providerName: 'TechFix Mobile',
+        lastMessage: 'On my way!',
+        time: 'Just now',
+        isOnline: true,
+      );
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ChatPage(conversation: testConv),
+        ),
+      );
+
+      await tester.pump();
+
+      expect(find.text('TechFix Mobile'), findsOneWidget);
+      expect(find.byIcon(Icons.call_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.send_rounded), findsOneWidget);
+      expect(find.text('Where are you now?'), findsOneWidget);
+      expect(find.text('How much will it cost?'), findsOneWidget);
+    });
+  });
 }
+

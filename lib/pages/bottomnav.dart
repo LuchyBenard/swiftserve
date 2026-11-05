@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../services/chat_service.dart';
 import 'homepage.dart';
 import 'history_page.dart';
 import 'chat_inbox_page.dart';
@@ -23,6 +24,12 @@ class _BottomNavPageState extends State<BottomNavPage> {
     const ChatInboxPage(),
     const ProfilePage(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    ChatService().init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -125,10 +132,10 @@ class _BottomNavPageState extends State<BottomNavPage> {
                         Container(
                           width: 50,
                           height: 50,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF25F46A),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF25F46A),
                             shape: BoxShape.circle,
-                            boxShadow: const [
+                            boxShadow: [
                               BoxShadow(
                                 color: Color.fromRGBO(37, 244, 106, 0.5),
                                 blurRadius: 10,
@@ -172,17 +179,60 @@ class _BottomNavPageState extends State<BottomNavPage> {
 
   Widget _buildNavItem(IconData icon, String label, int index) {
     final isActive = _currentIndex == index;
+    Widget iconWidget = Icon(
+      icon,
+      color: isActive ? const Color(0xFF25F46A) : Colors.grey[500],
+      size: 24,
+    );
+
+    if (index == 2) {
+      iconWidget = ValueListenableBuilder<int>(
+        valueListenable: ChatService().unreadCountNotifier,
+        builder: (context, unreadCount, child) {
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              child!,
+              if (unreadCount > 0)
+                Positioned(
+                  top: -4,
+                  right: -8,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF25F46A),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0xFF25F46A),
+                          blurRadius: 6,
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      unreadCount > 9 ? '9+' : '$unreadCount',
+                      style: GoogleFonts.spaceGrotesk(
+                        color: Colors.black,
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+        },
+        child: iconWidget,
+      );
+    }
+
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),
       behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            color: isActive ? const Color(0xFF25F46A) : Colors.grey[500],
-            size: 24,
-          ),
+          iconWidget,
           const SizedBox(height: 2),
           Text(
             label,
