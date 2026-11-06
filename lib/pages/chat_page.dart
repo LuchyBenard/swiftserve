@@ -80,11 +80,12 @@ class _ChatPageState extends State<ChatPage> {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color(0xFF141414),
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => SafeArea(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,

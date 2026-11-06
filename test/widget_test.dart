@@ -473,7 +473,7 @@ void main() {
       expect(find.text('Camera'), findsOneWidget);
       expect(find.text('Gallery'), findsOneWidget);
       expect(find.text('Location'), findsOneWidget);
-      expect(find.text('Where are you now?'), findsOneWidget);
+      expect(find.text('Are you on your way?'), findsOneWidget);
     });
   });
 }

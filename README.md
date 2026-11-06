@@ -19,7 +19,13 @@ An on-demand service booking and marketplace mobile application built with **Flu
   - **Step 3 — Review & Checkout:** Verify request details, view cost breakdowns, and finalize booking.
 - **Live Job Tracking:** Monitor ongoing service requests with status stages (`In Progress`, `Confirmed`, `Completed`, `Canceled`).
 - **Structured Booking Cancellation:** Cancel active bookings through a dedicated modal with categorized reasons and notes.
-- **In-App Messaging:** Real-time 1-on-1 chat between clients and providers for direct communication.
+- **Interactive Chat & Direct Messaging:**
+  - Real-time 1-on-1 direct messaging between clients and service providers with local caching and offline persistence.
+  - Realistic provider typing status indicator and intelligent auto-reply simulation engine.
+  - Quick actions bottom sheet for camera capture, gallery photo attachments, GPS location sharing, and preset replies.
+  - Full-screen media preview viewer and one-tap provider voice dialing.
+  - Direct messaging entry points from Provider Profile (`ProviderDetailsPage`) and Job Tracking (`JobTrackingPage`).
+  - Real-time unread badges on `ChatInboxPage` and navigation bar, search filtering, and swipe-to-delete conversation management.
 - **Ratings & Reviews:** Leave 5-star ratings and written feedback once a job is complete.
 - **Profile & History:** Manage personal details, saved addresses, favorite providers, and historical bookings.
 
@@ -102,6 +108,7 @@ swiftserve/
 │   ├── services/              # External services & business logic
 │   │   ├── address_service.dart# Saved addresses & GPS auto-detection
 │   │   ├── auth_service.dart  # Firebase Auth & Firestore user sync
+│   │   ├── chat_service.dart  # Direct messaging, reactive streams & auto-replies
 │   │   └── favorites_service.dart# Favorite provider persistence & reactive state
 │   ├── splash/                # Startup splash screen
 │   ├── welcome/               # Post-onboarding welcome screen
