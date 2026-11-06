@@ -442,7 +442,7 @@ void main() {
       expect(messages.any((m) => m.text == 'Hello from automated unit test!'), isTrue);
     });
 
-    testWidgets('ChatPage renders conversation header and message bubble UI', (WidgetTester tester) async {
+    testWidgets('ChatPage renders conversation header, input area, and quick actions', (WidgetTester tester) async {
       final testConv = Conversation(
         id: 'test_conv_widget',
         providerName: 'TechFix Mobile',
@@ -457,13 +457,23 @@ void main() {
         ),
       );
 
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('TechFix Mobile'), findsOneWidget);
-      expect(find.byIcon(Icons.call_outlined), findsOneWidget);
-      expect(find.byIcon(Icons.send_rounded), findsOneWidget);
+      expect(find.text('ONLINE'), findsOneWidget);
+      expect(find.byIcon(Icons.phone_outlined), findsOneWidget);
+      expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
+      expect(find.text('Type a message...'), findsOneWidget);
+
+      // Tap + button to open quick actions bottom sheet
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+
+      expect(find.text('QUICK ACTIONS'), findsOneWidget);
+      expect(find.text('Camera'), findsOneWidget);
+      expect(find.text('Gallery'), findsOneWidget);
+      expect(find.text('Location'), findsOneWidget);
       expect(find.text('Where are you now?'), findsOneWidget);
-      expect(find.text('How much will it cost?'), findsOneWidget);
     });
   });
 }
