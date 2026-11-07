@@ -15,6 +15,9 @@ import 'package:swiftserve/widgets/clippers/top_wave_clipper.dart';
 import 'package:swiftserve/widgets/cancel_booking_dialog.dart';
 import 'package:swiftserve/services/chat_service.dart';
 import 'package:swiftserve/pages/chat_page.dart';
+import 'package:swiftserve/models/app_notification.dart';
+import 'package:swiftserve/services/notification_service.dart';
+import 'package:swiftserve/pages/notification_center_page.dart';
 
 void main() {
   setUp(() {
@@ -476,5 +479,113 @@ void main() {
       expect(find.text('Are you on your way?'), findsOneWidget);
     });
   });
+
+  group('In-App Notification Center & Alerts Feature Tests', () {
+    test('AppNotification and NotificationSettings serialize and deserialize correctly', () {
+      final notif = AppNotification(
+        id: 'notif_unit_1',
+        title: 'Booking Accepted',
+        body: 'Sarah M. accepted your appointment for 2:00 PM.',
+        timestamp: DateTime(2026, 11, 7, 14, 0),
+        type: NotificationType.booking,
+        isRead: false,
+        actionRoute: 'tracking',
+        actionPayload: 'Sarah M.',
+      );
+
+      final json = notif.toJson();
+      final restored = AppNotification.fromJson(json);
+
+      expect(restored.id, notif.id);
+      expect(restored.title, notif.title);
+      expect(restored.body, notif.body);
+      expect(restored.type, NotificationType.booking);
+      expect(restored.isRead, isFalse);
+      expect(restored.actionRoute, 'tracking');
+      expect(restored.actionPayload, 'Sarah M.');
+
+      final updated = notif.copyWith(isRead: true);
+      expect(updated.isRead, isTrue);
+
+      final settings = const NotificationSettings(
+        pushEnabled: true,
+        bookingAlerts: false,
+        promoAlerts: true,
+        soundEnabled: false,
+      );
+      final settingsJson = settings.toJson();
+      final restoredSettings = NotificationSettings.fromJson(settingsJson);
+
+      expect(restoredSettings.pushEnabled, isTrue);
+      expect(restoredSettings.bookingAlerts, isFalse);
+      expect(restoredSettings.promoAlerts, isTrue);
+      expect(restoredSettings.soundEnabled, isFalse);
+    });
+
+    test('NotificationService manages seed notifications, reads, and deletes', () async {
+      final service = NotificationService();
+      await service.init();
+
+      expect(service.notificationsNotifier.value.isNotEmpty, isTrue);
+      expect(service.unreadCountNotifier.value, greaterThan(0));
+
+      final firstItem = service.notificationsNotifier.value.first;
+      await service.markAsRead(firstItem.id);
+
+      final updatedList = service.notificationsNotifier.value;
+      final readItem = updatedList.firstWhere((n) => n.id == firstItem.id);
+      expect(readItem.isRead, isTrue);
+
+      // Add a new notification
+      final newNotif = await service.addNotification(
+        title: 'Flash Sale Today!',
+        body: '30% off all styling services.',
+        type: NotificationType.promo,
+      );
+
+      expect(newNotif.title, 'Flash Sale Today!');
+      expect(service.notificationsNotifier.value.first.id, newNotif.id);
+
+      // Delete the notification
+      await service.deleteNotification(newNotif.id);
+      expect(service.notificationsNotifier.value.any((n) => n.id == newNotif.id), isFalse);
+
+      // Mark all as read
+      await service.markAllAsRead();
+      expect(service.unreadCountNotifier.value, 0);
+    });
+
+    testWidgets('NotificationCenterPage renders headers, categories, and items', (WidgetTester tester) async {
+      final service = NotificationService();
+      await service.init();
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: NotificationCenterPage(),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Notifications'), findsOneWidget);
+      expect(find.text('ALERTS & MARKETPLACE UPDATES'), findsOneWidget);
+      expect(find.text('All'), findsOneWidget);
+      expect(find.text('Bookings'), findsOneWidget);
+      expect(find.text('Payments'), findsOneWidget);
+      expect(find.text('Promos'), findsOneWidget);
+      expect(find.text('Alerts'), findsOneWidget);
+
+      // Tap 'Payments' filter
+      await tester.tap(find.text('Payments'));
+      await tester.pumpAndSettle();
+
+      // Tap 'Mark all as read' icon
+      await tester.tap(find.byIcon(Icons.done_all));
+      await tester.pumpAndSettle();
+
+      expect(find.text('All notifications marked as read'), findsOneWidget);
+    });
+  });
 }
+
 

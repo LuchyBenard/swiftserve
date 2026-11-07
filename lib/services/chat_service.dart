@@ -5,6 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/conversation.dart';
 import '../models/message.dart';
 import '../models/provider.dart';
+import '../models/app_notification.dart';
+import 'notification_service.dart';
 
 class ChatService {
   static final ChatService _instance = ChatService._internal();
@@ -147,6 +149,19 @@ class ChatService {
         lastMessage: replyText,
         time: 'Just now',
         isUnread: true,
+      );
+
+      // Register notification alert
+      final conv = conversationsNotifier.value.firstWhere(
+        (c) => c.id == conversationId,
+        orElse: () => Conversation(id: conversationId, providerName: 'Provider', lastMessage: '', time: ''),
+      );
+      NotificationService().addNotification(
+        title: 'New message from ${conv.providerName}',
+        body: replyText,
+        type: NotificationType.booking,
+        actionRoute: 'chat',
+        actionPayload: conversationId,
       );
     });
   }

@@ -26,6 +26,12 @@ An on-demand service booking and marketplace mobile application built with **Flu
   - Full-screen media preview viewer and one-tap provider voice dialing.
   - Direct messaging entry points from Provider Profile (`ProviderDetailsPage`) and Job Tracking (`JobTrackingPage`).
   - Real-time unread badges on `ChatInboxPage` and navigation bar, search filtering, and swipe-to-delete conversation management.
+- **In-App Notification Center & Alerts:**
+  - Dedicated notification hub with real-time unread counter badge on `HomePage` header and `ProfilePage`.
+  - Category filtering across **All**, **Bookings**, **Payments**, **Promos**, and **Alerts**.
+  - One-tap "Mark all as read" action and swipe-to-delete gesture removal with reactive offline persistence.
+  - Custom floating in-app alert banner system for high-priority status updates and provider replies.
+  - Granular notification preferences modal for toggling push, booking alerts, promotional deals, and alert sounds.
 - **Ratings & Reviews:** Leave 5-star ratings and written feedback once a job is complete.
 - **Profile & History:** Manage personal details, saved addresses, favorite providers, and historical bookings.
 
@@ -82,6 +88,7 @@ swiftserve/
 │   ├── firebase_options.dart  # Firebase initialization configuration
 │   ├── main.dart              # Application entrypoint & global theme
 │   ├── models/                # Data transfer objects & entity models
+│   │   ├── app_notification.dart# In-app notifications & settings models
 │   │   ├── booking.dart       # Booking state and metadata
 │   │   ├── conversation.dart  # Chat inbox conversations
 │   │   ├── message.dart       # Individual chat messages
@@ -102,6 +109,7 @@ swiftserve/
 │   │   ├── chat_page.dart     # Direct message chat room
 │   │   ├── chat_inbox_page.dart# Recent conversations inbox
 │   │   ├── homepage.dart      # Main client dashboard & categories
+│   │   ├── notification_center_page.dart# In-app notification center & alerts
 │   │   ├── profile_page.dart  # User profile management
 │   │   ├── provider_list_page.dart# Search & filtered provider directory
 │   │   └── saved_providers_page.dart# Dedicated favorite providers view
@@ -109,7 +117,8 @@ swiftserve/
 │   │   ├── address_service.dart# Saved addresses & GPS auto-detection
 │   │   ├── auth_service.dart  # Firebase Auth & Firestore user sync
 │   │   ├── chat_service.dart  # Direct messaging, reactive streams & auto-replies
-│   │   └── favorites_service.dart# Favorite provider persistence & reactive state
+│   │   ├── favorites_service.dart# Favorite provider persistence & reactive state
+│   │   └── notification_service.dart# Reactive notifications, unread state & alerts
 │   ├── splash/                # Startup splash screen
 │   ├── welcome/               # Post-onboarding welcome screen
 │   └── widgets/               # Reusable widgets
