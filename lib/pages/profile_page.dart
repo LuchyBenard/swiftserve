@@ -6,6 +6,8 @@ import '../widgets/provider_bottom_nav.dart';
 import '../widgets/address_picker_sheet.dart';
 import 'admin/admin_dashboard_page.dart';
 import 'saved_providers_page.dart';
+import 'notification_center_page.dart';
+import '../services/notification_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -467,7 +469,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   _buildMenuItem(Icons.event_note, 'My Bookings'),
                   _buildMenuItem(Icons.payment, 'Payment'),
-                  _buildMenuItem(Icons.notifications, 'Notifications', hasAlert: true),
+                  ValueListenableBuilder<int>(
+                    valueListenable: NotificationService().unreadCountNotifier,
+                    builder: (context, unreadCount, _) {
+                      return _buildMenuItem(
+                        Icons.notifications,
+                        'Notifications',
+                        hasAlert: unreadCount > 0,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const NotificationCenterPage(),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                   _buildMenuItem(Icons.help_outline, 'Help & Support'),
                   _buildMenuItem(Icons.lock_outline, 'Security'),
                   

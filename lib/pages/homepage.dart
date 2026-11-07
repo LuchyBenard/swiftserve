@@ -10,6 +10,8 @@ import 'provider_details_page.dart';
 import 'provider_list_page.dart';
 import 'profile_page.dart';
 import 'saved_providers_page.dart';
+import 'notification_center_page.dart';
+import '../services/notification_service.dart';
 
 const Color _kGreen = Color(0xFF25F46A);
 
@@ -31,6 +33,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     FavoritesService().init();
     AddressService().init();
+    NotificationService().init();
   }
 
   // Mock data
@@ -234,9 +237,62 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
 
-          // Right side: favorites + profile avatar
+          // Right side: notifications + favorites + profile avatar
           Row(
             children: [
+              ValueListenableBuilder<int>(
+                valueListenable: NotificationService().unreadCountNotifier,
+                builder: (context, unreadCount, _) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const NotificationCenterPage(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF141414),
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white12),
+                      ),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          const Icon(
+                            Icons.notifications_outlined,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          if (unreadCount > 0)
+                            Positioned(
+                              top: -2,
+                              right: -2,
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: const BoxDecoration(
+                                  color: _kGreen,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: _kGreen,
+                                      blurRadius: 4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
