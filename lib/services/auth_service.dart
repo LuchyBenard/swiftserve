@@ -80,7 +80,11 @@ class AuthService {
         'location': location,
         'rating': 5.0,
         'reviewsCount': 0,
-        'isApproved': false, // Admin review
+        'isVerified': false,
+        'isAvailable': true,
+        'availability': {},
+        'lastSeen': FieldValue.serverTimestamp(),
+        'specialty': '',
       });
 
       return credential;
