@@ -37,7 +37,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Background Glows (Global)
+          // Background Glow (Global)
           Positioned(
             top: -150,
             right: -150,
@@ -50,22 +50,6 @@ class _BottomNavPageState extends State<BottomNavPage> {
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 300,
-            left: -100,
-            child: Container(
-              width: 300,
-              height: 300,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: Color.fromRGBO(37, 244, 106, 0.05),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 120, sigmaY: 120),
                 child: Container(color: Colors.transparent),
               ),
             ),

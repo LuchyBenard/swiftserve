@@ -29,8 +29,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             children: [
               _AdminOverview(onIndexChanged: (i) => setState(() => _currentIndex = i)),
               const AdminUserManagementPage(),
-              const AdminUserManagementPage(), // Same for providers for now
-              _buildDummyPage("Categories"),
+              _buildDummyPage("Providers"),
               const AdminModerationPage(),
             ],
           ),
@@ -67,7 +66,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   _navItem(Icons.dashboard, "Overview", 0, primary),
                   _navItem(Icons.people_outline, "Users", 1, primary),
                   _navItem(Icons.engineering_outlined, "Providers", 2, primary),
-                  _navItem(Icons.category_outlined, "Cats", 3, primary),
                   _navItem(Icons.gavel_outlined, "Mod", 4, primary),
                 ],
               ),
