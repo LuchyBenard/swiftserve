@@ -18,6 +18,7 @@ An on-demand service booking and marketplace mobile application built with **Flu
   - **Step 2 — Schedule:** Choose booking date and convenient time slots.
   - **Step 3 — Review & Checkout:** Verify request details, view cost breakdowns, and finalize booking.
 - **Live Job Tracking:** Monitor ongoing service requests with status stages (`In Progress`, `Confirmed`, `Completed`, `Canceled`).
+- **Booking History:** Switch between active and past bookings, re-open job tracking, leave ratings, or cancel upcoming appointments.
 - **Structured Booking Cancellation:** Cancel active bookings through a dedicated modal with categorized reasons and notes.
 - **Interactive Chat & Direct Messaging:**
   - Real-time 1-on-1 direct messaging between clients and service providers with local caching and offline persistence.
@@ -37,7 +38,7 @@ An on-demand service booking and marketplace mobile application built with **Flu
 
 ### 🛠️ Service Provider Portal
 - **Provider Registration & Verification:** Onboarding workflow for professionals to submit their category, experience, base rates, bio, and verification documents.
-- **Dedicated Dashboard:** Bottom navigation optimized for providers.
+- **Dedicated Dashboard:** Bottom navigation optimized for providers (Active Jobs, Schedule, Earnings, Availability).
 - **Active Jobs Management:** Accept, manage, and update the status of incoming client requests.
 - **Schedule & Availability:** Configure work schedules and toggle real-time availability.
 - **Earnings & Analytics:** Track revenue, completed jobs, and detailed transaction histories.
@@ -46,6 +47,7 @@ An on-demand service booking and marketplace mobile application built with **Flu
 - **Admin Dashboard:** High-level overview of platform metrics, active jobs, and users.
 - **Provider Moderation:** Review incoming worker registrations and approve or reject provider profiles.
 - **User Management:** Manage client and provider accounts across the platform.
+- **Access:** Reachable from `ProfilePage` via the **Admin Portal** toggle.
 
 ### 🔐 Authentication & Security
 - **Role-Based Routing (`AuthGate`):** Dynamically steers users to Client or Provider workspaces based on their Firestore role profile.
@@ -53,16 +55,16 @@ An on-demand service booking and marketplace mobile application built with **Flu
   - Email & Password authentication.
   - Google Sign-In integration.
   - Apple Sign-In support.
-- **Account Recovery:** Forgot password and OTP verification workflows.
+- **Account Recovery:** Forgot password, OTP verification, and password reset workflows.
 
 ---
 
 ## 🛠️ Tech Stack & Architecture
 
-- **Framework:** [Flutter](https://flutter.dev) (SDK `^3.10.7`) / [Dart](https://dart.dev)
+- **Framework:** [Flutter](https://flutter.dev) / [Dart](https://dart.dev) (Dart SDK `^3.10.7`)
 - **Backend & Cloud Services:**
   - **Firebase Authentication:** Secure user identity management and social logins.
-  - **Cloud Firestore:** Real-time NoSQL cloud database for users, providers, bookings, messages, and reviews.
+  - **Cloud Firestore:** Real-time NoSQL cloud database for users, providers, conversations, and messages.
 - **UI & UX:**
   - Modern dark mode aesthetic with vibrant neon green accent (`#25F46A`) and purple splash branding (`#4A148C`).
   - [Google Fonts](https://pub.dev/packages/google_fonts) for typography.
@@ -72,7 +74,17 @@ An on-demand service booking and marketplace mobile application built with **Flu
 - **Native & Utility Packages:**
   - [Image Picker](https://pub.dev/packages/image_picker): Profile picture and verification uploads.
   - [URL Launcher](https://pub.dev/packages/url_launcher): Dialing, emailing, and opening external URLs.
-  - [Shared Preferences](https://pub.dev/packages/shared_preferences): Local persistence for onboarding completion state.
+  - [Shared Preferences](https://pub.dev/packages/shared_preferences): Local persistence for onboarding completion, favorites, addresses, chats, and notifications.
+  - [Google Sign-In](https://pub.dev/packages/google_sign_in) & [Sign in with Apple](https://pub.dev/packages/sign_in_with_apple): Social authentication.
+
+### 🗄️ Firestore Data Model
+
+| Collection | Purpose |
+| --- | --- |
+| `users/{uid}` | Account profile and `role` (`client` or `provider`) used by `AuthGate` |
+| `providers/{uid}` | Provider profile, category, rates, verification and availability state |
+| `conversations/{id}` | Chat metadata, participants, last message and read state |
+| `conversations/{id}/messages` | Individual chat messages ordered by timestamp |
 
 ---
 
@@ -80,57 +92,60 @@ An on-demand service booking and marketplace mobile application built with **Flu
 
 ```text
 swiftserve/
-├── android/                   # Native Android configuration
-├── ios/                       # Native iOS configuration
-├── assets/                    # Static assets & images
-│   └── images/                # App icons, avatars & onboarding artwork
+├── android/                        # Native Android configuration
+├── ios/                            # Native iOS configuration
+├── assets/                         # Static assets & images
+│   └── images/                     # App icons, avatars & onboarding artwork
 ├── lib/
-│   ├── firebase_options.dart  # Firebase initialization configuration
-│   ├── main.dart              # Application entrypoint & global theme
-│   ├── models/                # Data transfer objects & entity models
-│   │   ├── app_notification.dart# In-app notifications & settings models
-│   │   ├── booking.dart       # Booking state and metadata
-│   │   ├── conversation.dart  # Chat inbox conversations
-│   │   ├── message.dart       # Individual chat messages
-│   │   ├── provider.dart      # Service provider profile model
-│   │   ├── provider_filter.dart# Filter & sorting criteria model
-│   │   ├── saved_address.dart # Saved service address model
-│   │   └── user.dart          # User account model
-│   ├── onboarding/            # Onboarding walkthrough screens
-│   ├── pages/                 # UI screens and navigation flows
-│   │   ├── admin/             # Admin management & moderation screens
-│   │   ├── auth/              # Sign-in, sign-up, OTP & worker registration
-│   │   ├── provider/          # Provider jobs, earnings & availability
-│   │   ├── rating/            # Review & rating submission
-│   │   ├── request/           # Multi-step service request flow
-│   │   ├── tracking/          # Real-time job status tracking
-│   │   ├── booking_page.dart  # Bookings list page
-│   │   ├── bottomnav.dart     # Client bottom navigation shell
-│   │   ├── chat_page.dart     # Direct message chat room
-│   │   ├── chat_inbox_page.dart# Recent conversations inbox
-│   │   ├── homepage.dart      # Main client dashboard & categories
-│   │   ├── notification_center_page.dart# In-app notification center & alerts
-│   │   ├── profile_page.dart  # User profile management
-│   │   ├── provider_list_page.dart# Search & filtered provider directory
-│   │   └── saved_providers_page.dart# Dedicated favorite providers view
-│   ├── services/              # External services & business logic
-│   │   ├── address_service.dart# Saved addresses & GPS auto-detection
-│   │   ├── auth_service.dart  # Firebase Auth & Firestore user sync
-│   │   ├── chat_service.dart  # Direct messaging, reactive streams & auto-replies
-│   │   ├── favorites_service.dart# Favorite provider persistence & reactive state
-│   │   └── notification_service.dart# Reactive notifications, unread state & alerts
-│   ├── splash/                # Startup splash screen
-│   ├── welcome/               # Post-onboarding welcome screen
-│   └── widgets/               # Reusable widgets
-│       ├── address_picker_sheet.dart# Bottom sheet for location selection
-│       ├── auth_gate.dart     # Role-based route gatekeeper
-│       ├── cancel_booking_dialog.dart# Booking cancellation modal
-│       ├── clippers/          # Geometric and wave shape clippers
-│       ├── provider_bottom_nav.dart# Provider navigation bar
-│       └── provider_filter_sheet.dart# Filter & sort bottom sheet
-├── test/                      # Unit and widget tests
-├── pubspec.yaml               # Project dependencies and asset definitions
-└── README.md                  # Project documentation
+│   ├── firebase_options.dart       # Firebase initialization configuration
+│   ├── main.dart                   # Application entrypoint & global theme
+│   ├── models/                     # Data transfer objects & entity models
+│   │   ├── app_notification.dart   # In-app notifications & settings models
+│   │   ├── booking.dart            # Booking state and metadata
+│   │   ├── conversation.dart       # Chat inbox conversations
+│   │   ├── message.dart            # Individual chat messages
+│   │   ├── provider.dart           # Service provider profile model
+│   │   ├── provider_filter.dart    # Filter & sorting criteria model
+│   │   ├── saved_address.dart      # Saved service address model
+│   │   └── user.dart               # User account model
+│   ├── onboarding/                 # Onboarding walkthrough screens
+│   ├── pages/                      # UI screens and navigation flows
+│   │   ├── admin/                  # Admin dashboard, moderation & user management
+│   │   ├── auth/                   # Sign-up, forgot/reset password, OTP & worker registration
+│   │   ├── provider/               # Provider jobs, schedule, earnings, availability & verification
+│   │   ├── rating/                 # Review & rating submission
+│   │   ├── request/                # Multi-step service request & checkout flow
+│   │   ├── tracking/               # Real-time job status tracking
+│   │   ├── booking_page.dart       # Bookings list page
+│   │   ├── bottomnav.dart          # Client bottom navigation shell
+│   │   ├── chat_inbox_page.dart    # Recent conversations inbox
+│   │   ├── chat_page.dart          # Direct message chat room
+│   │   ├── history_page.dart       # Active & past booking history
+│   │   ├── homepage.dart           # Main client dashboard & categories
+│   │   ├── notification_center_page.dart # In-app notification center & alerts
+│   │   ├── profile_page.dart       # User profile management & admin entry
+│   │   ├── provider_details_page.dart    # Provider profile & portfolio
+│   │   ├── provider_list_page.dart # Search & filtered provider directory
+│   │   └── saved_providers_page.dart     # Dedicated favorite providers view
+│   ├── services/                   # External services & business logic
+│   │   ├── address_service.dart    # Saved addresses & GPS auto-detection
+│   │   ├── auth_service.dart       # Firebase Auth & Firestore user sync
+│   │   ├── chat_service.dart       # Direct messaging, reactive streams & auto-replies
+│   │   ├── chat_service_firestore.dart # Firestore-only chat service variant
+│   │   ├── favorites_service.dart  # Favorite provider persistence & reactive state
+│   │   └── notification_service.dart # Reactive notifications, unread state & alerts
+│   ├── splash/                     # Startup splash screen
+│   ├── welcome/                    # Welcome & sign-in screen
+│   └── widgets/                    # Reusable widgets
+│       ├── clippers/               # Geometric and wave shape clippers
+│       ├── address_picker_sheet.dart # Bottom sheet for location selection
+│       ├── auth_gate.dart          # Role-based route gatekeeper
+│       ├── cancel_booking_dialog.dart # Booking cancellation modal
+│       ├── provider_bottom_nav.dart # Provider navigation bar
+│       └── provider_filter_sheet.dart # Filter & sort bottom sheet
+├── test/                           # Unit and widget tests
+├── pubspec.yaml                    # Project dependencies and asset definitions
+└── README.md                       # Project documentation
 ```
 
 ---
@@ -140,7 +155,7 @@ swiftserve/
 ### Prerequisites
 
 Make sure you have the following installed on your machine:
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) (3.10.7 or higher)
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (includes Dart `3.10.7` or higher)
 - [Dart SDK](https://dart.dev/get-dart)
 - An active [Firebase Project](https://console.firebase.google.com/)
 - [FlutterFire CLI](https://firebase.flutter.dev/docs/cli/) for Firebase setup
@@ -185,6 +200,15 @@ Make sure you have the following installed on your machine:
   flutter test
   ```
 
+  The current suite covers:
+  - Model serialization (`User`, `Provider`, `Booking`, `Message`, `Conversation`, `SavedAddress`, `ProviderFilter`, `AppNotification`)
+  - Favorites and saved provider persistence
+  - Advanced provider filtering and sorting
+  - Address presets and GPS detection
+  - Booking cancellation dialog and wave clipper widgets
+  - Chat service messaging, unread counts, and `ChatPage` rendering
+  - Notification service lifecycle and `NotificationCenterPage` rendering
+
 - **Run static code analysis:**
   ```bash
   flutter analyze
@@ -200,33 +224,33 @@ Make sure you have the following installed on your machine:
 ## 👥 User Roles & Flow
 
 ```
-                  ┌──────────────────────┐
-                  │    Splash Screen     │
-                  └──────────┬───────────┘
-                             │
-                      [AuthGate Check]
-                       /            \
-           (Logged Out)              (Logged In)
-               /                            \
-   ┌───────────────────────┐          ┌──────────────┐
-   │ Onboarding / Welcome  │          │ Check Role   │
-   └──────────┬────────────┘          └──────┬───────┘
-              │                              │
-   ┌───────────────────────┐         ┌───────┴───────┐
-   │  Sign In / Register   │         │               │
-   │  (Client or Provider) │     [Client]       [Provider]
-   └───────────────────────┘         │               │
-                            ┌────────┴──────┐ ┌──────┴──────────────┐
-                            │ Client Home   │ │ Provider Dashboard  │
-                            │ • Browse      │ │ • Active Jobs       │
-                            │ • Book        │ │ • Availability      │
-                            │ • Track       │ │ • Earnings          │
-                            │ • Chat        │ │ • Schedule          │
-                            └───────────────┘ └─────────────────────┘
+                    ┌──────────────────────┐
+                    │    Splash Screen     │
+                    └──────────┬───────────┘
+                               │
+                        [AuthGate Check]
+                         /            \
+                 (Logged Out)       (Logged In)
+                     /                    \
+     ┌───────────────────────┐      ┌──────────────┐
+     │ Onboarding / Welcome  │      │ Check Role   │
+     └──────────┬────────────┘      └──────┬───────┘
+                │                          │
+     ┌───────────────────────┐      ┌──────┴───────┐
+     │  Sign In / Register   │      │              │
+     │  (Client or Provider) │   [Client]     [Provider]
+     └───────────────────────┘      │              │
+                          ┌─────────┴─────┐  ┌─────┴───────────────┐
+                          │ Client Home   │  │ Provider Dashboard  │
+                          │ • Browse      │  │ • Active Jobs       │
+                          │ • Book        │  │ • Availability      │
+                          │ • Track       │  │ • Earnings          │
+                          │ • Chat        │  │ • Schedule          │
+                          └───────────────┘  └─────────────────────┘
 ```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
