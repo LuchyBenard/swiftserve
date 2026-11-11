@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/provider.dart';
@@ -427,34 +426,25 @@ class _ProviderListPageState extends State<ProviderListPage> {
                               provider.distance,
                               style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 10),
                             ),
+                            const SizedBox(width: 8),
+                            // Availability status
+                            if (!provider.isAvailable) ...[
+                              Icon(Icons.timer_off, color: Colors.red, size: 12),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Unavailable',
+                                style: GoogleFonts.spaceGrotesk(color: Colors.red, fontSize: 9),
+                              ),
+                            ] else ...[
+                              Icon(Icons.access_time, color: Colors.green, size: 12),
+                              const SizedBox(width: 4),
+                              Text(
+                                'Available',
+                                style: GoogleFonts.spaceGrotesk(color: Colors.green, fontSize: 9),
+                              ),
+                            ],
                           ],
-                          // Availability status
-                          if (!provider.isAvailable) ...[
-                            const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                Icon(Icons.access_time_off, color: Colors.red, size: 12),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Unavailable',
-                                  style: GoogleFonts.spaceGrotesk(color: Colors.red, fontSize: 9),
-                                ),
-                              ],
-                            ),
-                          ] else ...[
-                            const SizedBox(height: 2),
-                            Row(
-                              children: [
-                                Icon(Icons.access_time, color: Colors.green, size: 12),
-                                const SizedBox(width: 4),
-                                Text(
-                                  'Available',
-                                  style: GoogleFonts.spaceGrotesk(color: Colors.green, fontSize: 9),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ],
+                        ),
                       ],
                     ),
                   ),
