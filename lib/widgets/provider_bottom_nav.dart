@@ -32,8 +32,8 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
       bottomNavigationBar: Container(
         height: 100,
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.8),
-          border: Border(top: BorderSide(color: Colors.white.withOpacity(0.05))),
+          color: Colors.black.withValues(alpha: 0.8),
+          border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
         ),
         child: Stack(
           alignment: Alignment.center,
@@ -69,7 +69,7 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: primaryGreen.withOpacity(0.4),
+                        color: primaryGreen.withValues(alpha: 0.4),
                         blurRadius: 15,
                         spreadRadius: 2,
                       ),

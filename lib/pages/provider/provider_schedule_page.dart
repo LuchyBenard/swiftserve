@@ -61,7 +61,7 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.08),
+                color: primaryGreen.withValues(alpha: 0.08),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -122,7 +122,7 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
             decoration: BoxDecoration(
               color: const Color(0xFF141E18),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFF25F46A).withOpacity(0.1)),
+              border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.1)),
             ),
             child: const Icon(Icons.calendar_month, color: Color(0xFF25F46A), size: 20),
           ),
@@ -150,15 +150,15 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
               width: 65,
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF25F46A) : const Color(0xFF141E18).withOpacity(0.4),
+                color: isSelected ? const Color(0xFF25F46A) : const Color(0xFF141E18).withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: isSelected ? const Color(0xFF25F46A) : Colors.white.withOpacity(0.05),
+                  color: isSelected ? const Color(0xFF25F46A) : Colors.white.withValues(alpha: 0.05),
                 ),
                 boxShadow: isSelected
                     ? [
                         BoxShadow(
-                          color: const Color(0xFF25F46A).withOpacity(0.3),
+                          color: const Color(0xFF25F46A).withValues(alpha: 0.3),
                           blurRadius: 15,
                           offset: const Offset(0, 5),
                         )
@@ -243,7 +243,7 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                     Container(
                       width: 1,
                       height: 100,
-                      color: Colors.white.withOpacity(0.05),
+                      color: Colors.white.withValues(alpha: 0.05),
                     ),
                 ],
               ),
@@ -253,9 +253,9 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                 child: Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF141E18).withOpacity(0.4),
+                    color: const Color(0xFF141E18).withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +266,7 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
-                              color: (appt["color"] as Color).withOpacity(0.15),
+                              color: (appt["color"] as Color).withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(

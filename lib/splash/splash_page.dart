@@ -84,7 +84,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     height: 600,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: neonGreen.withOpacity(0.05),
+                      color: neonGreen.withValues(alpha: 0.05),
                     ),
                   ),
                 );
@@ -106,13 +106,13 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     children: [
                       // Distorted Shadow 'S' (Approximation)
                       Transform(
-                        transform: Matrix4.skewX(-0.1)..scale(1.0, 1.1),
+                        transform: Matrix4.skewX(-0.1)..scaleByDouble(1.0, 1.1, 1.0, 1.0),
                         child: Text(
                           'S',
                           style: TextStyle(
                             fontSize: 140,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white.withOpacity(0.05),
+                            color: Colors.white.withValues(alpha: 0.05),
                             height: 1,
                             fontStyle: FontStyle.italic,
                           ),
@@ -137,7 +137,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                            color: neonGreen,
                            shadows: [
                              BoxShadow(
-                               color: neonGreen.withOpacity(0.8),
+                               color: neonGreen.withValues(alpha: 0.8),
                                blurRadius: 25,
                                spreadRadius: 5,
                              )
@@ -183,7 +183,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: Colors.white.withOpacity(0.1),
+                            color: Colors.white.withValues(alpha: 0.1),
                             width: 1,
                           ),
                         ),

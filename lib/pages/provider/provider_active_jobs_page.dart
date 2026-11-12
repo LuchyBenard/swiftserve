@@ -31,7 +31,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
               height: 350,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.08),
+                color: primaryGreen.withValues(alpha: 0.08),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -66,7 +66,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                             decoration: BoxDecoration(
                               color: darkSurface,
                               shape: BoxShape.circle,
-                              border: Border.all(color: Colors.white.withOpacity(0.05)),
+                              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                             ),
                             child: const Icon(Icons.notifications_none, color: Colors.grey, size: 22),
                           ),
@@ -79,7 +79,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                               decoration: BoxDecoration(
                                 color: primaryGreen,
                                 shape: BoxShape.circle,
-                                boxShadow: [BoxShadow(color: primaryGreen.withOpacity(0.3), blurRadius: 4)],
+                                boxShadow: [BoxShadow(color: primaryGreen.withValues(alpha: 0.3), blurRadius: 4)],
                               ),
                             ),
                           ),
@@ -97,7 +97,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                     decoration: BoxDecoration(
                       color: darkSurface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.white.withOpacity(0.05)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                     ),
                     child: Row(
                       children: [
@@ -159,7 +159,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white.withOpacity(0.1) : Colors.transparent,
+          color: isActive ? Colors.white.withValues(alpha: 0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Text(
@@ -191,9 +191,9 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: isUrgent ? const Color(0xFF102216).withOpacity(0.4) : cardDark,
+        color: isUrgent ? const Color(0xFF102216).withValues(alpha: 0.4) : cardDark,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: isUrgent ? primaryGreen.withOpacity(0.1) : Colors.white.withOpacity(0.05)),
+        border: Border.all(color: isUrgent ? primaryGreen.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05)),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
@@ -225,7 +225,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: isUrgent ? primaryGreen.withOpacity(0.1) : Colors.white.withOpacity(0.05),
+                              color: isUrgent ? primaryGreen.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(icon, color: isUrgent ? primaryGreen : Colors.grey[400], size: 20),
@@ -244,9 +244,9 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: primaryGreen.withOpacity(0.1),
+                            color: primaryGreen.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
-                            border: Border.all(color: primaryGreen.withOpacity(0.1)),
+                            border: Border.all(color: primaryGreen.withValues(alpha: 0.1)),
                           ),
                           child: const Text("URGENT", style: TextStyle(color: primaryGreen, fontSize: 10, fontWeight: FontWeight.bold)),
                         )
@@ -275,7 +275,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.2),
+                          color: Colors.black.withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
@@ -291,7 +291,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text("Launching Google Maps to $address...", style: GoogleFonts.spaceGrotesk()),
-                              backgroundColor: primaryGreen.withOpacity(0.9),
+                              backgroundColor: primaryGreen.withValues(alpha: 0.9),
                               behavior: SnackBarBehavior.floating,
                             ),
                           );
@@ -304,7 +304,7 @@ class _ProviderActiveJobsPageState extends State<ProviderActiveJobsPage> {
                             side: isPrimaryNavigate ? BorderSide.none : const BorderSide(color: primaryGreen, width: 1.5),
                           ),
                           elevation: isPrimaryNavigate ? 10 : 0,
-                          shadowColor: primaryGreen.withOpacity(0.3),
+                          shadowColor: primaryGreen.withValues(alpha: 0.3),
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         ),
                         child: Row(

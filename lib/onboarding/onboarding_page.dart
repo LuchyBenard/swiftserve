@@ -95,7 +95,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: neonGreen.withOpacity(0.05),
+                color: neonGreen.withValues(alpha: 0.05),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
@@ -126,7 +126,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
               child: Text(
                 'Skip',
                 style: GoogleFonts.spaceGrotesk(
-                  color: Colors.white.withOpacity(0.6),
+                  color: Colors.white.withValues(alpha: 0.6),
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
@@ -169,9 +169,9 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                         borderRadius: BorderRadius.circular(16),
                       ),
                       elevation: 0,
-                      shadowColor: neonGreen.withOpacity(0.5),
+                      shadowColor: neonGreen.withValues(alpha: 0.5),
                     ).copyWith(
-                      shadowColor: WidgetStateProperty.all(neonGreen.withOpacity(0.4)),
+                      shadowColor: WidgetStateProperty.all(neonGreen.withValues(alpha: 0.4)),
                       elevation: WidgetStateProperty.all(10), 
                     ),
                     child: Text(
@@ -209,11 +209,11 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                   width: 200,
                   height: 320,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                     borderRadius: BorderRadius.circular(40),
-                    border: Border.all(color: neonGreen.withOpacity(0.5), width: 2),
+                    border: Border.all(color: neonGreen.withValues(alpha: 0.5), width: 2),
                     boxShadow: [
-                      BoxShadow(color: neonGreen.withOpacity(0.2), blurRadius: 20),
+                      BoxShadow(color: neonGreen.withValues(alpha: 0.2), blurRadius: 20),
                     ],
                   ),
                   child: Column(
@@ -267,16 +267,16 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.2),
+              color: color.withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Icon(icon, size: 16, color: color),
@@ -285,7 +285,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(width: 60, height: 6, decoration: BoxDecoration(color: color.withOpacity(0.4), borderRadius: BorderRadius.circular(3))),
+              Container(width: 60, height: 6, decoration: BoxDecoration(color: color.withValues(alpha: 0.4), borderRadius: BorderRadius.circular(3))),
               const SizedBox(height: 4),
               Container(width: 40, height: 4, decoration: BoxDecoration(color: Colors.white24, borderRadius: BorderRadius.circular(2))),
             ],
@@ -314,7 +314,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: color),
               boxShadow: [
-                 BoxShadow(color: color.withOpacity(0.3), blurRadius: 10),
+                 BoxShadow(color: color.withValues(alpha: 0.3), blurRadius: 10),
               ],
             ),
             child: Icon(icon, color: color, size: 24),
@@ -340,7 +340,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                  shape: BoxShape.circle,
                  boxShadow: [
                    BoxShadow(
-                     color: neonGreen.withOpacity(0.2),
+                     color: neonGreen.withValues(alpha: 0.2),
                      blurRadius: 40,
                      spreadRadius: 10,
                    )
@@ -401,7 +401,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                     color: neonGreen,
                     shadows: [
                        BoxShadow(
-                         color: neonGreen.withOpacity(0.5),
+                         color: neonGreen.withValues(alpha: 0.5),
                          blurRadius: 30,
                        )
                     ],
@@ -419,7 +419,7 @@ class _OnboardingPageState extends State<OnboardingPage> with TickerProviderStat
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(color: Colors.white10),
                           boxShadow: [
-                            BoxShadow(color: Colors.black.withOpacity(0.8), blurRadius: 20, offset: const Offset(0, 10)),
+                            BoxShadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 20, offset: const Offset(0, 10)),
                           ],
                         ),
                         child: const Icon(

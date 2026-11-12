@@ -129,7 +129,7 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
           return ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             itemCount: savedList.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            separatorBuilder: (_, _) => const SizedBox(height: 16),
             itemBuilder: (context, index) {
               final provider = savedList[index];
               return _buildProviderCard(provider, primaryGreen);
@@ -216,7 +216,7 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                   height: 140,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+                  errorBuilder: (_, _, _) => Container(
                     height: 140,
                     color: Colors.grey[900],
                     child: const Icon(Icons.person, color: Colors.white38, size: 48),

@@ -51,9 +51,9 @@ class TransactionHistoryPage extends StatelessWidget {
       margin: const EdgeInsets.all(0).copyWith(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF141E18).withOpacity(0.4),
+        color: const Color(0xFF141E18).withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: primaryGreen.withOpacity(0.08)),
+        border: Border.all(color: primaryGreen.withValues(alpha: 0.08)),
       ),
       child: Row(
         children: [
@@ -63,7 +63,7 @@ class TransactionHistoryPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: const Color(0xFF0F1A12),
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Icon(icon, color: Colors.white, size: 20),
           ),

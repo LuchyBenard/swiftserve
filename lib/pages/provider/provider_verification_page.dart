@@ -104,7 +104,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                           decoration: BoxDecoration(
                             color: darkSurfaceLighter,
                             borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: Colors.white.withOpacity(0.05)),
+                            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                           ),
                           child: FractionallySizedBox(
                             alignment: Alignment.centerLeft,
@@ -115,7 +115,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                                 borderRadius: BorderRadius.circular(4),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: primaryGreen.withOpacity(0.3),
+                                    color: primaryGreen.withValues(alpha: 0.3),
                                     blurRadius: 10,
                                     spreadRadius: 1,
                                   ),
@@ -134,11 +134,11 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                               height: 110,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: primaryGreen.withOpacity(0.4), width: 2),
+                                border: Border.all(color: primaryGreen.withValues(alpha: 0.4), width: 2),
                                 color: darkSurface,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: primaryGreen.withOpacity(0.1),
+                                    color: primaryGreen.withValues(alpha: 0.1),
                                     blurRadius: 15,
                                   ),
                                 ],
@@ -159,7 +159,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                                   border: Border.all(color: primaryGreen),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: primaryGreen.withOpacity(0.3),
+                                      color: primaryGreen.withValues(alpha: 0.3),
                                       blurRadius: 8,
                                     ),
                                   ],
@@ -176,7 +176,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                                 decoration: BoxDecoration(
                                   color: darkSurface,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
                                 ),
                                 child: const Icon(Icons.edit, color: Colors.white, size: 16),
                               ),
@@ -233,7 +233,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                 borderRadius: BorderRadius.circular(16),
                 boxShadow: [
                   BoxShadow(
-                    color: primaryGreen.withOpacity(0.3),
+                    color: primaryGreen.withValues(alpha: 0.3),
                     blurRadius: 15,
                     spreadRadius: 2,
                   ),
@@ -294,9 +294,9 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: primaryGreen.withOpacity(0.1),
+                color: primaryGreen.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: primaryGreen.withOpacity(0.2)),
+                border: Border.all(color: primaryGreen.withValues(alpha: 0.2)),
               ),
               child: const Text(
                 "Required",
@@ -321,7 +321,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 32),
       decoration: BoxDecoration(
-        color: darkSurface.withOpacity(0.5),
+        color: darkSurface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -330,7 +330,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: primaryGreen.withOpacity(0.1),
+              color: primaryGreen.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.cloud_upload, color: primaryGreen),
@@ -358,7 +358,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
       decoration: BoxDecoration(
         color: darkSurface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Wrap(
         spacing: 8,
@@ -376,12 +376,12 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: primaryGreen.withOpacity(0.1),
+        color: primaryGreen.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: primaryGreen.withOpacity(0.3)),
+        border: Border.all(color: primaryGreen.withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: primaryGreen.withOpacity(0.1),
+            color: primaryGreen.withValues(alpha: 0.1),
             blurRadius: 4,
           ),
         ],
@@ -437,7 +437,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
       decoration: BoxDecoration(
         color: darkSurface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Row(
         children: [
@@ -447,7 +447,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
             color: primaryGreen,
             decoration: BoxDecoration(
               boxShadow: [
-                BoxShadow(color: primaryGreen.withOpacity(0.8), blurRadius: 10),
+                BoxShadow(color: primaryGreen.withValues(alpha: 0.8), blurRadius: 10),
               ],
             ),
           ),

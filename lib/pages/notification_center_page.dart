@@ -560,7 +560,7 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                           Navigator.pop(sheetCtx);
                           await _notificationService.clearAll();
                           if (mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            ScaffoldMessenger.of(this.context).showSnackBar(
                               SnackBar(
                                 content: Text('All notifications cleared', style: GoogleFonts.spaceGrotesk()),
                                 backgroundColor: const Color(0xFF1E1E1E),

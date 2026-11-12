@@ -27,7 +27,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     const primaryGreen = Color(0xFF25F46A);
     const pitchBlack = Color(0xFF050505);
-    const darkSurface = Color(0xFF0F1A12);
 
     return Scaffold(
       backgroundColor: pitchBlack,
@@ -42,7 +41,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.1),
+                color: primaryGreen.withValues(alpha: 0.1),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -68,7 +67,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         height: 40,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Colors.white.withOpacity(0.05),
+                          color: Colors.white.withValues(alpha: 0.05),
                         ),
                         child: const Icon(Icons.chevron_left, color: Colors.white),
                       ),
@@ -148,7 +147,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: primaryGreen.withOpacity(0.3),
+                            color: primaryGreen.withValues(alpha: 0.3),
                             blurRadius: 15,
                             spreadRadius: 2,
                             offset: const Offset(0, 4),
@@ -197,7 +196,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     String? Function(String?)? validator,
   }) {
     const darkSurface = Color(0xFF0F1A12);
-    const primaryGreen = Color(0xFF25F46A);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,7 +213,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           decoration: BoxDecoration(
             color: darkSurface,
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
           child: TextFormField(
             controller: controller,
@@ -256,7 +254,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 width: 70,
                 height: 70,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF25F46A).withOpacity(0.1),
+                  color: const Color(0xFF25F46A).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                   border: Border.all(color: const Color(0xFF25F46A), width: 2),
                 ),

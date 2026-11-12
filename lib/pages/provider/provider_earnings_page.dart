@@ -69,7 +69,7 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
               height: 400,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.08),
+                color: primaryGreen.withValues(alpha: 0.08),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 120, sigmaY: 120),
@@ -95,7 +95,7 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
                             height: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              border: Border.all(color: primaryGreen.withOpacity(0.4)),
+                              border: Border.all(color: primaryGreen.withValues(alpha: 0.4)),
                               image: const DecorationImage(
                                 image: NetworkImage("https://lh3.googleusercontent.com/aida-public/AB6AXuAy2lcxBSOYRN65DN1g-Gq6PNmjuY_Nd65gPauKAc1bG_wV4FPk2T1TZtPtH53oZ3abbMgS21GvQnf9R5j9VnccyPquo3A4RenvW1Z_2ooIMRcFkWq5sZCRED5g_2OsUAR9XB2i7PnFyGMIPijH9ZC9SS4HthphB_qy0k8fpOqFe3pWAiy9VbKcKaBJpniHBvdE_pfSivWXMhLIH_lgVWzV4CxS1CGB6Bc2CFcKqKegDyhAfRiDGZ5toOy2iHyJFy4-5UdZsJfdvEl7"),
                                 fit: BoxFit.cover,
@@ -166,7 +166,7 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
                               decoration: BoxDecoration(
                                 color: darkSurface,
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.white.withOpacity(0.05)),
+                                border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                               ),
                               child: Row(
                                 children: [
@@ -231,9 +231,9 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
       width: double.infinity,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF141E18).withOpacity(0.4),
+        color: const Color(0xFF141E18).withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: primaryGreen.withOpacity(0.08)),
+        border: Border.all(color: primaryGreen.withValues(alpha: 0.08)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,7 +286,7 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
                 decoration: BoxDecoration(
                   color: darkSurface,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: primaryGreen.withOpacity(0.1)),
+                  border: Border.all(color: primaryGreen.withValues(alpha: 0.1)),
                 ),
                 child: const Icon(Icons.more_horiz, color: primaryGreen),
               ),
@@ -303,7 +303,7 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? Colors.white.withOpacity(0.08) : Colors.transparent,
+          color: isActive ? Colors.white.withValues(alpha: 0.08) : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
@@ -355,9 +355,9 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
                     width: 32,
                     height: 120 * data[index],
                     decoration: BoxDecoration(
-                      color: isHighlight ? primaryGreen : primaryGreen.withOpacity(0.3),
+                      color: isHighlight ? primaryGreen : primaryGreen.withValues(alpha: 0.3),
                       borderRadius: BorderRadius.circular(8),
-                      boxShadow: isHighlight ? [BoxShadow(color: primaryGreen.withOpacity(0.4), blurRadius: 10)] : [],
+                      boxShadow: isHighlight ? [BoxShadow(color: primaryGreen.withValues(alpha: 0.4), blurRadius: 10)] : [],
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -385,9 +385,9 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF141E18).withOpacity(0.4),
+        color: const Color(0xFF141E18).withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: primaryGreen.withOpacity(0.08)),
+        border: Border.all(color: primaryGreen.withValues(alpha: 0.08)),
       ),
       child: Row(
         children: [
@@ -397,7 +397,7 @@ class _ProviderEarningsPageState extends State<ProviderEarningsPage> {
             decoration: BoxDecoration(
               color: darkSurface,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Icon(icon, color: Colors.white, size: 20),
           ),

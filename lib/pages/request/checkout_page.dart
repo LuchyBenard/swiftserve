@@ -37,7 +37,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: neonGreen.withOpacity(0.1),
+                color: neonGreen.withValues(alpha: 0.1),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -53,7 +53,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               height: 200,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: neonGreen.withOpacity(0.05),
+                color: neonGreen.withValues(alpha: 0.05),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
@@ -100,9 +100,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.1)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
               child: const Icon(Icons.chevron_left, color: Colors.white, size: 24),
             ),
@@ -146,7 +146,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   color: neonGreen,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  shadows: [Shadow(color: neonGreen.withOpacity(0.5), blurRadius: 10)],
+                  shadows: [Shadow(color: neonGreen.withValues(alpha: 0.5), blurRadius: 10)],
                 ),
               ),
             ),
@@ -231,10 +231,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isSelected ? neonGreen.withOpacity(0.05) : Colors.white.withOpacity(0.03),
+          color: isSelected ? neonGreen.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isSelected ? neonGreen : Colors.white.withOpacity(0.08),
+            color: isSelected ? neonGreen : Colors.white.withValues(alpha: 0.08),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -245,9 +245,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.05),
+                    color: Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withOpacity(0.05)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
                   ),
                   child: Icon(icon, color: isSelected ? neonGreen : Colors.white, size: 24),
                 ),
@@ -277,7 +277,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected ? neonGreen : Colors.white.withOpacity(0.2),
+                      color: isSelected ? neonGreen : Colors.white.withValues(alpha: 0.2),
                       width: 2,
                     ),
                   ),
@@ -295,7 +295,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ),
             if (showDetails) ...[
               const SizedBox(height: 20),
-              Container(height: 1, color: Colors.white.withOpacity(0.1)),
+              Container(height: 1, color: Colors.white.withValues(alpha: 0.1)),
               const SizedBox(height: 20),
               _buildBankDetails(neonGreen),
             ]
@@ -311,9 +311,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black.withValues(alpha: 0.4),
             borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.05)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -338,7 +338,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(color: neonGreen.withOpacity(0.1), shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: neonGreen.withValues(alpha: 0.1), shape: BoxShape.circle),
                   child: Icon(Icons.content_copy, color: neonGreen, size: 14),
                 ),
               ),
@@ -398,7 +398,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 foregroundColor: Colors.black,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 elevation: 10,
-                shadowColor: neonGreen.withOpacity(0.4),
+                shadowColor: neonGreen.withValues(alpha: 0.4),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

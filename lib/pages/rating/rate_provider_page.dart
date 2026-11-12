@@ -49,7 +49,7 @@ class _RateProviderPageState extends State<RateProviderPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: neonGreen.withOpacity(0.05),
+                color: neonGreen.withValues(alpha: 0.05),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -65,7 +65,7 @@ class _RateProviderPageState extends State<RateProviderPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: neonGreen.withOpacity(0.05),
+                color: neonGreen.withValues(alpha: 0.05),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -119,9 +119,9 @@ class _RateProviderPageState extends State<RateProviderPage> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.1)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
               child: const Icon(Icons.chevron_left, color: Colors.white, size: 24),
             ),
@@ -154,7 +154,7 @@ class _RateProviderPageState extends State<RateProviderPage> {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: neonGreen.withOpacity(0.2),
+                    color: neonGreen.withValues(alpha: 0.2),
                     blurRadius: 30,
                     spreadRadius: 5,
                   ),
@@ -250,7 +250,7 @@ class _RateProviderPageState extends State<RateProviderPage> {
                   size: 44,
                   color: isSelected ? neonGreen : Colors.grey[900],
                   shadows: isSelected ? [
-                    Shadow(color: neonGreen.withOpacity(0.8), blurRadius: 15),
+                    Shadow(color: neonGreen.withValues(alpha: 0.8), blurRadius: 15),
                   ] : null,
                 ),
               ),
@@ -277,12 +277,12 @@ class _RateProviderPageState extends State<RateProviderPage> {
         const SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.03),
+            color: Colors.white.withValues(alpha: 0.03),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: neonGreen.withOpacity(0.3), width: 1.5),
+            border: Border.all(color: neonGreen.withValues(alpha: 0.3), width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: neonGreen.withOpacity(0.05),
+                color: neonGreen.withValues(alpha: 0.05),
                 blurRadius: 10,
                 spreadRadius: 1,
               ),
@@ -337,10 +337,10 @@ class _RateProviderPageState extends State<RateProviderPage> {
                 duration: const Duration(milliseconds: 200),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
-                  color: isSelected ? neonGreen.withOpacity(0.1) : Colors.white.withOpacity(0.05),
+                  color: isSelected ? neonGreen.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                    color: isSelected ? neonGreen.withOpacity(0.5) : Colors.white.withOpacity(0.1),
+                    color: isSelected ? neonGreen.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.1),
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
@@ -377,7 +377,7 @@ class _RateProviderPageState extends State<RateProviderPage> {
             borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
-                color: neonGreen.withOpacity(0.4),
+                color: neonGreen.withValues(alpha: 0.4),
                 blurRadius: 25,
                 offset: const Offset(0, 10),
               ),
@@ -413,8 +413,9 @@ class _RateProviderPageState extends State<RateProviderPage> {
       ),
     );
     
+    final navigator = Navigator.of(context);
     Future.delayed(const Duration(seconds: 1), () {
-      Navigator.pop(context);
+      navigator.pop();
     });
   }
 }

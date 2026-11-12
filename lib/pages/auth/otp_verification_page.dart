@@ -87,7 +87,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
               height: 250,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.1),
+                color: primaryGreen.withValues(alpha: 0.1),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -103,7 +103,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.05),
+                color: primaryGreen.withValues(alpha: 0.05),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 120, sigmaY: 120),
@@ -130,7 +130,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                           height: 40,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withOpacity(0.05),
+                            color: Colors.white.withValues(alpha: 0.05),
                           ),
                           child: const Icon(Icons.chevron_left, color: Colors.white),
                         ),
@@ -139,7 +139,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                         width: 32,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: primaryGreen.withOpacity(0.3),
+                          color: primaryGreen.withValues(alpha: 0.3),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -160,15 +160,15 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                 width: 80,
                                 height: 80,
                                 decoration: BoxDecoration(
-                                  color: primaryGreen.withOpacity(0.1),
+                                  color: primaryGreen.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(24),
                                   border: Border.all(
-                                    color: primaryGreen.withOpacity(0.2),
+                                    color: primaryGreen.withValues(alpha: 0.2),
                                     width: 1,
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: primaryGreen.withOpacity(0.1),
+                                      color: primaryGreen.withValues(alpha: 0.1),
                                       blurRadius: 10,
                                       spreadRadius: 2,
                                     ),
@@ -199,7 +199,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: primaryGreen.withOpacity(0.5),
+                                        color: primaryGreen.withValues(alpha: 0.5),
                                         blurRadius: 8,
                                         spreadRadius: 2,
                                       ),
@@ -233,7 +233,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                           Text(
                             widget.email,
                             style: GoogleFonts.spaceGrotesk(
-                              color: primaryGreen.withOpacity(0.8),
+                              color: primaryGreen.withValues(alpha: 0.8),
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
@@ -253,12 +253,12 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                   border: Border.all(
                                     color: _focusNodes[index].hasFocus 
                                         ? primaryGreen 
-                                        : (_controllers[index].text.isNotEmpty ? primaryGreen.withOpacity(0.3) : Colors.white.withOpacity(0.1)),
+                                        : (_controllers[index].text.isNotEmpty ? primaryGreen.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.1)),
                                     width: 2,
                                   ),
                                   boxShadow: _focusNodes[index].hasFocus ? [
                                     BoxShadow(
-                                      color: primaryGreen.withOpacity(0.3),
+                                      color: primaryGreen.withValues(alpha: 0.3),
                                       blurRadius: 10,
                                       spreadRadius: 1,
                                     )
@@ -352,7 +352,7 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: primaryGreen.withOpacity(0.3),
+                            color: primaryGreen.withValues(alpha: 0.3),
                             blurRadius: 15,
                             spreadRadius: 2,
                             offset: const Offset(0, 4),

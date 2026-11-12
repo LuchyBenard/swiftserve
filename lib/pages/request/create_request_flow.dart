@@ -91,8 +91,8 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white.withOpacity(0.05),
-                        border: Border.all(color: Colors.white.withOpacity(0.1)),
+                        color: Colors.white.withValues(alpha: 0.05),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                       ),
                       child: const Icon(Icons.close, color: Colors.grey, size: 20),
                     ),
@@ -175,12 +175,12 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
         borderRadius: BorderRadius.circular(3),
         boxShadow: isActive ? [
            BoxShadow(
-            color: color.withOpacity(0.5),
+            color: color.withValues(alpha: 0.5),
             blurRadius: 10,
             spreadRadius: 1,
           )
         ] : [],
-        border: isActive ? null : Border.all(color: color.withOpacity(0.3)),
+        border: isActive ? null : Border.all(color: color.withValues(alpha: 0.3)),
       ),
     );
   }

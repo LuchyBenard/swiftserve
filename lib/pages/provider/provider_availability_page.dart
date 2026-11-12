@@ -49,7 +49,7 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: primaryGreen.withOpacity(0.08),
+                color: primaryGreen.withValues(alpha: 0.08),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 100, sigmaY: 100),
@@ -125,7 +125,7 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: primaryGreen.withOpacity(0.3),
+                                color: primaryGreen.withValues(alpha: 0.3),
                                 blurRadius: 15,
                                 spreadRadius: 2,
                               ),
@@ -181,9 +181,9 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: const Color(0xFF142216).withOpacity(0.4),
+        color: const Color(0xFF142216).withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: primaryGreen.withOpacity(0.1)),
+        border: Border.all(color: primaryGreen.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
@@ -210,11 +210,11 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               trackHeight: 4,
-              activeTrackColor: primaryGreen.withOpacity(0.3),
-              inactiveTrackColor: Colors.white.withOpacity(0.1),
+              activeTrackColor: primaryGreen.withValues(alpha: 0.3),
+              inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
               thumbColor: primaryGreen,
               thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10),
-              overlayColor: primaryGreen.withOpacity(0.1),
+              overlayColor: primaryGreen.withValues(alpha: 0.1),
             ),
             child: Slider(
               value: _radius,
@@ -242,9 +242,9 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isActive ? Colors.transparent : Colors.white.withOpacity(0.05),
+        color: isActive ? Colors.transparent : Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isActive ? primaryGreen.withOpacity(0.2) : Colors.white.withOpacity(0.05)),
+        border: Border.all(color: isActive ? primaryGreen.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05)),
         image: isActive ? null : null, // Transparent build panels in HTML
       ),
       child: Row(
@@ -265,7 +265,7 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
               Text(
                 _hours[day]!,
                 style: TextStyle(
-                  color: isActive ? primaryGreen.withOpacity(0.8) : Colors.grey[600],
+                  color: isActive ? primaryGreen.withValues(alpha: 0.8) : Colors.grey[600],
                   fontSize: 12,
                 ),
               ),
@@ -277,9 +277,9 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
               value: isActive,
               onChanged: (val) => setState(() => _schedule[day] = val),
               activeThumbColor: primaryGreen,
-              activeTrackColor: primaryGreen.withOpacity(0.3),
+              activeTrackColor: primaryGreen.withValues(alpha: 0.3),
               inactiveThumbColor: Colors.grey[600],
-              inactiveTrackColor: Colors.white.withOpacity(0.1),
+              inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
             ),
           ),
         ],

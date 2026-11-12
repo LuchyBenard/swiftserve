@@ -94,7 +94,7 @@ class _Step3ReviewState extends State<Step3Review> {
       contentPadding: EdgeInsets.zero,
       leading: Container(
         padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(color: Colors.white.withOpacity(0.05), borderRadius: BorderRadius.circular(8)),
+        decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.05), borderRadius: BorderRadius.circular(8)),
         child: Icon(icon, color: Colors.white, size: 20),
       ),
       title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
@@ -135,9 +135,9 @@ class _Step3ReviewState extends State<Step3Review> {
           // Glass Card Summary
           Container(
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: Colors.white.withOpacity(0.08)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
@@ -175,7 +175,7 @@ class _Step3ReviewState extends State<Step3Review> {
                             decoration: BoxDecoration(
                               color: const Color(0xFF111111),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.white.withOpacity(0.1)),
+                              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                             ),
                             child: Icon(Icons.description, color: Colors.grey[300]),
                           ),
@@ -203,7 +203,7 @@ class _Step3ReviewState extends State<Step3Review> {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      Divider(color: Colors.white.withOpacity(0.05)),
+                      Divider(color: Colors.white.withValues(alpha: 0.05)),
                       const SizedBox(height: 16),
                       // Details
                       _buildSummaryRow(Icons.location_on, 'Location', widget.data['location'] ?? 'Independence Layout, Enugu', neonGreen),
@@ -231,9 +231,9 @@ class _Step3ReviewState extends State<Step3Review> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.08)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
             ),
             child: Row(
               children: [
@@ -242,7 +242,7 @@ class _Step3ReviewState extends State<Step3Review> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF111111),
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                   ),
                   child: const Icon(Icons.credit_card, color: Colors.white, size: 20),
                 ),
@@ -288,11 +288,11 @@ class _Step3ReviewState extends State<Step3Review> {
               hintStyle: TextStyle(color: Colors.grey[600]),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.white.withOpacity(0.1)),
+                borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -330,7 +330,7 @@ class _Step3ReviewState extends State<Step3Review> {
                 foregroundColor: Colors.black,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 elevation: 10,
-                shadowColor: neonGreen.withOpacity(0.5),
+                shadowColor: neonGreen.withValues(alpha: 0.5),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

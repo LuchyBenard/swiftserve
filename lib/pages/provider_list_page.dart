@@ -52,7 +52,7 @@ class _ProviderListPageState extends State<ProviderListPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: neonGreen.withOpacity(0.05),
+                color: neonGreen.withValues(alpha: 0.05),
               ),
             ),
           ),
@@ -277,7 +277,7 @@ class _ProviderListPageState extends State<ProviderListPage> {
               decoration: BoxDecoration(
                 color: const Color(0xFF0F0F0F),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.1)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
               child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
             ),
@@ -322,7 +322,7 @@ class _ProviderListPageState extends State<ProviderListPage> {
         decoration: BoxDecoration(
           color: const Color(0xFF080808),
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: Colors.white.withOpacity(0.05)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -343,9 +343,9 @@ class _ProviderListPageState extends State<ProviderListPage> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
+                      color: Colors.black.withValues(alpha: 0.6),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -379,7 +379,7 @@ class _ProviderListPageState extends State<ProviderListPage> {
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
+                            color: Colors.black.withValues(alpha: 0.6),
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.white12),
                           ),

@@ -154,7 +154,7 @@ class _ProviderFilterSheetState extends State<ProviderFilterSheet> {
                 ),
                 Switch(
                   value: _availableToday,
-                  activeColor: primaryGreen,
+                  activeThumbColor: primaryGreen,
                   onChanged: (val) => setState(() => _availableToday = val),
                 ),
               ],

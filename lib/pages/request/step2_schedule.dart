@@ -103,7 +103,7 @@ class _Step2ScheduleState extends State<Step2Schedule> {
             decoration: BoxDecoration(
               color: const Color(0xFF0A0A0A),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: neonGreen.withOpacity(0.5)),
+              border: Border.all(color: neonGreen.withValues(alpha: 0.5)),
             ),
             child: Row(
               children: [
@@ -147,7 +147,7 @@ class _Step2ScheduleState extends State<Step2Schedule> {
             decoration: BoxDecoration(
               color: const Color(0xFF0A0A0A),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: neonGreen.withOpacity(0.5)),
+              border: Border.all(color: neonGreen.withValues(alpha: 0.5)),
             ),
             child: Row(
               children: [
@@ -181,7 +181,7 @@ class _Step2ScheduleState extends State<Step2Schedule> {
                   child: OutlinedButton(
                     onPressed: widget.onPrev,
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.white.withOpacity(0.1)),
+                      side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       backgroundColor: const Color(0xFF1A1A1A),
                     ),
@@ -215,7 +215,7 @@ class _Step2ScheduleState extends State<Step2Schedule> {
                       foregroundColor: Colors.black,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       elevation: 10,
-                      shadowColor: neonGreen.withOpacity(0.5),
+                      shadowColor: neonGreen.withValues(alpha: 0.5),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -265,7 +265,7 @@ class _Step2ScheduleState extends State<Step2Schedule> {
       decoration: BoxDecoration(
         color: const Color(0xFF0A0A0A),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Column(
         children: [
@@ -361,7 +361,7 @@ class _Step2ScheduleState extends State<Step2Schedule> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: isSelected ? color : Colors.transparent,
-          boxShadow: isSelected ? [BoxShadow(color: color.withOpacity(0.4), blurRadius: 8)] : [],
+          boxShadow: isSelected ? [BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 8)] : [],
         ),
         child: Center(
           child: Text(
@@ -385,8 +385,8 @@ class _Step2ScheduleState extends State<Step2Schedule> {
         decoration: BoxDecoration(
           color: isSelected ? activeColor : const Color(0xFF0A0A0A),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isSelected ? activeColor : Colors.white.withOpacity(0.1)),
-          boxShadow: isSelected ? [BoxShadow(color: activeColor.withOpacity(0.3), blurRadius: 10)] : [],
+          border: Border.all(color: isSelected ? activeColor : Colors.white.withValues(alpha: 0.1)),
+          boxShadow: isSelected ? [BoxShadow(color: activeColor.withValues(alpha: 0.3), blurRadius: 10)] : [],
         ),
         child: Text(
           time,
@@ -406,10 +406,10 @@ class _Step2ScheduleState extends State<Step2Schedule> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? activeColor.withOpacity(0.1) : const Color(0xFF0A0A0A),
+          color: isSelected ? activeColor.withValues(alpha: 0.1) : const Color(0xFF0A0A0A),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isSelected ? activeColor : Colors.white.withOpacity(0.1)),
-          boxShadow: isSelected ? [BoxShadow(color: activeColor.withOpacity(0.1), blurRadius: 8)] : [],
+          border: Border.all(color: isSelected ? activeColor : Colors.white.withValues(alpha: 0.1)),
+          boxShadow: isSelected ? [BoxShadow(color: activeColor.withValues(alpha: 0.1), blurRadius: 8)] : [],
         ),
         child: Text(
           amount,

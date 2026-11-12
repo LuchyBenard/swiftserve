@@ -28,10 +28,11 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
       scheme: 'tel',
       path: '+2348001234567', // Mock phone number
     );
+    final messenger = ScaffoldMessenger.of(context);
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      messenger.showSnackBar(
         const SnackBar(content: Text('Could not launch dialer')),
       );
     }
@@ -74,7 +75,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: neonGreen.withOpacity(0.05),
+                color: neonGreen.withValues(alpha: 0.05),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 80, sigmaY: 80),
@@ -122,9 +123,9 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
             child: Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.05),
+                color: Colors.white.withValues(alpha: 0.05),
                 shape: BoxShape.circle,
-                border: Border.all(color: Colors.white.withOpacity(0.1)),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
               child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
             ),
@@ -153,9 +154,9 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.05),
+              color: Colors.white.withValues(alpha: 0.05),
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withOpacity(0.1)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
             child: const Icon(Icons.more_vert, color: Colors.white, size: 18),
           ),
@@ -211,7 +212,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
                  Container(
                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                    decoration: BoxDecoration(
-                     color: Colors.black.withOpacity(0.6),
+                     color: Colors.black.withValues(alpha: 0.6),
                      borderRadius: BorderRadius.circular(4),
                      border: Border.all(color: Colors.white10),
                    ),
@@ -241,7 +242,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
             color: color,
             shape: BoxShape.circle,
             boxShadow: isGlowing ? [
-              BoxShadow(color: color.withOpacity(0.5), blurRadius: 15, spreadRadius: 2),
+              BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 15, spreadRadius: 2),
             ] : null,
           ),
           child: Icon(icon, color: Colors.black, size: 20),
@@ -265,9 +266,9 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: Row(
           children: [
@@ -276,7 +277,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               height: 50,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: neonGreen.withOpacity(0.3), width: 2),
+                border: Border.all(color: neonGreen.withValues(alpha: 0.3), width: 2),
                 image: DecorationImage(
                   image: NetworkImage(widget.providerImageUrl),
                   fit: BoxFit.cover,
@@ -306,12 +307,12 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               children: [
                 GestureDetector(
                   onTap: _makeCall,
-                  child: _buildActionIcon(Icons.call, Colors.white.withOpacity(0.1)),
+                  child: _buildActionIcon(Icons.call, Colors.white.withValues(alpha: 0.1)),
                 ),
                 const SizedBox(width: 12),
                 GestureDetector(
                   onTap: _goToChat,
-                  child: _buildActionIcon(Icons.chat_bubble, neonGreen.withOpacity(0.2), iconColor: neonGreen),
+                  child: _buildActionIcon(Icons.chat_bubble, neonGreen.withValues(alpha: 0.2), iconColor: neonGreen),
                 ),
               ],
             )
@@ -327,7 +328,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
       decoration: BoxDecoration(
         color: bg,
         shape: BoxShape.circle,
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Icon(icon, color: iconColor, size: 20),
     );
@@ -340,9 +341,9 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
         width: double.infinity,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.05),
+          color: Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(32),
-          border: Border.all(color: Colors.white.withOpacity(0.1)),
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -351,7 +352,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                children: [
                  Text('Service Status', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-                 Text('EST. 8 MINS', style: GoogleFonts.spaceGrotesk(color: neonGreen.withOpacity(0.6), fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 1)),
+                 Text('EST. 8 MINS', style: GoogleFonts.spaceGrotesk(color: neonGreen.withValues(alpha: 0.6), fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 1)),
                ],
              ),
              const SizedBox(height: 32),
@@ -380,7 +381,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
                    color: neonGreen,
                    borderRadius: BorderRadius.circular(16),
                    boxShadow: [
-                     BoxShadow(color: neonGreen.withOpacity(0.3), blurRadius: 10),
+                     BoxShadow(color: neonGreen.withValues(alpha: 0.3), blurRadius: 10),
                    ],
                  ),
                  child: Center(
@@ -410,17 +411,17 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               width: 16,
               height: 16,
               decoration: BoxDecoration(
-                color: isDone ? neonGreen : Colors.white.withOpacity(0.1),
+                color: isDone ? neonGreen : Colors.white.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.black, width: 2),
-                boxShadow: isDone ? [BoxShadow(color: neonGreen.withOpacity(0.5), blurRadius: 10)] : null,
+                boxShadow: isDone ? [BoxShadow(color: neonGreen.withValues(alpha: 0.5), blurRadius: 10)] : null,
               ),
             ),
             if (!isLast)
               Container(
                  width: 2,
                  height: 40,
-                 color: isDone ? neonGreen : Colors.white.withOpacity(0.1),
+                 color: isDone ? neonGreen : Colors.white.withValues(alpha: 0.1),
               ),
           ],
         ),
@@ -461,10 +462,10 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
         child: Container(
           height: 72,
           decoration: BoxDecoration(
-            color: const Color(0xFF0A0A0A).withOpacity(0.9),
+            color: const Color(0xFF0A0A0A).withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(40),
-            border: Border.all(color: Colors.white.withOpacity(0.1)),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 20, offset: const Offset(0, 10))],
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 20, offset: const Offset(0, 10))],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(40),
@@ -503,7 +504,7 @@ class MapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.white.withOpacity(0.05)
+      ..color = Colors.white.withValues(alpha: 0.05)
       ..strokeWidth = 2;
     
     // Draw some random map lines
@@ -522,7 +523,7 @@ class DashPathPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color.withOpacity(0.5)
+      ..color = color.withValues(alpha: 0.5)
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;

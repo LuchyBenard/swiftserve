@@ -5,10 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../pages/auth/forgot_password_page.dart';
 import '../pages/auth/sign_up_page.dart';
 import '../pages/auth/worker_registration_page.dart';
-import '../pages/bottomnav.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({Key? key}) : super(key: key);
+  const WelcomePage({super.key});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -66,14 +65,14 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                     height: 600,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: neonGreen.withOpacity(0.1),
+                      color: neonGreen.withValues(alpha: 0.1),
                     ),
                     child: Container( // Simulated blur via gradient or just opacity
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             boxShadow: [
                                 BoxShadow(
-                                    color: neonGreen.withOpacity(0.1),
+                                    color: neonGreen.withValues(alpha: 0.1),
                                     blurRadius: 120,
                                     spreadRadius: 20,
                                 )
@@ -101,13 +100,13 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                            width: 120,
                            height: 120,
                            decoration: BoxDecoration(
-                             color: neonGreen.withOpacity(0.3),
+                             color: neonGreen.withValues(alpha: 0.3),
                              shape: BoxShape.circle,
                            ), // Blur handled by outer container or separate widget if needed perfectly
                            child: Center(
                                child: Container(
                                    width: 80, height: 80,
-                                   decoration: BoxDecoration(shape: BoxShape.circle, color: neonGreen.withOpacity(0.2)),
+                                   decoration: BoxDecoration(shape: BoxShape.circle, color: neonGreen.withValues(alpha: 0.2)),
                                )
                            ),
                          ),
@@ -117,7 +116,7 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                            color: neonGreen,
                            shadows: [
                              BoxShadow(
-                               color: neonGreen.withOpacity(0.8),
+                               color: neonGreen.withValues(alpha: 0.8),
                                blurRadius: 15,
                              )
                            ],
@@ -259,7 +258,7 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
                              borderRadius: BorderRadius.circular(16),
                            ),
                            elevation: 10,
-                           shadowColor: neonGreen.withOpacity(0.4),
+                           shadowColor: neonGreen.withValues(alpha: 0.4),
                          ),
                          child: Text(
                            'Login',
@@ -437,7 +436,7 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
         credential = await AuthService().signInWithApple();
       }
 
-      if (context.mounted) {
+      if (mounted) {
         Navigator.pop(context); // Close loading dialog
         if (credential == null) {
           // User cancelled
@@ -446,7 +445,7 @@ class _WelcomePageState extends State<WelcomePage> with SingleTickerProviderStat
         // AuthGate will handle navigation automatically
       }
     } catch (e) {
-      if (context.mounted) {
+      if (mounted) {
         Navigator.pop(context); // Close loading dialog
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

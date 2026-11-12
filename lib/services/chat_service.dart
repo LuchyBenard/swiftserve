@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/conversation.dart';
 import '../models/message.dart';
 import '../models/provider.dart';
@@ -15,29 +14,133 @@ class ChatService {
   factory ChatService() => _instance;
   ChatService._internal();
 
-  static const String _conversationsKey = 'swiftserve_chat_conversations';
-  static const String _messagesPrefix = 'swiftserve_chat_messages_';
-
   final ValueNotifier<List<Conversation>> conversationsNotifier = ValueNotifier<List<Conversation>>([]);
   final ValueNotifier<int> unreadCountNotifier = ValueNotifier<int>(0);
   final ValueNotifier<Map<String, bool>> typingStatusNotifier = ValueNotifier<Map<String, bool>>({});
   final Map<String, ValueNotifier<List<Message>>> _conversationMessagesNotifiers = {};
   final Set<String> _listeningConversations = {};
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  // Lazily resolved so the service can be constructed before Firebase is ready
+  // (for example in unit/widget tests).
+  FirebaseFirestore? _firestoreInstance;
+  FirebaseAuth? _authInstance;
+
+  FirebaseFirestore get _firestore => _firestoreInstance ??= FirebaseFirestore.instance;
+  FirebaseAuth get _auth => _authInstance ??= FirebaseAuth.instance;
 
   bool _initialized = false;
-  bool _isAdmin = false;
+  bool _localMode = false;
+  final List<Conversation> _localConversations = [];
+  final Map<String, List<Message>> _localMessages = {};
 
   Future<void> init({bool isAdmin = false}) async {
     if (_initialized) return;
-    _isAdmin = isAdmin;
 
-    // Always initialize Firestore listeners
-    await _initializeFirestore();
+    // When Firebase has not been initialized (e.g. in tests or an offline
+    // preview build), fall back to an in-memory demo dataset.
+    if (Firebase.apps.isEmpty) {
+      _enableLocalMode();
+      return;
+    }
 
+    try {
+      await _initializeFirestore();
+      _initialized = true;
+    } catch (_) {
+      _enableLocalMode();
+    }
+  }
+
+  void _enableLocalMode() {
+    _localMode = true;
+    _seedLocalData();
     _initialized = true;
+  }
+
+  void _seedLocalData() {
+    final now = DateTime.now();
+    _localConversations
+      ..clear()
+      ..addAll([
+        Conversation(
+          id: 'conv_local_1',
+          providerName: 'TechFix Mobile',
+          providerIcon: 'smartphone',
+          isOnline: true,
+          isUnread: true,
+          participants: const ['me', 'provider_1'],
+          participantNames: const ['You', 'TechFix Mobile'],
+          participantImages: const ['', ''],
+          lastMessage: 'I am on my way!',
+          time: 'Now',
+          lastMessageTime: Timestamp.fromDate(now.subtract(const Duration(minutes: 2))),
+          createdAt: Timestamp.fromDate(now.subtract(const Duration(days: 1))),
+        ),
+        Conversation(
+          id: 'conv_local_2',
+          providerName: 'John D.',
+          providerIcon: 'content_cut',
+          isUnread: false,
+          participants: const ['me', 'provider_2'],
+          participantNames: const ['You', 'John D.'],
+          participantImages: const ['', ''],
+          lastMessage: 'See you at 10 AM.',
+          time: '10:00 AM',
+          lastMessageTime: Timestamp.fromDate(now.subtract(const Duration(hours: 3))),
+          createdAt: Timestamp.fromDate(now.subtract(const Duration(days: 3))),
+        ),
+      ]);
+
+    _localMessages
+      ..clear()
+      ..['conv_local_1'] = [
+        Message(
+          id: 'local_msg_1',
+          senderId: 'provider_1',
+          text: 'Hello! I have received your request.',
+          timestamp: now.subtract(const Duration(minutes: 15)),
+          isMe: false,
+        ),
+        Message(
+          id: 'local_msg_2',
+          senderId: 'me',
+          text: 'Great, how soon can you arrive?',
+          timestamp: now.subtract(const Duration(minutes: 10)),
+          isMe: true,
+        ),
+        Message(
+          id: 'local_msg_3',
+          senderId: 'provider_1',
+          text: 'I am on my way!',
+          timestamp: now.subtract(const Duration(minutes: 2)),
+          isMe: false,
+        ),
+      ]
+      ..['conv_local_2'] = [
+        Message(
+          id: 'local_msg_4',
+          senderId: 'provider_2',
+          text: 'See you at 10 AM.',
+          timestamp: now.subtract(const Duration(hours: 3)),
+          isMe: false,
+        ),
+      ];
+
+    conversationsNotifier.value = List<Conversation>.from(_localConversations);
+    _updateUnreadCount(_localConversations);
+  }
+
+  void _refreshLocalConversations() {
+    conversationsNotifier.value = List<Conversation>.from(_localConversations);
+    _updateUnreadCount(_localConversations);
+  }
+
+  void _notifyLocalMessages(String conversationId) {
+    final notifier = _conversationMessagesNotifiers[conversationId];
+    if (notifier == null) return;
+    final messages = List<Message>.from(_localMessages[conversationId] ?? const [])
+      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    notifier.value = messages;
   }
 
   Future<void> _initializeFirestore() async {
@@ -97,6 +200,31 @@ class ChatService {
     required String participantName,
     required String participantImageUrl,
   }) async {
+    if (_localMode) {
+      for (final conversation in _localConversations) {
+        if (conversation.participants.contains(participantId)) {
+          return conversation;
+        }
+      }
+
+      final conversation = Conversation(
+        id: 'conv_${participantId}_${DateTime.now().millisecondsSinceEpoch}',
+        providerName: participantName,
+        avatarUrl: participantImageUrl,
+        participants: ['me', participantId],
+        participantNames: ['You', participantName],
+        participantImages: ['', participantImageUrl],
+        lastMessage: '',
+        time: 'Now',
+        lastMessageTime: Timestamp.now(),
+        createdAt: Timestamp.now(),
+      );
+      _localConversations.insert(0, conversation);
+      _localMessages[conversation.id] = [];
+      _refreshLocalConversations();
+      return conversation;
+    }
+
     final userId = _auth.currentUser?.uid;
     if (userId == null) throw Exception('User not authenticated');
 
@@ -130,6 +258,32 @@ class ChatService {
     required String text,
     String? imageUrl,
   }) async {
+    if (_localMode) {
+      final message = Message(
+        id: 'local_msg_${DateTime.now().microsecondsSinceEpoch}',
+        senderId: 'me',
+        text: text,
+        timestamp: DateTime.now(),
+        isMe: true,
+        imageUrl: imageUrl,
+      );
+      _localMessages.putIfAbsent(conversationId, () => []).add(message);
+
+      final index = _localConversations.indexWhere((c) => c.id == conversationId);
+      if (index != -1) {
+        _localConversations[index] = _localConversations[index].copyWith(
+          lastMessage: text.isNotEmpty ? text : '📷 Shared a photo',
+          time: 'Now',
+          lastMessageTime: Timestamp.now(),
+          isUnread: false,
+        );
+        _refreshLocalConversations();
+      }
+
+      _notifyLocalMessages(conversationId);
+      return message;
+    }
+
     final userId = _auth.currentUser?.uid;
     if (userId == null) throw Exception('User not authenticated');
 
@@ -233,6 +387,13 @@ class ChatService {
   }
 
   Future<Conversation?> _getConversation(String conversationId) async {
+    if (_localMode) {
+      for (final conversation in _localConversations) {
+        if (conversation.id == conversationId) return conversation;
+      }
+      return null;
+    }
+
     final doc = await _firestore.collection('conversations').doc(conversationId).get();
     if (doc.exists) {
       return Conversation.fromFirestore(doc);
@@ -242,6 +403,41 @@ class ChatService {
 
   // Get or create conversation for provider
   Future<Conversation> getOrCreateConversationForProvider(Provider provider) async {
+    if (_localMode) {
+      for (final conversation in _localConversations) {
+        if (conversation.participants.contains(provider.id)) {
+          return conversation;
+        }
+      }
+
+      final conversation = Conversation(
+        id: 'conv_${provider.id}_${DateTime.now().millisecondsSinceEpoch}',
+        providerName: provider.name,
+        avatarUrl: provider.imageUrl,
+        isOnline: true,
+        isUnread: false,
+        participants: ['me', provider.id],
+        participantNames: ['You', provider.name],
+        participantImages: ['', provider.imageUrl],
+        lastMessage: 'Hello! Let me know how I can help with your service.',
+        time: 'Now',
+        lastMessageTime: Timestamp.now(),
+        createdAt: Timestamp.now(),
+      );
+      _localConversations.insert(0, conversation);
+      _localMessages[conversation.id] = [
+        Message(
+          id: 'local_welcome_${provider.id}',
+          senderId: 'provider',
+          text: 'Hello! Thanks for viewing my profile. Feel free to ask any questions about my services or availability.',
+          timestamp: DateTime.now(),
+          isMe: false,
+        ),
+      ];
+      _refreshLocalConversations();
+      return conversation;
+    }
+
     final userId = _auth.currentUser?.uid;
     if (userId == null) throw Exception('User not authenticated');
 
@@ -289,12 +485,30 @@ class ChatService {
   }
 
   Future<void> markAsRead(String conversationId) async {
+    if (_localMode) {
+      final index = _localConversations.indexWhere((c) => c.id == conversationId);
+      if (index != -1) {
+        _localConversations[index] = _localConversations[index].copyWith(isUnread: false);
+        _refreshLocalConversations();
+      }
+      return;
+    }
+
     await _firestore.collection('conversations').doc(conversationId).update({
       'isUnread': false,
     });
   }
 
   Future<void> deleteConversation(String conversationId) async {
+    if (_localMode) {
+      _localConversations.removeWhere((c) => c.id == conversationId);
+      _localMessages.remove(conversationId);
+      _conversationMessagesNotifiers.remove(conversationId)?.dispose();
+      _listeningConversations.remove(conversationId);
+      _refreshLocalConversations();
+      return;
+    }
+
     await _firestore.collection('conversations').doc(conversationId).delete();
     await _firestore
         .collection('conversations')
@@ -308,50 +522,14 @@ class ChatService {
     });
   }
 
-  // Update conversation last message
-  Future<void> _updateConversationLastMessage({
-    required String conversationId,
-    required String lastMessage,
-    required String time,
-    required bool isUnread,
-  }) async {
-    await _firestore.collection('conversations').doc(conversationId).update({
-      'lastMessage': lastMessage,
-      'lastMessageTime': isUnread ? FieldValue.serverTimestamp() : null,
-      'isUnread': isUnread,
-    });
-  }
-
-  // Seed default messages (for new conversations)
-  Future<void> _seedDefaultMessages(String conversationId) async {
-    final messages = [
-      Message(
-        id: 'msg_welcome_$conversationId',
-        senderId: 'provider',
-        text: "Hello! I've received your request.",
-        timestamp: DateTime.now().subtract(const Duration(minutes: 10)),
-        isMe: false,
-      ),
-      Message(
-        id: 'msg_user_1',
-        senderId: 'me',
-        text: "Hi! Yes, it's getting quite messy. How soon can you be here?",
-        timestamp: DateTime.now().subtract(const Duration(minutes: 8)),
-        isMe: true,
-      ),
-    ];
-
-    for (var message in messages) {
-      await _firestore
-          .collection('conversations')
-          .doc(conversationId)
-          .collection('messages')
-          .add(message.toFirestore());
-    }
-  }
-
   // Message methods
   Stream<List<Message>> messagesStream(String conversationId) {
+    if (_localMode) {
+      final messages = List<Message>.from(_localMessages[conversationId] ?? const [])
+        ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+      return Stream<List<Message>>.value(messages);
+    }
+
     return _messagesStream(conversationId).map((snapshot) {
       return snapshot.docs.map((doc) => Message.fromFirestore(doc)).toList()
         ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
@@ -367,6 +545,12 @@ class ChatService {
       () => ValueNotifier<List<Message>>([]),
     );
 
+    if (_localMode) {
+      notifier.value = List<Message>.from(_localMessages[conversationId] ?? const [])
+        ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+      return notifier;
+    }
+
     if (_listeningConversations.add(conversationId)) {
       messagesStream(conversationId).listen((messages) {
         notifier.value = messages;
@@ -381,6 +565,14 @@ class ChatService {
     required String text,
     String? imageUrl,
   }) async {
+    if (_localMode) {
+      return sendMessage(
+        conversationId: conversationId,
+        text: text,
+        imageUrl: imageUrl,
+      );
+    }
+
     final userId = _auth.currentUser?.uid;
     if (userId == null) throw Exception('User not authenticated');
 
@@ -401,6 +593,11 @@ class ChatService {
   }
 
   Future<List<Message>> getMessages(String conversationId) async {
+    if (_localMode) {
+      return List<Message>.from(_localMessages[conversationId] ?? const [])
+        ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    }
+
     final snapshot = await _firestore
         .collection('conversations')
         .doc(conversationId)

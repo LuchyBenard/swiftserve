@@ -87,7 +87,7 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
 
         await AuthService().signOut();
 
-        if (context.mounted) {
+        if (mounted) {
           Navigator.pop(context); // Close loading dialog
           showDialog(
             context: context,
@@ -109,14 +109,14 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
           );
         }
       } on FirebaseAuthException catch (e) {
-        if (context.mounted) {
+        if (mounted) {
           Navigator.pop(context); // Close loading dialog
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(e.message ?? 'Registration failed')),
           );
         }
       } catch (e) {
-        if (context.mounted) {
+        if (mounted) {
           Navigator.pop(context); // Close loading dialog
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('An unexpected error occurred')),
