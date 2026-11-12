@@ -131,7 +131,6 @@ swiftserve/
 │   │   ├── address_service.dart    # Saved addresses & GPS auto-detection
 │   │   ├── auth_service.dart       # Firebase Auth & Firestore user sync
 │   │   ├── chat_service.dart       # Direct messaging, reactive streams & auto-replies
-│   │   ├── chat_service_firestore.dart # Firestore-only chat service variant
 │   │   ├── favorites_service.dart  # Favorite provider persistence & reactive state
 │   │   └── notification_service.dart # Reactive notifications, unread state & alerts
 │   ├── splash/                     # Startup splash screen
