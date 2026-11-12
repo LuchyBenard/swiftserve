@@ -477,54 +477,6 @@ class _HomePageState extends State<HomePage> {
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  // Availability badge
-                  if (_selectedCategory != null && _selectedCategory.isNotEmpty) ...[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4),
-                      child: ValueListenableBuilder<List<Provider>>(
-                        valueListenable: FavoritesService().favoritesNotifier,
-                        builder: (context, favIds, _) {
-                          final categoryProviders = _getMockProviders(_selectedCategory)
-                              .where((p) => !favIds.contains(p.id));
-                          final provider = categoryProviders.isNotEmpty ? categoryProviders.first : null;
-                          if (provider != null) ...[
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: provider.isVerified ? Colors.green.withOpacity(0.2) : Colors.grey.withOpacity(0.2),
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.color(provider.isVerified ? Colors.green : Colors.grey),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    provider.isVerified ? Icons.verified : Icons.person,
-                                    color: provider.isVerified ? Colors.green : Colors.grey,
-                                    size: 12,
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    provider.isAvailable ? 'Available' : 'Unavailable',
-                                    style: GoogleFonts.spaceGrotesk(
-                                      color: provider.isVerified ? Colors.green : Colors.grey,
-                                      fontSize: 8,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ] ...[
-                            const Text(
-                              'Tap category to see availability',
-                              style: GoogleFonts.spaceGrotesk(color: Colors.grey, fontSize: 8),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ]) : const SizedBox.shrink(),
                 ],
               ),
             ),

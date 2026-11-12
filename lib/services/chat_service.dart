@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/conversation.dart';
 import '../models/message.dart';
@@ -21,6 +22,7 @@ class ChatService {
   final ValueNotifier<int> unreadCountNotifier = ValueNotifier<int>(0);
   final ValueNotifier<Map<String, bool>> typingStatusNotifier = ValueNotifier<Map<String, bool>>({});
   final Map<String, ValueNotifier<List<Message>>> _conversationMessagesNotifiers = {};
+  final Set<String> _listeningConversations = {};
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -116,13 +118,14 @@ class ChatService {
       'lastMessage': '',
       'lastMessageTime': FieldValue.serverTimestamp(),
       'createdAt': FieldValue.serverTimestamp(),
-      'isRead': false,
+      'isUnread': false,
     });
 
-    return Conversation.fromFirestore(convRef);
+    final doc = await convRef.get();
+    return Conversation.fromFirestore(doc);
   }
 
-  Future<void> sendMessage({
+  Future<Message> sendMessage({
     required String conversationId,
     required String text,
     String? imageUrl,
@@ -146,11 +149,14 @@ class ChatService {
     await _firestore.collection('conversations').doc(conversationId).update({
       'lastMessage': text.isNotEmpty ? text : '📷 Shared a photo',
       'lastMessageTime': FieldValue.serverTimestamp(),
-      'isRead': false,
+      'isUnread': false,
     });
 
     // Trigger provider auto-reply
     _scheduleProviderReply(conversationId, text, imageUrl);
+
+    final doc = await messageRef.get();
+    return Message.fromFirestore(doc);
   }
 
   void _scheduleProviderReply(String conversationId, String userText, String? imageUrl) {
@@ -184,7 +190,7 @@ class ChatService {
       await _firestore.collection('conversations').doc(conversationId).update({
         'lastMessage': replyText,
         'lastMessageTime': FieldValue.serverTimestamp(),
-        'isRead': false,
+        'isUnread': true,
       });
 
       // Register notification
@@ -226,7 +232,7 @@ class ChatService {
     return "Got your message! I've noted down the details and I'm on it.";
   }
 
-  Future<Conversation> _getConversation(String conversationId) async {
+  Future<Conversation?> _getConversation(String conversationId) async {
     final doc = await _firestore.collection('conversations').doc(conversationId).get();
     if (doc.exists) {
       return Conversation.fromFirestore(doc);
@@ -261,10 +267,11 @@ class ChatService {
       'lastMessage': "Hello! Let me know how I can help with your service.",
       'lastMessageTime': FieldValue.serverTimestamp(),
       'createdAt': FieldValue.serverTimestamp(),
-      'isRead': false,
+      'isUnread': false,
     });
 
-    final conv = Conversation.fromFirestore(convRef);
+    final doc = await convRef.get();
+    final conv = Conversation.fromFirestore(doc);
     
     // Seed initial message
     await _firestore
@@ -283,7 +290,7 @@ class ChatService {
 
   Future<void> markAsRead(String conversationId) async {
     await _firestore.collection('conversations').doc(conversationId).update({
-      'isRead': true,
+      'isUnread': false,
     });
   }
 
@@ -322,14 +329,14 @@ class ChatService {
         id: 'msg_welcome_$conversationId',
         senderId: 'provider',
         text: "Hello! I've received your request.",
-        timestamp: FieldValue.serverTimestamp(),
+        timestamp: DateTime.now().subtract(const Duration(minutes: 10)),
         isMe: false,
       ),
       Message(
         id: 'msg_user_1',
         senderId: 'me',
         text: "Hi! Yes, it's getting quite messy. How soon can you be here?",
-        timestamp: FieldValue.serverTimestamp(),
+        timestamp: DateTime.now().subtract(const Duration(minutes: 8)),
         isMe: true,
       ),
     ];
@@ -349,6 +356,24 @@ class ChatService {
       return snapshot.docs.map((doc) => Message.fromFirestore(doc)).toList()
         ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
     });
+  }
+
+  /// Returns a live notifier of messages for a conversation.
+  ///
+  /// The underlying Firestore listener is only attached once per conversation.
+  ValueListenable<List<Message>> getMessageNotifier(String conversationId) {
+    final notifier = _conversationMessagesNotifiers.putIfAbsent(
+      conversationId,
+      () => ValueNotifier<List<Message>>([]),
+    );
+
+    if (_listeningConversations.add(conversationId)) {
+      messagesStream(conversationId).listen((messages) {
+        notifier.value = messages;
+      });
+    }
+
+    return notifier;
   }
 
   Future<Message> sendMessageWithId({
