@@ -1,13 +1,25 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'splash/splash_page.dart';
 import 'firebase_options.dart';
+import 'services/push_notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  // Firebase is optional at runtime: if the project is not configured the app
+  // still boots into offline/demo mode instead of crashing.
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+    await PushNotificationService().init();
+  } catch (_) {
+    // Ignore — services fall back to local/demo data.
+  }
+
   runApp(const MyApp());
 }
 

@@ -26,17 +26,20 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
   void initState() {
     super.initState();
     _requestData = {
-      'description': widget.provider != null 
-          ? 'I need help with ${widget.provider!.role} services.' 
-          : (widget.initialService != null 
-              ? 'I need help with ${widget.initialService} services.' 
-              : ''),
+      'description': widget.provider != null
+          ? 'I need help with ${widget.provider!.role} services.'
+          : (widget.initialService != null
+                ? 'I need help with ${widget.initialService} services.'
+                : ''),
       'date': DateTime.now(),
       'time': '10:30 AM',
       'budget': '',
       'provider_name': widget.provider?.name ?? 'Marcus Vane',
       'provider_role': widget.provider?.role ?? 'Master Barber',
-      'provider_image': widget.provider?.imageUrl ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
+      'provider_id': widget.provider?.id ?? '',
+      'provider_image':
+          widget.provider?.imageUrl ??
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
     };
   }
 
@@ -92,9 +95,15 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: Colors.white.withValues(alpha: 0.05),
-                        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.1),
+                        ),
                       ),
-                      child: const Icon(Icons.close, color: Colors.grey, size: 20),
+                      child: const Icon(
+                        Icons.close,
+                        color: Colors.grey,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ],
@@ -106,21 +115,21 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 children: [
-                   _buildProgressIndicator(0, neonGreen),
-                   const SizedBox(width: 8),
-                   _buildProgressIndicator(1, neonGreen),
-                   const SizedBox(width: 8),
-                   _buildProgressIndicator(2, neonGreen),
-                   const SizedBox(width: 16),
-                   Text(
-                     'STEP ${_currentStep + 1} OF 3',
-                     style: GoogleFonts.spaceGrotesk(
-                       color: neonGreen,
-                       fontSize: 10,
-                       fontWeight: FontWeight.w600,
-                       letterSpacing: 1,
-                     ),
-                   ),
+                  _buildProgressIndicator(0, neonGreen),
+                  const SizedBox(width: 8),
+                  _buildProgressIndicator(1, neonGreen),
+                  const SizedBox(width: 8),
+                  _buildProgressIndicator(2, neonGreen),
+                  const SizedBox(width: 16),
+                  Text(
+                    'STEP ${_currentStep + 1} OF 3',
+                    style: GoogleFonts.spaceGrotesk(
+                      color: neonGreen,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -133,19 +142,13 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
                 controller: _pageController,
                 physics: const NeverScrollableScrollPhysics(), // Disable swipe
                 children: [
-                  Step1Details(
-                    onNext: _nextStep,
-                    data: _requestData,
-                  ),
+                  Step1Details(onNext: _nextStep, data: _requestData),
                   Step2Schedule(
                     onNext: _nextStep,
                     onPrev: _prevStep,
                     data: _requestData,
                   ),
-                  Step3Review(
-                    onPrev: _prevStep,
-                    data: _requestData,
-                  ),
+                  Step3Review(onPrev: _prevStep, data: _requestData),
                 ],
               ),
             ),
@@ -157,10 +160,14 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
 
   String _getTitle(int step) {
     switch (step) {
-      case 0: return 'New Request';
-      case 1: return 'Schedule & Budget';
-      case 2: return 'Review Request';
-      default: return 'New Request';
+      case 0:
+        return 'New Request';
+      case 1:
+        return 'Schedule & Budget';
+      case 2:
+        return 'Review Request';
+      default:
+        return 'New Request';
     }
   }
 
@@ -173,14 +180,18 @@ class _CreateRequestFlowState extends State<CreateRequestFlow> {
       decoration: BoxDecoration(
         color: isActive ? color : const Color(0xFF1A1A1A),
         borderRadius: BorderRadius.circular(3),
-        boxShadow: isActive ? [
-           BoxShadow(
-            color: color.withValues(alpha: 0.5),
-            blurRadius: 10,
-            spreadRadius: 1,
-          )
-        ] : [],
-        border: isActive ? null : Border.all(color: color.withValues(alpha: 0.3)),
+        boxShadow: isActive
+            ? [
+                BoxShadow(
+                  color: color.withValues(alpha: 0.5),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                ),
+              ]
+            : [],
+        border: isActive
+            ? null
+            : Border.all(color: color.withValues(alpha: 0.3)),
       ),
     );
   }

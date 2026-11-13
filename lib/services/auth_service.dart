@@ -18,10 +18,8 @@ class AuthService {
     required String phone,
   }) async {
     try {
-      auth.UserCredential credential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      auth.UserCredential credential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       // Save user to Firestore
       await _firestore.collection('users').doc(credential.user!.uid).set({
@@ -52,10 +50,8 @@ class AuthService {
     required String location,
   }) async {
     try {
-      auth.UserCredential credential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      auth.UserCredential credential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
       // Save provider to Firestore
       await _firestore.collection('users').doc(credential.user!.uid).set({
@@ -94,7 +90,10 @@ class AuthService {
   // Sign In
   Future<auth.UserCredential?> signIn(String email, String password) async {
     try {
-      return await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
     } catch (e) {
       rethrow;
     }
@@ -106,14 +105,15 @@ class AuthService {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) return null;
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final auth.AuthCredential credential = auth.GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
       final userCredential = await _auth.signInWithCredential(credential);
-      
+
       // If new user, create basic profile
       if (userCredential.additionalUserInfo?.isNewUser ?? false) {
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
@@ -142,10 +142,11 @@ class AuthService {
         ],
       );
 
-      final auth.AuthCredential credential = auth.OAuthProvider("apple.com").credential(
-        idToken: appleCredential.identityToken,
-        accessToken: appleCredential.authorizationCode,
-      );
+      final auth.AuthCredential credential = auth.OAuthProvider("apple.com")
+          .credential(
+            idToken: appleCredential.identityToken,
+            accessToken: appleCredential.authorizationCode,
+          );
 
       final userCredential = await _auth.signInWithCredential(credential);
 
@@ -153,9 +154,13 @@ class AuthService {
       if (userCredential.additionalUserInfo?.isNewUser ?? false) {
         await _firestore.collection('users').doc(userCredential.user!.uid).set({
           'uid': userCredential.user!.uid,
-          'name': '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'.trim().isEmpty 
-              ? 'Apple User' 
-              : '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'.trim(),
+          'name':
+              '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'
+                  .trim()
+                  .isEmpty
+              ? 'Apple User'
+              : '${appleCredential.givenName ?? ''} ${appleCredential.familyName ?? ''}'
+                    .trim(),
           'email': appleCredential.email,
           'phone': '',
           'role': 'client', // Default role

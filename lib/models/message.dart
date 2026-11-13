@@ -18,13 +18,14 @@ class Message {
   });
 
   factory Message.fromFirestore(DocumentSnapshot snapshot) {
-    final data = (snapshot.data() as Map<String, dynamic>?) ?? <String, dynamic>{};
+    final data =
+        (snapshot.data() as Map<String, dynamic>?) ?? <String, dynamic>{};
     final rawTimestamp = data['timestamp'];
     final timestamp = rawTimestamp is Timestamp
         ? rawTimestamp.toDate()
         : rawTimestamp is DateTime
-            ? rawTimestamp
-            : DateTime.now();
+        ? rawTimestamp
+        : DateTime.now();
 
     return Message(
       id: data['id'] as String? ?? snapshot.id,
@@ -63,7 +64,9 @@ class Message {
       id: json['id'] as String? ?? '',
       senderId: json['senderId'] as String? ?? '',
       text: json['text'] as String? ?? '',
-      timestamp: DateTime.tryParse(json['timestamp'] as String? ?? '') ?? DateTime.now(),
+      timestamp:
+          DateTime.tryParse(json['timestamp'] as String? ?? '') ??
+          DateTime.now(),
       isMe: json['isMe'] as bool? ?? false,
       imageUrl: json['imageUrl'] as String?,
     );

@@ -77,7 +77,9 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                     builder: (context, notifications, _) {
                       final filtered = _selectedFilter == null
                           ? notifications
-                          : notifications.where((n) => n.type == _selectedFilter).toList();
+                          : notifications
+                                .where((n) => n.type == _selectedFilter)
+                                .toList();
 
                       if (filtered.isEmpty) {
                         return _buildEmptyState();
@@ -86,7 +88,8 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                       return ListView.separated(
                         padding: const EdgeInsets.fromLTRB(20, 8, 20, 100),
                         itemCount: filtered.length,
-                        separatorBuilder: (context, index) => const SizedBox(height: 14),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 14),
                         itemBuilder: (context, index) {
                           final item = filtered[index];
                           return _buildNotificationCard(item, neonGreen);
@@ -109,7 +112,11 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+              size: 20,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
@@ -133,7 +140,10 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                       builder: (context, count, _) {
                         if (count == 0) return const SizedBox.shrink();
                         return Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: neonGreen,
                             borderRadius: BorderRadius.circular(12),
@@ -177,7 +187,10 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('All notifications marked as read', style: GoogleFonts.spaceGrotesk()),
+                    content: Text(
+                      'All notifications marked as read',
+                      style: GoogleFonts.spaceGrotesk(),
+                    ),
                     backgroundColor: const Color(0xFF1E1E1E),
                     duration: const Duration(seconds: 2),
                   ),
@@ -229,9 +242,13 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
               backgroundColor: const Color(0xFF101010),
               selectedColor: neonGreen,
               side: BorderSide(
-                color: isSelected ? neonGreen : Colors.white.withValues(alpha: 0.08),
+                color: isSelected
+                    ? neonGreen
+                    : Colors.white.withValues(alpha: 0.08),
               ),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
               showCheckmark: false,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             ),
@@ -273,7 +290,10 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
             const SizedBox(width: 8),
             Text(
               'Delete',
-              style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -283,7 +303,10 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Notification removed', style: GoogleFonts.spaceGrotesk()),
+              content: Text(
+                'Notification removed',
+                style: GoogleFonts.spaceGrotesk(),
+              ),
               backgroundColor: const Color(0xFF1E1E1E),
               duration: const Duration(seconds: 2),
             ),
@@ -298,7 +321,9 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: item.isRead ? const Color(0xFF0C0C0C) : const Color(0xFF141414),
+            color: item.isRead
+                ? const Color(0xFF0C0C0C)
+                : const Color(0xFF141414),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: item.isRead
@@ -341,9 +366,13 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                           child: Text(
                             item.title,
                             style: GoogleFonts.spaceGrotesk(
-                              color: item.isRead ? Colors.grey[300] : Colors.white,
+                              color: item.isRead
+                                  ? Colors.grey[300]
+                                  : Colors.white,
                               fontSize: 15,
-                              fontWeight: item.isRead ? FontWeight.w600 : FontWeight.bold,
+                              fontWeight: item.isRead
+                                  ? FontWeight.w600
+                                  : FontWeight.bold,
                             ),
                           ),
                         ),
@@ -369,7 +398,9 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                     Text(
                       item.body,
                       style: GoogleFonts.spaceGrotesk(
-                        color: item.isRead ? Colors.grey[500] : Colors.grey[400],
+                        color: item.isRead
+                            ? Colors.grey[500]
+                            : Colors.grey[400],
                         fontSize: 13,
                         height: 1.4,
                       ),
@@ -387,17 +418,24 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                         ),
                         if (item.actionRoute != null)
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
                               color: accentColor.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: accentColor.withValues(alpha: 0.3)),
+                              border: Border.all(
+                                color: accentColor.withValues(alpha: 0.3),
+                              ),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
-                                  item.actionRoute == 'tracking' ? 'Track Job' : 'View Details',
+                                  item.actionRoute == 'tracking'
+                                      ? 'Track Job'
+                                      : 'View Details',
                                   style: GoogleFonts.spaceGrotesk(
                                     color: accentColor,
                                     fontSize: 11,
@@ -405,7 +443,11 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                                   ),
                                 ),
                                 const SizedBox(width: 4),
-                                Icon(Icons.arrow_forward_ios, color: accentColor, size: 9),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: accentColor,
+                                  size: 9,
+                                ),
                               ],
                             ),
                           ),
@@ -455,7 +497,10 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                   ? "No new notifications right now. Service and booking updates will appear here."
                   : "No notifications found under this category.",
               textAlign: TextAlign.center,
-              style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 14),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.grey[500],
+                fontSize: 14,
+              ),
             ),
             if (_selectedFilter != null) ...[
               const SizedBox(height: 18),
@@ -463,9 +508,16 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                 onPressed: () => setState(() => _selectedFilter = null),
                 style: OutlinedButton.styleFrom(
                   side: const BorderSide(color: Color(0xFF25F46A)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                 ),
-                child: Text('View All', style: GoogleFonts.spaceGrotesk(color: const Color(0xFF25F46A))),
+                child: Text(
+                  'View All',
+                  style: GoogleFonts.spaceGrotesk(
+                    color: const Color(0xFF25F46A),
+                  ),
+                ),
               ),
             ],
           ],
@@ -491,19 +543,30 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
         context: context,
         builder: (ctx) => AlertDialog(
           backgroundColor: const Color(0xFF141414),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Text(
             item.title,
-            style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold),
+            style: GoogleFonts.spaceGrotesk(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           content: Text(
             item.body,
-            style: GoogleFonts.spaceGrotesk(color: Colors.grey[300], fontSize: 14),
+            style: GoogleFonts.spaceGrotesk(
+              color: Colors.grey[300],
+              fontSize: 14,
+            ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text('Dismiss', style: GoogleFonts.spaceGrotesk(color: const Color(0xFF25F46A))),
+              child: Text(
+                'Dismiss',
+                style: GoogleFonts.spaceGrotesk(color: const Color(0xFF25F46A)),
+              ),
             ),
           ],
         ),
@@ -562,7 +625,10 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                           if (mounted) {
                             ScaffoldMessenger.of(this.context).showSnackBar(
                               SnackBar(
-                                content: Text('All notifications cleared', style: GoogleFonts.spaceGrotesk()),
+                                content: Text(
+                                  'All notifications cleared',
+                                  style: GoogleFonts.spaceGrotesk(),
+                                ),
                                 backgroundColor: const Color(0xFF1E1E1E),
                               ),
                             );
@@ -582,39 +648,54 @@ class _NotificationCenterPageState extends State<NotificationCenterPage> {
                   const SizedBox(height: 4),
                   Text(
                     'Customize how SwiftServe delivers real-time marketplace alerts.',
-                    style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 13),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.grey[400],
+                      fontSize: 13,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   _buildSettingSwitch(
                     title: 'Push Notifications',
-                    subtitle: 'Receive instant notifications when the app is in background',
+                    subtitle:
+                        'Receive instant notifications when the app is in background',
                     value: settings.pushEnabled,
                     onChanged: (val) {
-                      _notificationService.updateSettings(settings.copyWith(pushEnabled: val));
+                      _notificationService.updateSettings(
+                        settings.copyWith(pushEnabled: val),
+                      );
                     },
                   ),
                   _buildSettingSwitch(
                     title: 'Booking & Status Updates',
-                    subtitle: 'Real-time alerts when providers accept, arrive, or complete jobs',
+                    subtitle:
+                        'Real-time alerts when providers accept, arrive, or complete jobs',
                     value: settings.bookingAlerts,
                     onChanged: (val) {
-                      _notificationService.updateSettings(settings.copyWith(bookingAlerts: val));
+                      _notificationService.updateSettings(
+                        settings.copyWith(bookingAlerts: val),
+                      );
                     },
                   ),
                   _buildSettingSwitch(
                     title: 'Promotions & Discounts',
-                    subtitle: 'Discounts, coupon codes, and weekend promotional deals',
+                    subtitle:
+                        'Discounts, coupon codes, and weekend promotional deals',
                     value: settings.promoAlerts,
                     onChanged: (val) {
-                      _notificationService.updateSettings(settings.copyWith(promoAlerts: val));
+                      _notificationService.updateSettings(
+                        settings.copyWith(promoAlerts: val),
+                      );
                     },
                   ),
                   _buildSettingSwitch(
                     title: 'Sound & Vibration',
-                    subtitle: 'Play alert sounds when urgent notifications are delivered',
+                    subtitle:
+                        'Play alert sounds when urgent notifications are delivered',
                     value: settings.soundEnabled,
                     onChanged: (val) {
-                      _notificationService.updateSettings(settings.copyWith(soundEnabled: val));
+                      _notificationService.updateSettings(
+                        settings.copyWith(soundEnabled: val),
+                      );
                     },
                   ),
                 ],

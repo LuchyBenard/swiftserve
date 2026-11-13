@@ -33,7 +33,9 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
         height: 100,
         decoration: BoxDecoration(
           color: Colors.black.withValues(alpha: 0.8),
-          border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
+          border: Border(
+            top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+          ),
         ),
         child: Stack(
           alignment: Alignment.center,
@@ -44,7 +46,11 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
                 _buildNavItem(0, Icons.dashboard_outlined, "Dashboard"),
                 _buildNavItem(1, Icons.calendar_today_outlined, "Schedule"),
                 const SizedBox(width: 60), // Space for FAB
-                _buildNavItem(2, Icons.account_balance_wallet_outlined, "Earnings"),
+                _buildNavItem(
+                  2,
+                  Icons.account_balance_wallet_outlined,
+                  "Earnings",
+                ),
                 _buildNavItem(3, Icons.settings_outlined, "Settings"),
               ],
             ),
@@ -55,7 +61,9 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text("Create New Service Request (Mock UI Coming Soon!)"),
+                      content: Text(
+                        "Create New Service Request (Mock UI Coming Soon!)",
+                      ),
                       backgroundColor: Color(0xFF142216),
                       behavior: SnackBarBehavior.floating,
                     ),

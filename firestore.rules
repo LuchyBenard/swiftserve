@@ -1,0 +1,138 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------------------------------------------------------------------
+    // Helpers
+    // ---------------------------------------------------------------------
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isSelf(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    // ---------------------------------------------------------------------
+    // Users
+    // ---------------------------------------------------------------------
+    match /users/{uid} {
+      allow read: if isSelf(uid) || isAdmin();
+      allow create: if isSelf(uid);
+      allow update: if isSelf(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------------
+    // Providers — public directory, owner-managed profile.
+    // ---------------------------------------------------------------------
+    match /providers/{uid} {
+      allow read: if true;
+      allow create: if isSelf(uid) || isAdmin();
+      allow update: if isSelf(uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------------
+    // Bookings — only the client and the assigned provider can access.
+    // ---------------------------------------------------------------------
+    match /bookings/{bookingId} {
+      function isParticipant() {
+        return signedIn() &&
+          (resource.data.clientId == request.auth.uid ||
+           resource.data.providerId == request.auth.uid);
+      }
+
+      function isClientOfIncoming() {
+        return signedIn() &&
+          request.resource.data.clientId == request.auth.uid;
+      }
+
+      function isProviderOfIncoming() {
+        return signedIn() &&
+          request.resource.data.providerId == request.auth.uid;
+      }
+
+      allow read: if isParticipant() || isAdmin();
+      allow create: if isClientOfIncoming() || isProviderOfIncoming() || isAdmin();
+      allow update: if isParticipant() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------------
+    // Conversations & messages — participants only.
+    // ---------------------------------------------------------------------
+    match /conversations/{conversationId} {
+      function isParticipant() {
+        return signedIn() &&
+          request.auth.uid in resource.data.participants;
+      }
+
+      function isIncomingParticipant() {
+        return signedIn() &&
+          request.auth.uid in request.resource.data.participants;
+      }
+
+      allow read: if isParticipant() || isAdmin();
+      allow create: if isIncomingParticipant() || isAdmin();
+      allow update: if isParticipant() || isAdmin();
+      allow delete: if isParticipant() || isAdmin();
+
+      match /messages/{messageId} {
+        function conversation() {
+          return get(/databases/$(database)/documents/conversations/$(conversationId));
+        }
+
+        function isParticipant() {
+          return signedIn() &&
+            request.auth.uid in conversation().data.participants;
+        }
+
+        allow read: if isParticipant() || isAdmin();
+        allow create: if isParticipant() &&
+          request.resource.data.senderId == request.auth.uid;
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // ---------------------------------------------------------------------
+    // Reviews — public read, author-managed.
+    // ---------------------------------------------------------------------
+    match /reviews/{reviewId} {
+      allow read: if true;
+      allow create: if signedIn() &&
+        request.resource.data.reviewerId == request.auth.uid;
+      allow update, delete: if signedIn() &&
+        (resource.data.reviewerId == request.auth.uid || isAdmin());
+    }
+
+    // ---------------------------------------------------------------------
+    // Transactions — written by trusted Cloud Functions only.
+    // ---------------------------------------------------------------------
+    match /transactions/{transactionId} {
+      allow read: if signedIn() &&
+        (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // ---------------------------------------------------------------------
+    // Notifications — server-created, owner-readable.
+    // ---------------------------------------------------------------------
+    match /notifications/{notificationId} {
+      allow read: if signedIn() &&
+        (resource.data.userId == request.auth.uid || isAdmin());
+      allow update: if signedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isAdmin();
+    }
+
+    // Default deny for anything not explicitly matched.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

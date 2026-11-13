@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/booking.dart';
+import '../services/booking_service.dart';
 import '../widgets/cancel_booking_dialog.dart';
 import 'tracking/job_tracking_page.dart';
 import 'rating/rate_provider_page.dart';
@@ -23,53 +24,26 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   bool _showActive = true;
 
-  final List<Booking> _allBookings = [
-    Booking(
-      id: '1',
-      providerName: 'TechFix Mobile',
-      serviceType: 'Phone Repair',
-      status: 'In Progress',
-      date: 'Today',
-      time: '2:00 PM',
-      location: '123 Market St, SF',
-      price: 120.0,
-      imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
-    ),
-    Booking(
-      id: '2',
-      providerName: 'John D.',
-      serviceType: 'Haircut & Beard Trim',
-      status: 'Confirmed',
-      date: 'Tomorrow',
-      time: '10:00 AM',
-      location: 'Provider Shop',
-      price: 45.0,
-      imageUrl: _kFallbackProviderImage,
-    ),
-    Booking(
-      id: '3',
-      providerName: "Mike's Plumbing",
-      serviceType: 'Leak Fix',
-      status: 'Completed',
-      date: 'Oct 24',
-      time: '4:30 PM',
-      location: '',
-      price: 150.0,
-      imageUrl: '', // Uses icon placeholder
-    ),
-    Booking(
-      id: '4',
-      providerName: 'Sparkle Clean',
-      serviceType: 'Home Cleaning',
-      status: 'Canceled',
-      date: 'Oct 12',
-      time: '9:00 AM',
-      location: '',
-      price: 80.0,
-      imageUrl: '', // Uses icon placeholder
-    ),
-  ];
+  final BookingService _bookingService = BookingService();
+
+  @override
+  void initState() {
+    super.initState();
+    _bookingService.bookingsNotifier.addListener(_onBookingsChanged);
+    _bookingService.listenToClientBookings();
+  }
+
+  @override
+  void dispose() {
+    _bookingService.bookingsNotifier.removeListener(_onBookingsChanged);
+    super.dispose();
+  }
+
+  void _onBookingsChanged() {
+    if (mounted) setState(() {});
+  }
+
+  List<Booking> get _allBookings => _bookingService.currentBookings;
 
   List<Booking> get _filteredBookings {
     if (_showActive) {
@@ -83,22 +57,7 @@ class _HistoryPageState extends State<HistoryPage> {
   }
 
   void _cancelBooking(Booking booking, String reason) {
-    setState(() {
-      final idx = _allBookings.indexWhere((b) => b.id == booking.id);
-      if (idx != -1) {
-        _allBookings[idx] = Booking(
-          id: booking.id,
-          providerName: booking.providerName,
-          serviceType: booking.serviceType,
-          status: 'Canceled',
-          date: booking.date,
-          time: booking.time,
-          location: booking.location,
-          price: booking.price,
-          imageUrl: booking.imageUrl,
-        );
-      }
-    });
+    _bookingService.cancelBooking(booking.id, reason: reason);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -196,11 +155,11 @@ class _HistoryPageState extends State<HistoryPage> {
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: _showActive
                         ? [
-                      BoxShadow(
-                        color: _kGreen.withValues(alpha: 0.3),
-                        blurRadius: 15,
-                      ),
-                    ]
+                            BoxShadow(
+                              color: _kGreen.withValues(alpha: 0.3),
+                              blurRadius: 15,
+                            ),
+                          ]
                         : null,
                   ),
                   alignment: Alignment.center,
@@ -269,10 +228,7 @@ class _BookingCard extends StatelessWidget {
   final Booking booking;
   final ValueChanged<String> onCancelled;
 
-  const _BookingCard({
-    required this.booking,
-    required this.onCancelled,
-  });
+  const _BookingCard({required this.booking, required this.onCancelled});
 
   String get _providerImage =>
       booking.imageUrl.isNotEmpty ? booking.imageUrl : _kFallbackProviderImage;
@@ -485,8 +441,9 @@ class _BookingCard extends StatelessWidget {
                             decoration: isCanceled
                                 ? TextDecoration.lineThrough
                                 : null,
-                            decorationColor:
-                            Colors.white.withValues(alpha: 0.5),
+                            decorationColor: Colors.white.withValues(
+                              alpha: 0.5,
+                            ),
                           ),
                         ),
                       ],

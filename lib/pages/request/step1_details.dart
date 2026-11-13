@@ -5,11 +5,7 @@ class Step1Details extends StatefulWidget {
   final VoidCallback onNext;
   final Map<String, dynamic> data;
 
-  const Step1Details({
-    super.key,
-    required this.onNext,
-    required this.data,
-  });
+  const Step1Details({super.key, required this.onNext, required this.data});
 
   @override
   State<Step1Details> createState() => _Step1DetailsState();
@@ -50,8 +46,10 @@ class _Step1DetailsState extends State<Step1Details> {
   @override
   Widget build(BuildContext context) {
     const neonGreen = Color(0xFF25F46A);
-    final providerName = widget.data['provider_name'] as String? ?? 'SwiftServe Pro';
-    final providerRole = widget.data['provider_role'] as String? ?? 'Service Professional';
+    final providerName =
+        widget.data['provider_name'] as String? ?? 'SwiftServe Pro';
+    final providerRole =
+        widget.data['provider_role'] as String? ?? 'Service Professional';
     final providerImage = widget.data['provider_image'] as String? ?? '';
 
     return SingleChildScrollView(
@@ -106,7 +104,10 @@ class _Step1DetailsState extends State<Step1Details> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: neonGreen.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(20),
@@ -159,7 +160,9 @@ class _Step1DetailsState extends State<Step1Details> {
               contentPadding: const EdgeInsets.all(16),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.08)),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.08),
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -178,7 +181,11 @@ class _Step1DetailsState extends State<Step1Details> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.tips_and_updates_outlined, color: neonGreen, size: 18),
+                const Icon(
+                  Icons.tips_and_updates_outlined,
+                  color: neonGreen,
+                  size: 18,
+                ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(

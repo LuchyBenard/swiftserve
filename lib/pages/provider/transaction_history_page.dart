@@ -10,13 +10,55 @@ class TransactionHistoryPage extends StatelessWidget {
     const pitchBlack = Color(0xFF050505);
 
     final List<Map<String, dynamic>> transactions = [
-      {"title": "Haircut & Beard Trim", "name": "Client: David Miller", "time": "2 hours ago", "amount": "+\$45.00", "icon": Icons.content_cut},
-      {"title": "Style Consultation", "name": "Client: Sarah Jenkins", "time": "Yesterday", "amount": "+\$25.00", "icon": Icons.brush},
-      {"title": "Premium Fade", "name": "Client: Mike Ross", "time": "Yesterday", "amount": "+\$35.00", "icon": Icons.content_cut},
-      {"title": "Head Shave", "name": "Client: Alex Chen", "time": "Oct 24", "amount": "+\$30.00", "icon": Icons.face},
-      {"title": "Beard Grooming", "name": "Client: Linda Wu", "time": "Oct 22", "amount": "+\$20.00", "icon": Icons.face_retouching_natural},
-      {"title": "Skin Fade", "name": "Client: John Doe", "time": "Oct 20", "amount": "+\$40.00", "icon": Icons.content_cut},
-      {"title": "Kid's Haircut", "name": "Client: Robert Fox", "time": "Oct 18", "amount": "+\$25.00", "icon": Icons.child_care},
+      {
+        "title": "Haircut & Beard Trim",
+        "name": "Client: David Miller",
+        "time": "2 hours ago",
+        "amount": "+\$45.00",
+        "icon": Icons.content_cut,
+      },
+      {
+        "title": "Style Consultation",
+        "name": "Client: Sarah Jenkins",
+        "time": "Yesterday",
+        "amount": "+\$25.00",
+        "icon": Icons.brush,
+      },
+      {
+        "title": "Premium Fade",
+        "name": "Client: Mike Ross",
+        "time": "Yesterday",
+        "amount": "+\$35.00",
+        "icon": Icons.content_cut,
+      },
+      {
+        "title": "Head Shave",
+        "name": "Client: Alex Chen",
+        "time": "Oct 24",
+        "amount": "+\$30.00",
+        "icon": Icons.face,
+      },
+      {
+        "title": "Beard Grooming",
+        "name": "Client: Linda Wu",
+        "time": "Oct 22",
+        "amount": "+\$20.00",
+        "icon": Icons.face_retouching_natural,
+      },
+      {
+        "title": "Skin Fade",
+        "name": "Client: John Doe",
+        "time": "Oct 20",
+        "amount": "+\$40.00",
+        "icon": Icons.content_cut,
+      },
+      {
+        "title": "Kid's Haircut",
+        "name": "Client: Robert Fox",
+        "time": "Oct 18",
+        "amount": "+\$25.00",
+        "icon": Icons.child_care,
+      },
     ];
 
     return Scaffold(
@@ -30,7 +72,10 @@ class TransactionHistoryPage extends StatelessWidget {
         ),
         title: Text(
           "Transaction History",
-          style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold),
+          style: GoogleFonts.spaceGrotesk(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: ListView.builder(
@@ -39,14 +84,26 @@ class TransactionHistoryPage extends StatelessWidget {
         itemBuilder: (context, index) {
           final tx = transactions[index];
           return _buildTransactionItem(
-            tx["title"], tx["name"], tx["time"], tx["amount"], tx["icon"], primaryGreen
+            tx["title"],
+            tx["name"],
+            tx["time"],
+            tx["amount"],
+            tx["icon"],
+            primaryGreen,
           );
         },
       ),
     );
   }
 
-  Widget _buildTransactionItem(String title, String name, String time, String amount, IconData icon, Color primaryGreen) {
+  Widget _buildTransactionItem(
+    String title,
+    String name,
+    String time,
+    String amount,
+    IconData icon,
+    Color primaryGreen,
+  ) {
     return Container(
       margin: const EdgeInsets.all(0).copyWith(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -74,7 +131,11 @@ class TransactionHistoryPage extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                  style: GoogleFonts.spaceGrotesk(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
                 Text(
                   "$name • $time",
@@ -85,7 +146,11 @@ class TransactionHistoryPage extends StatelessWidget {
           ),
           Text(
             amount,
-            style: GoogleFonts.spaceGrotesk(color: primaryGreen, fontWeight: FontWeight.bold, fontSize: 16),
+            style: GoogleFonts.spaceGrotesk(
+              color: primaryGreen,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
           ),
         ],
       ),

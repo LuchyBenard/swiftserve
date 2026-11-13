@@ -11,8 +11,10 @@ class AddressService {
   static const String _storageKey = 'swiftserve_saved_addresses';
   static const String _activeIdKey = 'swiftserve_active_address_id';
 
-  final ValueNotifier<List<SavedAddress>> addressesNotifier = ValueNotifier<List<SavedAddress>>([]);
-  final ValueNotifier<SavedAddress?> selectedAddressNotifier = ValueNotifier<SavedAddress?>(null);
+  final ValueNotifier<List<SavedAddress>> addressesNotifier =
+      ValueNotifier<List<SavedAddress>>([]);
+  final ValueNotifier<SavedAddress?> selectedAddressNotifier =
+      ValueNotifier<SavedAddress?>(null);
   bool _initialized = false;
 
   Future<void> init() async {
@@ -22,7 +24,12 @@ class AddressService {
 
     List<SavedAddress> list = [];
     if (jsonList != null && jsonList.isNotEmpty) {
-      list = jsonList.map((str) => SavedAddress.fromJson(jsonDecode(str) as Map<String, dynamic>)).toList();
+      list = jsonList
+          .map(
+            (str) =>
+                SavedAddress.fromJson(jsonDecode(str) as Map<String, dynamic>),
+          )
+          .toList();
     } else {
       // Seed default preset addresses for instant usability
       list = [
@@ -50,7 +57,10 @@ class AddressService {
     if (activeId != null && list.any((a) => a.id == activeId)) {
       selectedAddressNotifier.value = list.firstWhere((a) => a.id == activeId);
     } else {
-      selectedAddressNotifier.value = list.firstWhere((a) => a.isDefault, orElse: () => list.first);
+      selectedAddressNotifier.value = list.firstWhere(
+        (a) => a.isDefault,
+        orElse: () => list.first,
+      );
     }
 
     _initialized = true;

@@ -78,9 +78,7 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                 const SizedBox(height: 24),
                 _buildDatePicker(),
                 const SizedBox(height: 32),
-                Expanded(
-                  child: _buildTimeline(),
-                ),
+                Expanded(child: _buildTimeline()),
               ],
             ),
           ),
@@ -122,9 +120,15 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
             decoration: BoxDecoration(
               color: const Color(0xFF141E18),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.1)),
+              border: Border.all(
+                color: const Color(0xFF25F46A).withValues(alpha: 0.1),
+              ),
             ),
-            child: const Icon(Icons.calendar_month, color: Color(0xFF25F46A), size: 20),
+            child: const Icon(
+              Icons.calendar_month,
+              color: Color(0xFF25F46A),
+              size: 20,
+            ),
           ),
         ],
       ),
@@ -140,8 +144,12 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
         itemCount: 14, // 2 weeks view
         itemBuilder: (context, index) {
           final date = DateTime.now().add(Duration(days: index - 3));
-          final isSelected = date.day == _selectedDate.day && date.month == _selectedDate.month;
-          final isToday = date.day == DateTime.now().day && date.month == DateTime.now().month;
+          final isSelected =
+              date.day == _selectedDate.day &&
+              date.month == _selectedDate.month;
+          final isToday =
+              date.day == DateTime.now().day &&
+              date.month == DateTime.now().month;
 
           return GestureDetector(
             onTap: () => setState(() => _selectedDate = date),
@@ -150,10 +158,14 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
               width: 65,
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: isSelected ? const Color(0xFF25F46A) : const Color(0xFF141E18).withValues(alpha: 0.4),
+                color: isSelected
+                    ? const Color(0xFF25F46A)
+                    : const Color(0xFF141E18).withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: isSelected ? const Color(0xFF25F46A) : Colors.white.withValues(alpha: 0.05),
+                  color: isSelected
+                      ? const Color(0xFF25F46A)
+                      : Colors.white.withValues(alpha: 0.05),
                 ),
                 boxShadow: isSelected
                     ? [
@@ -161,7 +173,7 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                           color: const Color(0xFF25F46A).withValues(alpha: 0.3),
                           blurRadius: 15,
                           offset: const Offset(0, 5),
-                        )
+                        ),
                       ]
                     : [],
               ),
@@ -255,7 +267,9 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF141E18).withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.05),
+                    ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,9 +278,14 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 4,
+                            ),
                             decoration: BoxDecoration(
-                              color: (appt["color"] as Color).withValues(alpha: 0.15),
+                              color: (appt["color"] as Color).withValues(
+                                alpha: 0.15,
+                              ),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -279,7 +298,11 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                               ),
                             ),
                           ),
-                          const Icon(Icons.more_horiz, color: Colors.grey, size: 18),
+                          const Icon(
+                            Icons.more_horiz,
+                            color: Colors.grey,
+                            size: 18,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 12),
@@ -294,7 +317,11 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
                       const SizedBox(height: 4),
                       Row(
                         children: [
-                          Icon(Icons.content_cut, color: Colors.grey[500], size: 14),
+                          Icon(
+                            Icons.content_cut,
+                            color: Colors.grey[500],
+                            size: 14,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             appt["service"],
@@ -318,14 +345,22 @@ class _ProviderSchedulePageState extends State<ProviderSchedulePage> {
 
   String _getWeekdayShort(int day) {
     switch (day) {
-      case 1: return "MON";
-      case 2: return "TUE";
-      case 3: return "WED";
-      case 4: return "THU";
-      case 5: return "FRI";
-      case 6: return "SAT";
-      case 7: return "SUN";
-      default: return "";
+      case 1:
+        return "MON";
+      case 2:
+        return "TUE";
+      case 3:
+        return "WED";
+      case 4:
+        return "THU";
+      case 5:
+        return "FRI";
+      case 6:
+        return "SAT";
+      case 7:
+        return "SUN";
+      default:
+        return "";
     }
   }
 }

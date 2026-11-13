@@ -27,7 +27,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
           IndexedStack(
             index: _currentIndex,
             children: [
-              _AdminOverview(onIndexChanged: (i) => setState(() => _currentIndex = i)),
+              _AdminOverview(
+                onIndexChanged: (i) => setState(() => _currentIndex = i),
+              ),
               const AdminUserManagementPage(),
               _buildDummyPage("Providers"),
               const AdminModerationPage(),
@@ -41,7 +43,12 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   }
 
   Widget _buildDummyPage(String title) {
-    return Center(child: Text(title, style: const TextStyle(color: Colors.white, fontSize: 24)));
+    return Center(
+      child: Text(
+        title,
+        style: const TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    );
   }
 
   Widget _buildBottomNav(Color primary, Color pitchBlack) {
@@ -53,7 +60,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
         height: 90,
         decoration: BoxDecoration(
           color: pitchBlack.withValues(alpha: 0.9),
-          border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
+          border: Border(
+            top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+          ),
         ),
         child: ClipRRect(
           child: BackdropFilter(
@@ -92,17 +101,15 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 margin: const EdgeInsets.only(bottom: 8),
                 decoration: BoxDecoration(
                   color: primary,
-                  borderRadius: const BorderRadius.vertical(bottom: Radius.circular(3)),
+                  borderRadius: const BorderRadius.vertical(
+                    bottom: Radius.circular(3),
+                  ),
                   boxShadow: [BoxShadow(color: primary, blurRadius: 10)],
                 ),
               )
             else
               const SizedBox(height: 11),
-            Icon(
-              icon,
-              color: isActive ? primary : Colors.grey[600],
-              size: 26,
-            ),
+            Icon(icon, color: isActive ? primary : Colors.grey[600], size: 26),
             const SizedBox(height: 4),
             Text(
               label,
@@ -231,7 +238,9 @@ class _AdminOverview extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: surface,
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
                 child: const Icon(Icons.search, color: Colors.grey, size: 20),
               ),
@@ -245,7 +254,9 @@ class _AdminOverview extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(color: primary.withValues(alpha: 0.2)),
                       image: const DecorationImage(
-                        image: NetworkImage("https://lh3.googleusercontent.com/aida-public/AB6AXuAy2lcxBSOYRN65DN1g-Gq6PNmjuY_Nd65gPauKAc1bG_wV4FPk2T1TZtPtH53oZ3abbMgS21GvQnf9R5j9VnccyPquo3A4RenvW1Z_2ooIMRcFkWq5sZCRED5g_2OsUAR9XB2i7PnFyGMIPijH9ZC9SS4HthphB_qy0k8fpOqFe3pWAiy9VbKcKaBJpniHBvdE_pfSivWXMhLIH_lgVWzV4CxS1CGB6Bc2CFcKqKegDyhAfRiDGZ5toOy2iHyJFy4-5UdZsJfdvEl7"),
+                        image: NetworkImage(
+                          "https://lh3.googleusercontent.com/aida-public/AB6AXuAy2lcxBSOYRN65DN1g-Gq6PNmjuY_Nd65gPauKAc1bG_wV4FPk2T1TZtPtH53oZ3abbMgS21GvQnf9R5j9VnccyPquo3A4RenvW1Z_2ooIMRcFkWq5sZCRED5g_2OsUAR9XB2i7PnFyGMIPijH9ZC9SS4HthphB_qy0k8fpOqFe3pWAiy9VbKcKaBJpniHBvdE_pfSivWXMhLIH_lgVWzV4CxS1CGB6Bc2CFcKqKegDyhAfRiDGZ5toOy2iHyJFy4-5UdZsJfdvEl7",
+                        ),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -331,10 +342,17 @@ class _AdminOverview extends StatelessWidget {
                       color: primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Icon(Icons.monetization_on, color: primary, size: 20),
+                    child: Icon(
+                      Icons.monetization_on,
+                      color: primary,
+                      size: 20,
+                    ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: primary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
@@ -360,7 +378,10 @@ class _AdminOverview extends StatelessWidget {
               const SizedBox(height: 20),
               Text(
                 "Total Revenue",
-                style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 13),
+                style: GoogleFonts.spaceGrotesk(
+                  color: Colors.grey[400],
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 4),
               const Text(
@@ -380,9 +401,7 @@ class _AdminOverview extends StatelessWidget {
             right: -20,
             child: SizedBox(
               height: 40,
-              child: CustomPaint(
-                painter: SparklinePainter(primary),
-              ),
+              child: CustomPaint(painter: SparklinePainter(primary)),
             ),
           ),
         ],
@@ -431,7 +450,13 @@ class _AdminOverview extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: iconColor,
                     shape: BoxShape.circle,
-                    boxShadow: [BoxShadow(color: iconColor, blurRadius: 4, spreadRadius: 1)],
+                    boxShadow: [
+                      BoxShadow(
+                        color: iconColor,
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                      ),
+                    ],
                   ),
                 ),
             ],
@@ -439,7 +464,10 @@ class _AdminOverview extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             label,
-            style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 13),
+            style: GoogleFonts.spaceGrotesk(
+              color: Colors.grey[400],
+              fontSize: 13,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
@@ -456,11 +484,18 @@ class _AdminOverview extends StatelessWidget {
               children: [
                 TextSpan(
                   text: subtext,
-                  style: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 10),
+                  style: GoogleFonts.spaceGrotesk(
+                    color: Colors.grey[600],
+                    fontSize: 10,
+                  ),
                 ),
                 TextSpan(
                   text: subvalue,
-                  style: GoogleFonts.spaceGrotesk(color: primary, fontSize: 10, fontWeight: FontWeight.bold),
+                  style: GoogleFonts.spaceGrotesk(
+                    color: primary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -496,10 +531,17 @@ class _AdminOverview extends StatelessWidget {
                 children: [
                   Text(
                     "This Week",
-                    style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 11),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.grey[400],
+                      fontSize: 11,
+                    ),
                   ),
                   const SizedBox(width: 4),
-                  const Icon(Icons.keyboard_arrow_down, color: Colors.grey, size: 16),
+                  const Icon(
+                    Icons.keyboard_arrow_down,
+                    color: Colors.grey,
+                    size: 16,
+                  ),
                 ],
               ),
             ),
@@ -523,7 +565,10 @@ class _AdminOverview extends StatelessWidget {
                     // Grid Lines
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(5, (_) => Container(height: 1, color: Colors.white10)),
+                      children: List.generate(
+                        5,
+                        (_) => Container(height: 1, color: Colors.white10),
+                      ),
                     ),
                     // Main Chart
                     Padding(
@@ -538,7 +583,10 @@ class _AdminOverview extends StatelessWidget {
                       left: 140,
                       top: 40,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFF1A2E20),
                           borderRadius: BorderRadius.circular(6),
@@ -561,7 +609,15 @@ class _AdminOverview extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                    .map((d) => Text(d, style: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 10)))
+                    .map(
+                      (d) => Text(
+                        d,
+                        style: GoogleFonts.spaceGrotesk(
+                          color: Colors.grey[600],
+                          fontSize: 10,
+                        ),
+                      ),
+                    )
                     .toList(),
               ),
             ],
@@ -594,7 +650,11 @@ class _AdminOverview extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               ),
-              child: const Icon(Icons.filter_list, color: Colors.grey, size: 18),
+              child: const Icon(
+                Icons.filter_list,
+                color: Colors.grey,
+                size: 18,
+              ),
             ),
           ],
         ),
@@ -655,7 +715,9 @@ class _AdminOverview extends StatelessWidget {
         color: const Color(0xFF141E18).withValues(alpha: isUrgent ? 0.3 : 0.6),
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isUrgent ? Colors.redAccent.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05),
+          color: isUrgent
+              ? Colors.redAccent.withValues(alpha: 0.2)
+              : Colors.white.withValues(alpha: 0.05),
         ),
       ),
       child: Row(
@@ -668,7 +730,9 @@ class _AdminOverview extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.black.withValues(alpha: 0.3),
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.05),
+                  ),
                 ),
                 child: Icon(icon, color: Colors.grey, size: 20),
               ),
@@ -695,7 +759,11 @@ class _AdminOverview extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+                  style: GoogleFonts.spaceGrotesk(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
                 const SizedBox(height: 2),
                 Text(
@@ -751,11 +819,36 @@ class SparklinePainter extends CustomPainter {
 
     final path = Path();
     path.moveTo(0, size.height * 0.8);
-    path.quadraticBezierTo(size.width * 0.1, size.height * 0.8, size.width * 0.2, size.height * 0.5);
-    path.quadraticBezierTo(size.width * 0.3, size.height * 0.6, size.width * 0.4, size.height * 0.65);
-    path.quadraticBezierTo(size.width * 0.5, size.height * 0.65, size.width * 0.6, size.height * 0.3);
-    path.quadraticBezierTo(size.width * 0.7, size.height * 0.5, size.width * 0.8, size.height * 0.55);
-    path.quadraticBezierTo(size.width * 0.9, size.height * 0.55, size.width, size.height * 0.2);
+    path.quadraticBezierTo(
+      size.width * 0.1,
+      size.height * 0.8,
+      size.width * 0.2,
+      size.height * 0.5,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.3,
+      size.height * 0.6,
+      size.width * 0.4,
+      size.height * 0.65,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.5,
+      size.height * 0.65,
+      size.width * 0.6,
+      size.height * 0.3,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.7,
+      size.height * 0.5,
+      size.width * 0.8,
+      size.height * 0.55,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.9,
+      size.height * 0.55,
+      size.width,
+      size.height * 0.2,
+    );
 
     canvas.drawPath(path, paint);
 
@@ -793,19 +886,28 @@ class MainChartPainter extends CustomPainter {
     final path = Path();
     path.moveTo(0, size.height * 0.8);
     path.cubicTo(
-      size.width * 0.2, size.height * 0.7, 
-      size.width * 0.2, size.height * 0.9, 
-      size.width * 0.33, size.height * 0.5
+      size.width * 0.2,
+      size.height * 0.7,
+      size.width * 0.2,
+      size.height * 0.9,
+      size.width * 0.33,
+      size.height * 0.5,
     );
     path.cubicTo(
-      size.width * 0.46, size.height * 0.2, 
-      size.width * 0.46, size.height * 0.6, 
-      size.width * 0.6, size.height * 0.4
+      size.width * 0.46,
+      size.height * 0.2,
+      size.width * 0.46,
+      size.height * 0.6,
+      size.width * 0.6,
+      size.height * 0.4,
     );
     path.cubicTo(
-      size.width * 0.8, size.height * 0.6, 
-      size.width * 0.8, size.height * 0.1, 
-      size.width, size.height * 0.1
+      size.width * 0.8,
+      size.height * 0.6,
+      size.width * 0.8,
+      size.height * 0.1,
+      size.width,
+      size.height * 0.1,
     );
 
     // Filter glow effect (simplified using stroke)
@@ -814,7 +916,7 @@ class MainChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 8
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 5);
-    
+
     canvas.drawPath(path, shadowPaint);
     canvas.drawPath(path, paint);
 
@@ -841,11 +943,27 @@ class MainChartPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
-    canvas.drawCircle(Offset(size.width * 0.33, size.height * 0.5), 5, pointPaint);
-    canvas.drawCircle(Offset(size.width * 0.33, size.height * 0.5), 5, borderPaint);
+    canvas.drawCircle(
+      Offset(size.width * 0.33, size.height * 0.5),
+      5,
+      pointPaint,
+    );
+    canvas.drawCircle(
+      Offset(size.width * 0.33, size.height * 0.5),
+      5,
+      borderPaint,
+    );
 
-    canvas.drawCircle(Offset(size.width * 0.6, size.height * 0.4), 5, pointPaint);
-    canvas.drawCircle(Offset(size.width * 0.6, size.height * 0.4), 5, borderPaint);
+    canvas.drawCircle(
+      Offset(size.width * 0.6, size.height * 0.4),
+      5,
+      pointPaint,
+    );
+    canvas.drawCircle(
+      Offset(size.width * 0.6, size.height * 0.4),
+      5,
+      borderPaint,
+    );
   }
 
   @override

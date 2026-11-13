@@ -43,3 +43,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Node / Cloud Functions
+functions/node_modules/
+functions/.env
+functions/*.log

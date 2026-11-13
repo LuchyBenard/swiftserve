@@ -6,7 +6,8 @@ class ProviderAvailabilityPage extends StatefulWidget {
   const ProviderAvailabilityPage({super.key});
 
   @override
-  State<ProviderAvailabilityPage> createState() => _ProviderAvailabilityPageState();
+  State<ProviderAvailabilityPage> createState() =>
+      _ProviderAvailabilityPageState();
 }
 
 class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
@@ -63,12 +64,18 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
               children: [
                 // Header
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.chevron_left, color: Colors.white),
+                        icon: const Icon(
+                          Icons.chevron_left,
+                          color: Colors.white,
+                        ),
                         onPressed: () {
                           // Optional: define behavior or leave empty for bottom nav persistence
                         },
@@ -103,11 +110,19 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
                           children: [
                             const Text(
                               "Weekly Schedule",
-                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             Text(
                               "Apply to all",
-                              style: TextStyle(color: primaryGreen, fontSize: 12, fontWeight: FontWeight.bold),
+                              style: TextStyle(
+                                color: primaryGreen,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -135,7 +150,13 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text("Preferences Saved Successfully!", style: GoogleFonts.spaceGrotesk(color: Colors.black, fontWeight: FontWeight.bold)),
+                                  content: Text(
+                                    "Preferences Saved Successfully!",
+                                    style: GoogleFonts.spaceGrotesk(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                   backgroundColor: primaryGreen,
                                   behavior: SnackBarBehavior.floating,
                                 ),
@@ -143,13 +164,19 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryGreen,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
                               elevation: 0,
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.save, color: Colors.black, size: 20),
+                                const Icon(
+                                  Icons.save,
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
                                 const SizedBox(width: 8),
                                 Text(
                                   "Save Preferences",
@@ -196,13 +223,21 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
                   const SizedBox(width: 8),
                   Text(
                     "Service Radius",
-                    style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                    ),
                   ),
                 ],
               ),
               Text(
                 "${_radius.toInt()} km",
-                style: const TextStyle(color: primaryGreen, fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  color: primaryGreen,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
@@ -226,8 +261,14 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("5 km", style: TextStyle(color: Colors.grey[600], fontSize: 11)),
-              Text("50 km", style: TextStyle(color: Colors.grey[600], fontSize: 11)),
+              Text(
+                "5 km",
+                style: TextStyle(color: Colors.grey[600], fontSize: 11),
+              ),
+              Text(
+                "50 km",
+                style: TextStyle(color: Colors.grey[600], fontSize: 11),
+              ),
             ],
           ),
         ],
@@ -242,9 +283,15 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: isActive ? Colors.transparent : Colors.white.withValues(alpha: 0.05),
+        color: isActive
+            ? Colors.transparent
+            : Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isActive ? primaryGreen.withValues(alpha: 0.2) : Colors.white.withValues(alpha: 0.05)),
+        border: Border.all(
+          color: isActive
+              ? primaryGreen.withValues(alpha: 0.2)
+              : Colors.white.withValues(alpha: 0.05),
+        ),
         image: isActive ? null : null, // Transparent build panels in HTML
       ),
       child: Row(
@@ -265,7 +312,9 @@ class _ProviderAvailabilityPageState extends State<ProviderAvailabilityPage> {
               Text(
                 _hours[day]!,
                 style: TextStyle(
-                  color: isActive ? primaryGreen.withValues(alpha: 0.8) : Colors.grey[600],
+                  color: isActive
+                      ? primaryGreen.withValues(alpha: 0.8)
+                      : Colors.grey[600],
                   fontSize: 12,
                 ),
               ),

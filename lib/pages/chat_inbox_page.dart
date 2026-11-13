@@ -63,7 +63,9 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                 }
 
                 return Column(
-                  children: filtered.map((c) => _buildDismissibleConversationItem(c)).toList(),
+                  children: filtered
+                      .map((c) => _buildDismissibleConversationItem(c))
+                      .toList(),
                 );
               },
             ),
@@ -97,9 +99,15 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                   decoration: BoxDecoration(
                     color: const Color(0xFF25F46A).withValues(alpha: 0.1),
                     shape: BoxShape.circle,
-                    border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.2)),
+                    border: Border.all(
+                      color: const Color(0xFF25F46A).withValues(alpha: 0.2),
+                    ),
                   ),
-                  child: const Icon(Icons.add, color: Color(0xFF25F46A), size: 24),
+                  child: const Icon(
+                    Icons.add,
+                    color: Color(0xFF25F46A),
+                    size: 24,
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -107,7 +115,10 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                 padding: const EdgeInsets.all(2),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: const Color.fromRGBO(37, 244, 106, 0.2), width: 2),
+                  border: Border.all(
+                    color: const Color.fromRGBO(37, 244, 106, 0.2),
+                    width: 2,
+                  ),
                 ),
                 child: const CircleAvatar(
                   radius: 18,
@@ -173,11 +184,17 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
               color: const Color(0xFF25F46A).withValues(alpha: 0.08),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFF25F46A), size: 40),
+            child: const Icon(
+              Icons.chat_bubble_outline_rounded,
+              color: Color(0xFF25F46A),
+              size: 40,
+            ),
           ),
           const SizedBox(height: 20),
           Text(
-            _searchQuery.isNotEmpty ? 'No conversations found' : 'No messages yet',
+            _searchQuery.isNotEmpty
+                ? 'No conversations found'
+                : 'No messages yet',
             style: GoogleFonts.spaceGrotesk(
               color: Colors.white,
               fontSize: 18,
@@ -201,7 +218,9 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
               onPressed: () => _searchController.clear(),
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0xFF25F46A)),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
               ),
               child: Text(
                 'Clear Search',
@@ -294,10 +313,7 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                           shape: BoxShape.circle,
                           border: Border.all(color: Colors.black, width: 3),
                           boxShadow: const [
-                            BoxShadow(
-                              color: Color(0xFF25F46A),
-                              blurRadius: 8,
-                            ),
+                            BoxShadow(color: Color(0xFF25F46A), blurRadius: 8),
                           ],
                         ),
                       ),
@@ -317,9 +333,13 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                           child: Text(
                             conversation.providerName,
                             style: GoogleFonts.spaceGrotesk(
-                              color: conversation.isUnread ? Colors.white : Colors.grey[300],
+                              color: conversation.isUnread
+                                  ? Colors.white
+                                  : Colors.grey[300],
                               fontSize: 16,
-                              fontWeight: conversation.isUnread ? FontWeight.bold : FontWeight.w500,
+                              fontWeight: conversation.isUnread
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -328,9 +348,13 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                         Text(
                           conversation.time,
                           style: GoogleFonts.spaceGrotesk(
-                            color: conversation.isUnread ? const Color(0xFF25F46A) : Colors.grey[600],
+                            color: conversation.isUnread
+                                ? const Color(0xFF25F46A)
+                                : Colors.grey[600],
                             fontSize: 11,
-                            fontWeight: conversation.isUnread ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: conversation.isUnread
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -339,7 +363,9 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                     Text(
                       conversation.lastMessage,
                       style: GoogleFonts.spaceGrotesk(
-                        color: conversation.isUnread ? Colors.grey[300] : Colors.grey[600],
+                        color: conversation.isUnread
+                            ? Colors.grey[300]
+                            : Colors.grey[600],
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -375,7 +401,9 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
       IconData icon = Icons.person;
       if (c.providerIcon == 'plumbing') icon = Icons.plumbing;
       if (c.providerIcon == 'cleaning_services') icon = Icons.cleaning_services;
-      if (c.providerIcon == 'electrical_services') icon = Icons.electrical_services;
+      if (c.providerIcon == 'electrical_services') {
+        icon = Icons.electrical_services;
+      }
 
       return Container(
         width: 56,
@@ -402,7 +430,8 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
         priceStart: 85.0,
         imageUrl:
             'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
-        about: 'Certified mobile technician specializing in micro-soldering and screen replacements.',
+        about:
+            'Certified mobile technician specializing in micro-soldering and screen replacements.',
         services: ['Screen Repair', 'Battery Replacement'],
       ),
       Provider(
@@ -415,7 +444,8 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
         priceStart: 35.0,
         imageUrl:
             'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
-        about: 'Premium haircutting and beard grooming services directly to your doorstep.',
+        about:
+            'Premium haircutting and beard grooming services directly to your doorstep.',
         services: ['Haircut', 'Beard Trim'],
       ),
       Provider(
@@ -485,15 +515,25 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
               const SizedBox(height: 4),
               Text(
                 'Select a verified artisan or provider to message directly:',
-                style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 13),
+                style: GoogleFonts.spaceGrotesk(
+                  color: Colors.grey[400],
+                  fontSize: 13,
+                ),
               ),
               const SizedBox(height: 16),
               ...availableProviders.map((p) {
                 return ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   leading: CircleAvatar(
-                    backgroundColor: const Color(0xFF25F46A).withValues(alpha: 0.15),
-                    backgroundImage: p.imageUrl.isNotEmpty ? NetworkImage(p.imageUrl) : null,
+                    backgroundColor: const Color(
+                      0xFF25F46A,
+                    ).withValues(alpha: 0.15),
+                    backgroundImage: p.imageUrl.isNotEmpty
+                        ? NetworkImage(p.imageUrl)
+                        : null,
                     child: p.imageUrl.isEmpty
                         ? const Icon(Icons.person, color: Color(0xFF25F46A))
                         : null,
@@ -518,11 +558,16 @@ class _ChatInboxPageState extends State<ChatInboxPage> {
                       color: const Color(0xFF25F46A).withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.chat_bubble_outline, color: Color(0xFF25F46A), size: 18),
+                    child: const Icon(
+                      Icons.chat_bubble_outline,
+                      color: Color(0xFF25F46A),
+                      size: 18,
+                    ),
                   ),
                   onTap: () async {
                     Navigator.pop(sheetContext);
-                    final conv = await _chatService.getOrCreateConversationForProvider(p);
+                    final conv = await _chatService
+                        .getOrCreateConversationForProvider(p);
                     if (mounted) {
                       Navigator.push(
                         context,

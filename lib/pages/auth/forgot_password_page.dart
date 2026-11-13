@@ -90,7 +90,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       return null;
                     },
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.mail_outline, color: Colors.grey[500]),
+                      prefixIcon: Icon(
+                        Icons.mail_outline,
+                        color: Colors.grey[500],
+                      ),
                       hintText: 'john@example.com',
                       hintStyle: TextStyle(color: Colors.grey[600]),
                       border: InputBorder.none,
@@ -109,50 +112,77 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         try {
-                           showDialog(
-                             context: context,
-                             barrierDismissible: false,
-                             builder: (context) => const Center(child: CircularProgressIndicator(color: Color(0xFF25F46A))),
-                           );
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF25F46A),
+                              ),
+                            ),
+                          );
 
-                           await AuthService().resetPassword(_emailController.text.trim());
+                          await AuthService().resetPassword(
+                            _emailController.text.trim(),
+                          );
 
-                           if (context.mounted) {
-                             Navigator.pop(context); // Close loading
-                             // Show success dialog
-                             showDialog(
-                               context: context,
-                               builder: (context) => AlertDialog(
-                                 backgroundColor: const Color(0xFF101010),
-                                 title: Text('Email Sent', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold)),
-                                 content: Text(
-                                   'We have sent a password reset link to ${_emailController.text}. Please check your inbox.', 
-                                   style: GoogleFonts.spaceGrotesk(color: Colors.grey[400])
-                                 ),
-                                 actions: [
-                                   TextButton(
-                                     onPressed: () {
-                                       Navigator.pop(context); // Close dialog
-                                       Navigator.pop(context); // Go back to login
-                                     },
-                                     child: const Text('OK', style: TextStyle(color: Color(0xFF25F46A))),
-                                   )
-                                 ],
-                               ),
-                             );
-                           }
+                          if (context.mounted) {
+                            Navigator.pop(context); // Close loading
+                            // Show success dialog
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                backgroundColor: const Color(0xFF101010),
+                                title: Text(
+                                  'Email Sent',
+                                  style: GoogleFonts.spaceGrotesk(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                content: Text(
+                                  'We have sent a password reset link to ${_emailController.text}. Please check your inbox.',
+                                  style: GoogleFonts.spaceGrotesk(
+                                    color: Colors.grey[400],
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); // Close dialog
+                                      Navigator.pop(
+                                        context,
+                                      ); // Go back to login
+                                    },
+                                    child: const Text(
+                                      'OK',
+                                      style: TextStyle(
+                                        color: Color(0xFF25F46A),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
                         } on FirebaseAuthException catch (e) {
                           if (context.mounted) {
                             Navigator.pop(context); // Close loading
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text(e.message ?? 'Failed to send reset email')),
+                              SnackBar(
+                                content: Text(
+                                  e.message ?? 'Failed to send reset email',
+                                ),
+                              ),
                             );
                           }
                         } catch (e) {
-                           if (context.mounted) {
+                          if (context.mounted) {
                             Navigator.pop(context); // Close loading
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('An unexpected error occurred')),
+                              const SnackBar(
+                                content: Text('An unexpected error occurred'),
+                              ),
                             );
                           }
                         }

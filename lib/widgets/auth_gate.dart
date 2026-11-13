@@ -31,7 +31,7 @@ class AuthGate extends StatelessWidget {
             future: AuthService().getUserRole(user.uid),
             builder: (context, roleSnapshot) {
               if (roleSnapshot.connectionState == ConnectionState.waiting) {
-                 return const Scaffold(
+                return const Scaffold(
                   backgroundColor: Colors.black,
                   body: Center(
                     child: CircularProgressIndicator(color: Color(0xFF25F46A)),
@@ -47,8 +47,8 @@ class AuthGate extends StatelessWidget {
                   return const BottomNavPage();
                 }
               }
-              
-              return const BottomNavPage(); 
+
+              return const BottomNavPage();
             },
           );
         }
@@ -67,7 +67,7 @@ class AuthGate extends StatelessWidget {
             }
 
             final bool onboardingCompleted = onboardingSnapshot.data ?? false;
-            
+
             if (onboardingCompleted) {
               return const WelcomePage();
             } else {

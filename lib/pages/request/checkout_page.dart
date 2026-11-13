@@ -2,6 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../services/booking_service.dart';
+import '../../services/payment_service.dart';
 import '../tracking/job_tracking_page.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -19,7 +22,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     const neonGreen = Color(0xFF25F46A);
-    final String amount = widget.data['budget']?.toString().replaceAll(RegExp(r'[^0-9.]'), '') ?? '145.00';
+    final String amount =
+        widget.data['budget']?.toString().replaceAll(RegExp(r'[^0-9.]'), '') ??
+        '145.00';
     if (!amount.contains('.')) {
       // Add .00 if not present for premium look
     }
@@ -104,7 +109,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
-              child: const Icon(Icons.chevron_left, color: Colors.white, size: 24),
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
           ),
           Text(
@@ -146,7 +155,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   color: neonGreen,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  shadows: [Shadow(color: neonGreen.withValues(alpha: 0.5), blurRadius: 10)],
+                  shadows: [
+                    Shadow(
+                      color: neonGreen.withValues(alpha: 0.5),
+                      blurRadius: 10,
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -190,7 +204,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
         ),
         const SizedBox(height: 16),
-        
+
         // Cash on Delivery
         _buildPaymentOption(
           id: 'cash',
@@ -199,9 +213,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
           icon: Icons.payments_outlined,
           neonGreen: neonGreen,
         ),
-        
+
         const SizedBox(height: 16),
-        
+
         // Bank Transfer
         _buildPaymentOption(
           id: 'bank',
@@ -210,6 +224,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
           icon: Icons.account_balance_outlined,
           neonGreen: neonGreen,
           showDetails: _selectedMethod == 'bank',
+        ),
+
+        const SizedBox(height: 16),
+
+        // Card / gateway payment
+        _buildPaymentOption(
+          id: 'card',
+          title: 'Card Payment',
+          subtitle: 'Secure checkout via Paystack',
+          icon: Icons.credit_card_outlined,
+          neonGreen: neonGreen,
         ),
       ],
     );
@@ -231,10 +256,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
         duration: const Duration(milliseconds: 300),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isSelected ? neonGreen.withValues(alpha: 0.05) : Colors.white.withValues(alpha: 0.03),
+          color: isSelected
+              ? neonGreen.withValues(alpha: 0.05)
+              : Colors.white.withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isSelected ? neonGreen : Colors.white.withValues(alpha: 0.08),
+            color: isSelected
+                ? neonGreen
+                : Colors.white.withValues(alpha: 0.08),
             width: isSelected ? 1.5 : 1,
           ),
         ),
@@ -247,9 +276,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.05),
+                    ),
                   ),
-                  child: Icon(icon, color: isSelected ? neonGreen : Colors.white, size: 24),
+                  child: Icon(
+                    icon,
+                    color: isSelected ? neonGreen : Colors.white,
+                    size: 24,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -277,7 +312,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected ? neonGreen : Colors.white.withValues(alpha: 0.2),
+                      color: isSelected
+                          ? neonGreen
+                          : Colors.white.withValues(alpha: 0.2),
                       width: 2,
                     ),
                   ),
@@ -286,7 +323,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           child: Container(
                             width: 12,
                             height: 12,
-                            decoration: BoxDecoration(color: neonGreen, shape: BoxShape.circle),
+                            decoration: BoxDecoration(
+                              color: neonGreen,
+                              shape: BoxShape.circle,
+                            ),
                           ),
                         )
                       : null,
@@ -298,7 +338,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Container(height: 1, color: Colors.white.withValues(alpha: 0.1)),
               const SizedBox(height: 20),
               _buildBankDetails(neonGreen),
-            ]
+            ],
           ],
         ),
       ),
@@ -321,24 +361,45 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('ACCOUNT NUMBER', style: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                  Text(
+                    'ACCOUNT NUMBER',
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.grey[600],
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     '7740 1293 4810 55',
-                    style: GoogleFonts.spaceMono(color: Colors.white, fontSize: 13, fontWeight: FontWeight.bold, letterSpacing: 1),
+                    style: GoogleFonts.spaceMono(
+                      color: Colors.white,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
                   ),
                 ],
               ),
               GestureDetector(
                 onTap: () {
-                  Clipboard.setData(const ClipboardData(text: '77401293481055'));
+                  Clipboard.setData(
+                    const ClipboardData(text: '77401293481055'),
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Account number copied!'), duration: Duration(seconds: 1)),
+                    const SnackBar(
+                      content: Text('Account number copied!'),
+                      duration: Duration(seconds: 1),
+                    ),
                   );
                 },
                 child: Container(
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(color: neonGreen.withValues(alpha: 0.1), shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                    color: neonGreen.withValues(alpha: 0.1),
+                    shape: BoxShape.circle,
+                  ),
                   child: Icon(Icons.content_copy, color: neonGreen, size: 14),
                 ),
               ),
@@ -361,9 +422,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 8, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+        Text(
+          label,
+          style: GoogleFonts.spaceGrotesk(
+            color: Colors.grey[600],
+            fontSize: 8,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.5,
+          ),
+        ),
         const SizedBox(height: 2),
-        Text(value, style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600)),
+        Text(
+          value,
+          style: GoogleFonts.spaceGrotesk(
+            color: Colors.white,
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ],
     );
   }
@@ -396,7 +472,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: neonGreen,
                 foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
                 elevation: 10,
                 shadowColor: neonGreen.withValues(alpha: 0.4),
               ),
@@ -405,7 +483,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 children: [
                   Text(
                     'CONFIRM PAYMENT',
-                    style: GoogleFonts.spaceGrotesk(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1),
+                    style: GoogleFonts.spaceGrotesk(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1,
+                    ),
                   ),
                   const SizedBox(width: 8),
                   const Icon(Icons.arrow_forward, size: 20),
@@ -418,7 +500,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
             onPressed: () => Navigator.pop(context),
             child: Text(
               'Cancel Transaction',
-              style: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 14, fontWeight: FontWeight.w500),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.grey[600],
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
@@ -426,11 +512,71 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  void _showSuccessAndNavigate() {
+  Future<void> _showSuccessAndNavigate() async {
+    final rawBudget = (widget.data['budget'] ?? '').toString();
+    final amount =
+        double.tryParse(rawBudget.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 145.0;
+    final method = switch (_selectedMethod) {
+      'bank' => PaymentMethod.bankTransfer,
+      'card' => PaymentMethod.card,
+      _ => PaymentMethod.cash,
+    };
+    final email =
+        FirebaseAuth.instance.currentUser?.email ?? 'customer@swiftserve.app';
+
+    final dateValue = widget.data['date'];
+    final dateLabel = dateValue is DateTime
+        ? '${dateValue.year}-${dateValue.month.toString().padLeft(2, '0')}-${dateValue.day.toString().padLeft(2, '0')}'
+        : (dateValue?.toString() ?? 'Today');
+
+    // Persist the request first so the payment can reference a booking id.
+    final booking = await BookingService().createBooking(
+      providerName: widget.data['provider_name'] ?? 'Marcus Vane',
+      serviceType: widget.data['provider_role'] ?? 'Master Barber',
+      date: dateLabel,
+      time: widget.data['time'] ?? '10:30 AM',
+      location: widget.data['address'] ?? 'Service address',
+      price: amount,
+      imageUrl: widget.data['provider_image'] ?? '',
+      providerId: widget.data['provider_id'] ?? '',
+      notes: widget.data['description'] ?? '',
+      status: 'Pending',
+    );
+
+    final payment = await PaymentService().pay(
+      amount: amount,
+      method: method,
+      email: email,
+      bookingId: booking.id,
+    );
+
+    if (!mounted) return;
+
+    if (payment.status == PaymentStatus.failed) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(payment.message),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    if (payment.isSuccessful) {
+      await BookingService().updateStatus(booking.id, 'Confirmed');
+    }
+
+    if (!mounted) return;
+
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Payment Confirmed! Request Posted.'),
-        backgroundColor: Color(0xFF25F46A),
+      SnackBar(
+        content: Text(
+          payment.isSuccessful
+              ? 'Payment Confirmed! Request Posted.'
+              : 'Request Posted — ${payment.message}',
+        ),
+        backgroundColor: const Color(0xFF25F46A),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -442,10 +588,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
         builder: (context) => JobTrackingPage(
           providerName: widget.data['provider_name'] ?? 'Marcus Vane',
           serviceType: widget.data['provider_role'] ?? 'Master Barber',
-          providerImageUrl: widget.data['provider_image'] ?? 'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
+          providerImageUrl:
+              widget.data['provider_image'] ??
+              'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
         ),
       ),
-      (route) => route.isFirst, 
+      (route) => route.isFirst,
     );
   }
 }

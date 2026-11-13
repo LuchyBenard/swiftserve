@@ -52,35 +52,37 @@ class _BookingPageState extends State<BookingPage> {
               decoration: BoxDecoration(
                 color: const Color.fromRGBO(255, 255, 255, 0.05),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+                border: Border.all(
+                  color: const Color.fromRGBO(255, 255, 255, 0.1),
+                ),
               ),
               child: Row(
                 children: [
-                   CircleAvatar(
-                     radius: 24,
-                     backgroundImage: NetworkImage(widget.provider.imageUrl),
-                   ),
-                   const SizedBox(width: 16),
-                   Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Text(
-                         widget.provider.name,
-                         style: GoogleFonts.spaceGrotesk(
-                           color: Colors.white,
-                           fontSize: 16,
-                           fontWeight: FontWeight.bold,
-                         ),
-                       ),
-                       Text(
-                         widget.provider.role,
-                         style: GoogleFonts.spaceGrotesk(
-                           color: Colors.grey[400],
-                           fontSize: 12,
-                         ),
-                       ),
-                     ],
-                   ),
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundImage: NetworkImage(widget.provider.imageUrl),
+                  ),
+                  const SizedBox(width: 16),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.provider.name,
+                        style: GoogleFonts.spaceGrotesk(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        widget.provider.role,
+                        style: GoogleFonts.spaceGrotesk(
+                          color: Colors.grey[400],
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -104,16 +106,22 @@ class _BookingPageState extends State<BookingPage> {
                 itemBuilder: (context, index) {
                   final date = DateTime.now().add(Duration(days: index));
                   final isSelected = date.day == _selectedDate.day;
-                  
+
                   return GestureDetector(
                     onTap: () => setState(() => _selectedDate = date),
                     child: Container(
                       width: 60,
                       margin: const EdgeInsets.only(right: 12),
                       decoration: BoxDecoration(
-                        color: isSelected ? const Color(0xFF25F46A) : const Color.fromRGBO(255, 255, 255, 0.05),
+                        color: isSelected
+                            ? const Color(0xFF25F46A)
+                            : const Color.fromRGBO(255, 255, 255, 0.05),
                         borderRadius: BorderRadius.circular(16),
-                        border: isSelected ? null : Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+                        border: isSelected
+                            ? null
+                            : Border.all(
+                                color: const Color.fromRGBO(255, 255, 255, 0.1),
+                              ),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -121,7 +129,9 @@ class _BookingPageState extends State<BookingPage> {
                           Text(
                             _getMonth(date.month),
                             style: GoogleFonts.spaceGrotesk(
-                              color: isSelected ? Colors.black : Colors.grey[500],
+                              color: isSelected
+                                  ? Colors.black
+                                  : Colors.grey[500],
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
                             ),
@@ -160,11 +170,20 @@ class _BookingPageState extends State<BookingPage> {
                 return GestureDetector(
                   onTap: () => setState(() => _selectedTime = time),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF25F46A) : const Color.fromRGBO(255, 255, 255, 0.05),
+                      color: isSelected
+                          ? const Color(0xFF25F46A)
+                          : const Color.fromRGBO(255, 255, 255, 0.05),
                       borderRadius: BorderRadius.circular(20),
-                      border: isSelected ? null : Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+                      border: isSelected
+                          ? null
+                          : Border.all(
+                              color: const Color.fromRGBO(255, 255, 255, 0.1),
+                            ),
                     ),
                     child: Text(
                       time,
@@ -180,7 +199,7 @@ class _BookingPageState extends State<BookingPage> {
             ),
             const Spacer(),
             // Confirm Button
-             GestureDetector(
+            GestureDetector(
               onTap: () {
                 // Here we would submit the booking
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -220,7 +239,20 @@ class _BookingPageState extends State<BookingPage> {
   }
 
   String _getMonth(int month) {
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     return months[month - 1];
   }
 }

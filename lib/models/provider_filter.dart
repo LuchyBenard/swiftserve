@@ -62,7 +62,9 @@ class ProviderFilter {
       final query = searchQuery.toLowerCase();
       final matchName = provider.name.toLowerCase().contains(query);
       final matchRole = provider.role.toLowerCase().contains(query);
-      final matchServices = provider.services.any((s) => s.toLowerCase().contains(query));
+      final matchServices = provider.services.any(
+        (s) => s.toLowerCase().contains(query),
+      );
       if (!matchName && !matchRole && !matchServices) return false;
     }
 
@@ -103,8 +105,12 @@ class ProviderFilter {
         case 'price_high':
           return b.priceStart.compareTo(a.priceStart);
         case 'distance':
-          final distA = double.tryParse(a.distance.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
-          final distB = double.tryParse(b.distance.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
+          final distA =
+              double.tryParse(a.distance.replaceAll(RegExp(r'[^0-9.]'), '')) ??
+              0.0;
+          final distB =
+              double.tryParse(b.distance.replaceAll(RegExp(r'[^0-9.]'), '')) ??
+              0.0;
           return distA.compareTo(distB);
         case 'rating':
         default:

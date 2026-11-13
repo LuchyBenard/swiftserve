@@ -40,7 +40,11 @@ class NotificationService {
     if (jsonList != null && jsonList.isNotEmpty) {
       try {
         list = jsonList
-            .map((str) => AppNotification.fromJson(jsonDecode(str) as Map<String, dynamic>))
+            .map(
+              (str) => AppNotification.fromJson(
+                jsonDecode(str) as Map<String, dynamic>,
+              ),
+            )
             .toList();
       } catch (_) {
         list = _getSeedNotifications();
@@ -67,7 +71,9 @@ class NotificationService {
   }
 
   Future<void> markAllAsRead() async {
-    final list = notificationsNotifier.value.map((n) => n.copyWith(isRead: true)).toList();
+    final list = notificationsNotifier.value
+        .map((n) => n.copyWith(isRead: true))
+        .toList();
     notificationsNotifier.value = list;
     _updateUnreadCount(list);
     await _persistNotifications(list);
@@ -138,7 +144,11 @@ class NotificationService {
     await prefs.setStringList(_notificationsKey, jsonList);
   }
 
-  void showInAppBanner(BuildContext context, AppNotification notification, {VoidCallback? onTap}) {
+  void showInAppBanner(
+    BuildContext context,
+    AppNotification notification, {
+    VoidCallback? onTap,
+  }) {
     final overlayState = Overlay.of(context);
     late OverlayEntry overlayEntry;
 
@@ -186,7 +196,10 @@ class NotificationService {
                 decoration: BoxDecoration(
                   color: const Color(0xFF141414),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: accentColor.withValues(alpha: 0.4), width: 1.5),
+                  border: Border.all(
+                    color: accentColor.withValues(alpha: 0.4),
+                    width: 1.5,
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: accentColor.withValues(alpha: 0.25),
@@ -249,7 +262,11 @@ class NotificationService {
                     ),
                     const SizedBox(width: 8),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Colors.grey, size: 18),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.grey,
+                        size: 18,
+                      ),
                       onPressed: () => overlayEntry.remove(),
                       padding: EdgeInsets.zero,
                       constraints: const BoxConstraints(),
@@ -278,7 +295,8 @@ class NotificationService {
       AppNotification(
         id: 'notif_1',
         title: 'Artisan Has Arrived! 📍',
-        body: 'TechFix Mobile has arrived at your service address. Please be ready to meet them.',
+        body:
+            'TechFix Mobile has arrived at your service address. Please be ready to meet them.',
         timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
         type: NotificationType.booking,
         isRead: false,
@@ -288,7 +306,8 @@ class NotificationService {
       AppNotification(
         id: 'notif_2',
         title: 'Service Invoice #INV-2026-88',
-        body: 'Your payment receipt of \$40.00 for John D. (Master Barber) is ready for download.',
+        body:
+            'Your payment receipt of \$40.00 for John D. (Master Barber) is ready for download.',
         timestamp: DateTime.now().subtract(const Duration(hours: 2)),
         type: NotificationType.payment,
         isRead: false,
@@ -297,7 +316,8 @@ class NotificationService {
       AppNotification(
         id: 'notif_3',
         title: 'Weekend Flash Deal ⚡',
-        body: 'Enjoy 20% off all Plumbing & Electrical bookings this weekend with promo code SWIFT20.',
+        body:
+            'Enjoy 20% off all Plumbing & Electrical bookings this weekend with promo code SWIFT20.',
         timestamp: DateTime.now().subtract(const Duration(hours: 6)),
         type: NotificationType.promo,
         isRead: false,
@@ -305,7 +325,8 @@ class NotificationService {
       AppNotification(
         id: 'notif_4',
         title: 'Booking Confirmed',
-        body: "Mike's Plumbing accepted your emergency leak request scheduled for tomorrow at 10:00 AM.",
+        body:
+            "Mike's Plumbing accepted your emergency leak request scheduled for tomorrow at 10:00 AM.",
         timestamp: DateTime.now().subtract(const Duration(days: 1)),
         type: NotificationType.booking,
         isRead: true,
@@ -313,7 +334,8 @@ class NotificationService {
       AppNotification(
         id: 'notif_5',
         title: 'Account Security Verified 🛡️',
-        body: 'Two-factor biometric login and phone verification completed successfully.',
+        body:
+            'Two-factor biometric login and phone verification completed successfully.',
         timestamp: DateTime.now().subtract(const Duration(days: 2)),
         type: NotificationType.alert,
         isRead: true,

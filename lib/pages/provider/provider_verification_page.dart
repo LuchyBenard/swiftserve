@@ -1,16 +1,91 @@
+import 'dart:io';
 import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../services/storage_service.dart';
 
 class ProviderVerificationPage extends StatefulWidget {
   const ProviderVerificationPage({super.key});
 
   @override
-  State<ProviderVerificationPage> createState() => _ProviderVerificationPageState();
+  State<ProviderVerificationPage> createState() =>
+      _ProviderVerificationPageState();
 }
 
 class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
   final List<String> _services = ["Haircut", "Beard Trim", "Hot Towel"];
+  final ImagePicker _imagePicker = ImagePicker();
+  String? _idDocumentUrl;
+  bool _uploadingId = false;
+  bool _submitting = false;
+
+  Future<void> _pickIdDocument() async {
+    final XFile? image = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 85,
+    );
+    if (image == null) return;
+
+    setState(() => _uploadingId = true);
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? 'anonymous';
+    final url = await StorageService().uploadFile(
+      File(image.path),
+      folder: 'verification/$uid',
+    );
+    if (!mounted) return;
+    setState(() {
+      _uploadingId = false;
+      _idDocumentUrl = url;
+    });
+  }
+
+  Future<void> _completeVerification() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Sign in to submit verification documents.'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    setState(() => _submitting = true);
+    try {
+      await FirebaseFirestore.instance
+          .collection('providers')
+          .doc(user.uid)
+          .set({
+            'idDocumentUrl': _idDocumentUrl ?? '',
+            'verificationStatus': 'pending',
+            'verificationSubmittedAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Verification submitted for review.'),
+          backgroundColor: Color(0xFF25F46A),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Could not submit verification. Try again later.'),
+          backgroundColor: Colors.redAccent,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +121,18 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
               children: [
                 // Header
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.chevron_left, color: Colors.white),
+                        icon: const Icon(
+                          Icons.chevron_left,
+                          color: Colors.white,
+                        ),
                         onPressed: () => Navigator.pop(context),
                       ),
                       Text(
@@ -63,7 +144,10 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.help_outline, color: primaryGreen),
+                        icon: const Icon(
+                          Icons.help_outline,
+                          color: primaryGreen,
+                        ),
                         onPressed: () {},
                       ),
                     ],
@@ -104,7 +188,9 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                           decoration: BoxDecoration(
                             color: darkSurfaceLighter,
                             borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+                            border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.05),
+                            ),
                           ),
                           child: FractionallySizedBox(
                             alignment: Alignment.centerLeft,
@@ -134,7 +220,10 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                               height: 110,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                border: Border.all(color: primaryGreen.withValues(alpha: 0.4), width: 2),
+                                border: Border.all(
+                                  color: primaryGreen.withValues(alpha: 0.4),
+                                  width: 2,
+                                ),
                                 color: darkSurface,
                                 boxShadow: [
                                   BoxShadow(
@@ -144,7 +233,11 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                                 ],
                               ),
                               child: const Center(
-                                child: Icon(Icons.person, size: 50, color: Colors.grey),
+                                child: Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                             Positioned(
@@ -159,12 +252,18 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                                   border: Border.all(color: primaryGreen),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: primaryGreen.withValues(alpha: 0.3),
+                                      color: primaryGreen.withValues(
+                                        alpha: 0.3,
+                                      ),
                                       blurRadius: 8,
                                     ),
                                   ],
                                 ),
-                                child: const Icon(Icons.verified_user, color: primaryGreen, size: 20),
+                                child: const Icon(
+                                  Icons.verified_user,
+                                  color: primaryGreen,
+                                  size: 20,
+                                ),
                               ),
                             ),
                             Positioned(
@@ -176,9 +275,15 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                                 decoration: BoxDecoration(
                                   color: darkSurface,
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.2),
+                                  ),
                                 ),
-                                child: const Icon(Icons.edit, color: Colors.white, size: 16),
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                  size: 16,
+                                ),
                               ),
                             ),
                           ],
@@ -202,15 +307,30 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
 
                         const SizedBox(height: 40),
                         // Verification Sections
-                        _buildSectionHeader("ID Verification", isRequired: true, icon: Icons.badge),
-                        _buildUploadCard(),
+                        _buildSectionHeader(
+                          "ID Verification",
+                          isRequired: true,
+                          icon: Icons.badge,
+                        ),
+                        GestureDetector(
+                          onTap: _uploadingId ? null : _pickIdDocument,
+                          child: _buildUploadCard(),
+                        ),
 
                         const SizedBox(height: 32),
-                        _buildSectionHeader("Services Offered", actionText: "Edit", icon: Icons.content_cut),
+                        _buildSectionHeader(
+                          "Services Offered",
+                          actionText: "Edit",
+                          icon: Icons.content_cut,
+                        ),
                         _buildServicesCard(),
 
                         const SizedBox(height: 32),
-                        _buildSectionHeader("Payout Details", isDone: true, icon: Icons.account_balance),
+                        _buildSectionHeader(
+                          "Payout Details",
+                          isDone: true,
+                          icon: Icons.account_balance,
+                        ),
                         _buildPayoutCard(),
 
                         const SizedBox(height: 120), // Padding for button
@@ -240,10 +360,12 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                 ],
               ),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: _submitting ? null : _completeVerification,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryGreen,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   elevation: 0,
                 ),
                 child: Row(
@@ -258,7 +380,11 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    const Icon(Icons.arrow_forward, color: Colors.black, size: 20),
+                    const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.black,
+                      size: 20,
+                    ),
                   ],
                 ),
               ),
@@ -269,7 +395,13 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
     );
   }
 
-  Widget _buildSectionHeader(String title, {bool isRequired = false, bool isDone = false, String? actionText, IconData? icon}) {
+  Widget _buildSectionHeader(
+    String title, {
+    bool isRequired = false,
+    bool isDone = false,
+    String? actionText,
+    IconData? icon,
+  }) {
     const primaryGreen = Color(0xFF25F46A);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -300,14 +432,23 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
               ),
               child: const Text(
                 "Required",
-                style: TextStyle(color: primaryGreen, fontSize: 10, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: primaryGreen,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          if (isDone) const Icon(Icons.check_circle, color: primaryGreen, size: 20),
+          if (isDone)
+            const Icon(Icons.check_circle, color: primaryGreen, size: 20),
           if (actionText != null)
             Text(
               actionText,
-              style: const TextStyle(color: primaryGreen, fontSize: 13, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                color: primaryGreen,
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+              ),
             ),
         ],
       ),
@@ -317,12 +458,16 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
   Widget _buildUploadCard() {
     const primaryGreen = Color(0xFF25F46A);
     const darkSurface = Color(0xFF0F1A12);
+    final isDone = _idDocumentUrl != null && _idDocumentUrl!.isNotEmpty;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 32),
       decoration: BoxDecoration(
         color: darkSurface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(20),
+        border: isDone
+            ? Border.all(color: primaryGreen.withValues(alpha: 0.4))
+            : null,
       ),
       child: Column(
         children: [
@@ -333,16 +478,35 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
               color: primaryGreen.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.cloud_upload, color: primaryGreen),
+            child: _uploadingId
+                ? const Padding(
+                    padding: EdgeInsets.all(14),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: primaryGreen,
+                    ),
+                  )
+                : Icon(
+                    isDone ? Icons.check_circle : Icons.cloud_upload,
+                    color: primaryGreen,
+                  ),
           ),
           const SizedBox(height: 12),
-          const Text(
-            "Upload Government ID",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 14),
+          Text(
+            _uploadingId
+                ? "Uploading..."
+                : (isDone ? "Government ID Uploaded" : "Upload Government ID"),
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
-            "PNG, JPG or PDF (Max 5MB)",
+            isDone
+                ? "Tap to replace the document"
+                : "PNG, JPG or PDF (Max 5MB)",
             style: TextStyle(color: Colors.grey[600], fontSize: 11),
           ),
         ],
@@ -380,10 +544,7 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: primaryGreen.withValues(alpha: 0.3)),
         boxShadow: [
-          BoxShadow(
-            color: primaryGreen.withValues(alpha: 0.1),
-            blurRadius: 4,
-          ),
+          BoxShadow(color: primaryGreen.withValues(alpha: 0.1), blurRadius: 4),
         ],
       ),
       child: Row(
@@ -391,7 +552,11 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
         children: [
           Text(
             label,
-            style: const TextStyle(color: primaryGreen, fontSize: 13, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+              color: primaryGreen,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
           const SizedBox(width: 8),
           GestureDetector(
@@ -421,7 +586,11 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
           const SizedBox(width: 4),
           Text(
             "Add Service",
-            style: TextStyle(color: Colors.grey[500], fontSize: 13, fontWeight: FontWeight.w500),
+            style: TextStyle(
+              color: Colors.grey[500],
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ],
       ),
@@ -447,7 +616,10 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
             color: primaryGreen,
             decoration: BoxDecoration(
               boxShadow: [
-                BoxShadow(color: primaryGreen.withValues(alpha: 0.8), blurRadius: 10),
+                BoxShadow(
+                  color: primaryGreen.withValues(alpha: 0.8),
+                  blurRadius: 10,
+                ),
               ],
             ),
           ),
@@ -459,7 +631,11 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.account_balance, color: Colors.black, size: 20),
+            child: const Icon(
+              Icons.account_balance,
+              color: Colors.black,
+              size: 20,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -468,7 +644,11 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
               children: [
                 const Text(
                   "Chase Bank **** 4829",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
                 ),
                 Text(
                   "Checking Account",

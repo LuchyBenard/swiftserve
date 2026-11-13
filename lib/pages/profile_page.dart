@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -8,6 +10,7 @@ import 'admin/admin_dashboard_page.dart';
 import 'saved_providers_page.dart';
 import 'notification_center_page.dart';
 import '../services/notification_service.dart';
+import '../services/storage_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -26,16 +29,35 @@ class _ProfilePageState extends State<ProfilePage> {
   late TextEditingController _phoneController;
   late TextEditingController _bioController;
   String _selectedLocation = 'Independence Layout';
-  
+
   File? _imageFile;
+  String? _avatarUrl;
   final ImagePicker _picker = ImagePicker();
 
   final List<String> _enuguLocations = [
-    'Independence Layout', 'Achara Layout', 'Trans Ekulu', 'Abakpa', 'Coal Camp',
-    'Emene', 'New Haven', 'Thinkers Corner', 'GRA', 'Ogui New Layout',
-    'Awkunanaw', 'Gariki', 'Uwani', 'Obiagu', 'Maryland', 'Meniru',
-    'Agbani Road', 'Eke-Obinagu', 'Iva Valley', 'Tinker', 'Garki', 'Topland',
-    'Amechi'
+    'Independence Layout',
+    'Achara Layout',
+    'Trans Ekulu',
+    'Abakpa',
+    'Coal Camp',
+    'Emene',
+    'New Haven',
+    'Thinkers Corner',
+    'GRA',
+    'Ogui New Layout',
+    'Awkunanaw',
+    'Gariki',
+    'Uwani',
+    'Obiagu',
+    'Maryland',
+    'Meniru',
+    'Agbani Road',
+    'Eke-Obinagu',
+    'Iva Valley',
+    'Tinker',
+    'Garki',
+    'Topland',
+    'Amechi',
   ];
 
   @override
@@ -44,7 +66,9 @@ class _ProfilePageState extends State<ProfilePage> {
     _nameController = TextEditingController(text: 'Alex Johnson');
     _emailController = TextEditingController(text: 'alex.j@example.com');
     _phoneController = TextEditingController(text: '+234 803 000 0000');
-    _bioController = TextEditingController(text: 'Service seeker looking for quality help in Enugu.');
+    _bioController = TextEditingController(
+      text: 'Service seeker looking for quality help in Enugu.',
+    );
   }
 
   @override
@@ -58,11 +82,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _pickImage() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        _imageFile = File(image.path);
-      });
-    }
+    if (image == null) return;
+
+    setState(() => _imageFile = File(image.path));
+
+    final uid = FirebaseAuth.instance.currentUser?.uid ?? 'anonymous';
+    final url = await StorageService().uploadFile(
+      File(image.path),
+      folder: 'users/$uid/avatar',
+    );
+    if (!mounted) return;
+    setState(() => _avatarUrl = url);
   }
 
   void _toggleEdit() {
@@ -71,11 +101,29 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  void _saveProfile() {
+  Future<void> _saveProfile() async {
     setState(() {
       _isEditing = false;
     });
-    // In a real app, we would upload to a server here
+
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'name': _nameController.text.trim(),
+          'email': _emailController.text.trim(),
+          'phone': _phoneController.text.trim(),
+          'bio': _bioController.text.trim(),
+          'location': _selectedLocation,
+          if (_avatarUrl != null) 'photoUrl': _avatarUrl,
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+      } catch (_) {
+        // Keep the UI responsive when offline; local edits remain visible.
+      }
+    }
+
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Profile updated successfully!')),
     );
@@ -83,25 +131,29 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-           // Optional nice subtle background glow
-           Positioned(
-             top: -100,
-             right: -100,
-             child: Container(
-               width: 300,
-               height: 300,
-               decoration: BoxDecoration(
-                 shape: BoxShape.circle,
-                 color: neonGreen.withValues(alpha: 0.05),
-                 boxShadow: [BoxShadow(color: neonGreen.withValues(alpha: 0.05), blurRadius: 100)]
-               ),
-             ),
-           ),
+          // Optional nice subtle background glow
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: neonGreen.withValues(alpha: 0.05),
+                boxShadow: [
+                  BoxShadow(
+                    color: neonGreen.withValues(alpha: 0.05),
+                    blurRadius: 100,
+                  ),
+                ],
+              ),
+            ),
+          ),
 
           SafeArea(
             child: SingleChildScrollView(
@@ -112,30 +164,33 @@ class _ProfilePageState extends State<ProfilePage> {
                   // App Bar (Custom)
                   Row(
                     children: [
-                       GestureDetector(
-                         onTap: () {
-                           if (_isEditing) {
-                             setState(() => _isEditing = false);
-                           } else {
-                             Navigator.pop(context);
-                           }
-                         },
-                         child: Icon(_isEditing ? Icons.close : Icons.arrow_back, color: Colors.white)
-                       ), 
-                       const SizedBox(width: 20),
-                       if (_isEditing)
-                         Text(
-                           'EDIT PROFILE',
-                           style: GoogleFonts.spaceGrotesk(
-                             color: Colors.white,
-                             fontSize: 18,
-                             fontWeight: FontWeight.bold,
-                           ),
-                         ),
-                       const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          if (_isEditing) {
+                            setState(() => _isEditing = false);
+                          } else {
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Icon(
+                          _isEditing ? Icons.close : Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      if (_isEditing)
+                        Text(
+                          'EDIT PROFILE',
+                          style: GoogleFonts.spaceGrotesk(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      const Spacer(),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 20),
 
                   // Profile Image with Glow
@@ -153,32 +208,41 @@ class _ProfilePageState extends State<ProfilePage> {
                                 color: neonGreen.withValues(alpha: 0.4),
                                 blurRadius: 30,
                                 spreadRadius: 5,
-                              )
-                            ]
+                              ),
+                            ],
                           ),
                           child: CircleAvatar(
                             radius: 60,
                             backgroundColor: Colors.grey[900],
-                            backgroundImage: _imageFile != null 
-                              ? FileImage(_imageFile!) as ImageProvider
-                              : const NetworkImage('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80'),
+                            backgroundImage: _imageFile != null
+                                ? FileImage(_imageFile!) as ImageProvider
+                                : (_avatarUrl != null &&
+                                          _avatarUrl!.startsWith('http')
+                                      ? NetworkImage(_avatarUrl!)
+                                      : const NetworkImage(
+                                          'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80',
+                                        )),
                           ),
                         ),
                       ),
                       GestureDetector(
-                        onTap: _toggleEdit,
+                        onTap: _isEditing ? _saveProfile : _toggleEdit,
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           decoration: const BoxDecoration(
                             color: neonGreen,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(_isEditing ? Icons.check : Icons.edit, color: Colors.black, size: 20),
+                          child: Icon(
+                            _isEditing ? Icons.check : Icons.edit,
+                            color: Colors.black,
+                            size: 20,
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
-                  
+
                   // Name
                   if (_isEditing)
                     Padding(
@@ -192,8 +256,14 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: Colors.white,
                         ),
                         decoration: InputDecoration(
-                          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: neonGreen.withValues(alpha: 0.5))),
-                          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: neonGreen)),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: neonGreen.withValues(alpha: 0.5),
+                            ),
+                          ),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: neonGreen),
+                          ),
                         ),
                       ),
                     )
@@ -206,16 +276,35 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.white,
                       ),
                     ),
-                  
+
                   // Editable Fields and Info
                   const SizedBox(height: 32),
-                  
+
                   if (_isEditing) ...[
-                    _buildEditableInput('FULL NAME', _nameController, Icons.person_outline),
-                    _buildEditableInput('EMAIL', _emailController, Icons.mail_outline, keyboardType: TextInputType.emailAddress),
-                    _buildEditableInput('PHONE', _phoneController, Icons.phone_outlined, keyboardType: TextInputType.phone),
-                    _buildEditableInput('BIO', _bioController, Icons.info_outline, maxLines: 3),
-                    
+                    _buildEditableInput(
+                      'FULL NAME',
+                      _nameController,
+                      Icons.person_outline,
+                    ),
+                    _buildEditableInput(
+                      'EMAIL',
+                      _emailController,
+                      Icons.mail_outline,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    _buildEditableInput(
+                      'PHONE',
+                      _phoneController,
+                      Icons.phone_outlined,
+                      keyboardType: TextInputType.phone,
+                    ),
+                    _buildEditableInput(
+                      'BIO',
+                      _bioController,
+                      Icons.info_outline,
+                      maxLines: 3,
+                    ),
+
                     const SizedBox(height: 16),
                     _buildLabel('LOCATION IN ENUGU'),
                     const SizedBox(height: 8),
@@ -231,24 +320,42 @@ class _ProfilePageState extends State<ProfilePage> {
                           value: _selectedLocation,
                           dropdownColor: const Color(0xFF101010),
                           isExpanded: true,
-                          icon: Icon(Icons.keyboard_arrow_down, color: neonGreen),
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: neonGreen,
+                          ),
                           items: _enuguLocations.map((String loc) {
                             return DropdownMenuItem(
                               value: loc,
-                              child: Text(loc, style: GoogleFonts.spaceGrotesk(color: Colors.white)),
+                              child: Text(
+                                loc,
+                                style: GoogleFonts.spaceGrotesk(
+                                  color: Colors.white,
+                                ),
+                              ),
                             );
                           }).toList(),
-                          onChanged: (val) => setState(() => _selectedLocation = val!),
+                          onChanged: (val) =>
+                              setState(() => _selectedLocation = val!),
                         ),
                       ),
                     ),
                   ] else ...[
-                    _buildProfileInfo(Icons.mail_outline, _emailController.text),
-                    _buildProfileInfo(Icons.phone_outlined, _phoneController.text),
-                    _buildProfileInfo(Icons.location_on_outlined, _selectedLocation),
+                    _buildProfileInfo(
+                      Icons.mail_outline,
+                      _emailController.text,
+                    ),
+                    _buildProfileInfo(
+                      Icons.phone_outlined,
+                      _phoneController.text,
+                    ),
+                    _buildProfileInfo(
+                      Icons.location_on_outlined,
+                      _selectedLocation,
+                    ),
                     _buildProfileInfo(Icons.info_outline, _bioController.text),
                   ],
-                  
+
                   if (_isEditing) ...[
                     const SizedBox(height: 24),
                     SizedBox(
@@ -258,29 +365,38 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: neonGreen,
                           foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                         ),
                         child: Text(
                           'SAVE CHANGES',
-                          style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+                          style: GoogleFonts.spaceGrotesk(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ],
-                  
+
                   const SizedBox(height: 12),
-                  
+
                   // Verified & Rating
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFF0F361C), // Dark green bg
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: neonGreen.withValues(alpha: 0.2)),
+                          border: Border.all(
+                            color: neonGreen.withValues(alpha: 0.2),
+                          ),
                         ),
                         child: Row(
                           children: [
@@ -304,20 +420,23 @@ class _ProfilePageState extends State<ProfilePage> {
                       Text(
                         '4.9',
                         style: GoogleFonts.spaceGrotesk(
-                           color: Colors.white,
-                           fontSize: 16,
-                           fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         ' (48)',
-                        style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 16),
+                        style: GoogleFonts.spaceGrotesk(
+                          color: Colors.grey[500],
+                          fontSize: 16,
+                        ),
                       ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 40),
-                  
+
                   // Switch to Provider
                   Container(
                     padding: const EdgeInsets.all(20),
@@ -334,7 +453,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.grey[900],
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.storefront, color: Colors.white, size: 24),
+                          child: const Icon(
+                            Icons.storefront,
+                            color: Colors.white,
+                            size: 24,
+                          ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -371,7 +494,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             if (val) {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const ProviderBottomNav()),
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProviderBottomNav(),
+                                ),
                               ).then((_) {
                                 setState(() => _isProviderMode = false);
                               });
@@ -381,9 +507,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 16),
-                  
+
                   // Switch to Admin
                   Container(
                     padding: const EdgeInsets.all(20),
@@ -400,7 +526,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: Colors.grey[900],
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.admin_panel_settings, color: Colors.white, size: 24),
+                          child: const Icon(
+                            Icons.admin_panel_settings,
+                            color: Colors.white,
+                            size: 24,
+                          ),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -437,7 +567,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             if (val) {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const AdminDashboardPage()),
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const AdminDashboardPage(),
+                                ),
                               ).then((_) {
                                 setState(() => _isAdminMode = false);
                               });
@@ -448,7 +581,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  
+
                   // Menu Items
                   _buildMenuItem(
                     Icons.favorite,
@@ -456,7 +589,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SavedProvidersPage()),
+                        MaterialPageRoute(
+                          builder: (context) => const SavedProvidersPage(),
+                        ),
                       );
                     },
                   ),
@@ -480,7 +615,8 @@ class _ProfilePageState extends State<ProfilePage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const NotificationCenterPage(),
+                              builder: (context) =>
+                                  const NotificationCenterPage(),
                             ),
                           );
                         },
@@ -489,22 +625,29 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   _buildMenuItem(Icons.help_outline, 'Help & Support'),
                   _buildMenuItem(Icons.lock_outline, 'Security'),
-                  
+
                   const SizedBox(height: 40),
-                  
+
                   // Logout
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: OutlinedButton(
                       onPressed: () {
-                         ScaffoldMessenger.of(context).showSnackBar(
-                           const SnackBar(content: Text('Logging out...'), duration: Duration(seconds: 1)),
-                         );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Logging out...'),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
                       },
                       style: OutlinedButton.styleFrom(
-                        side: BorderSide(color: Colors.red.withValues(alpha: 0.5)),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        side: BorderSide(
+                          color: Colors.red.withValues(alpha: 0.5),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
                         backgroundColor: Colors.red.withValues(alpha: 0.05),
                       ),
                       child: Text(
@@ -517,7 +660,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(height: 100), // Bottom nav space
                 ],
               ),
@@ -538,7 +681,10 @@ class _ProfilePageState extends State<ProfilePage> {
           Expanded(
             child: Text(
               text,
-              style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 16),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.grey[400],
+                fontSize: 16,
+              ),
             ),
           ),
         ],
@@ -561,7 +707,13 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildEditableInput(String label, TextEditingController controller, IconData icon, {TextInputType? keyboardType, int maxLines = 1}) {
+  Widget _buildEditableInput(
+    String label,
+    TextEditingController controller,
+    IconData icon, {
+    TextInputType? keyboardType,
+    int maxLines = 1,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: Column(
@@ -579,11 +731,17 @@ class _ProfilePageState extends State<ProfilePage> {
               controller: controller,
               keyboardType: keyboardType,
               maxLines: maxLines,
-              style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 16),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.white,
+                fontSize: 16,
+              ),
               decoration: InputDecoration(
                 prefixIcon: Icon(icon, color: Colors.grey[600], size: 20),
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
             ),
           ),
@@ -592,7 +750,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildMenuItem(IconData icon, String title, {bool hasAlert = false, VoidCallback? onTap}) {
+  Widget _buildMenuItem(
+    IconData icon,
+    String title, {
+    bool hasAlert = false,
+    VoidCallback? onTap,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: GestureDetector(

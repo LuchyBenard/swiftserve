@@ -21,10 +21,8 @@ class ProviderFilterSheet extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => ProviderFilterSheet(
-        initialFilter: currentFilter,
-        onApply: onApply,
-      ),
+      builder: (context) =>
+          ProviderFilterSheet(initialFilter: currentFilter, onApply: onApply),
     );
   }
 
@@ -264,7 +262,9 @@ class _ProviderFilterSheetState extends State<ProviderFilterSheet> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryGreen,
                 foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
               child: Text(
                 'Apply Filters',

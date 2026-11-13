@@ -33,7 +33,9 @@ class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     const neonGreen = Color(0xFF25F46A);
-    const inputBg = Color(0xFF1E1E1E); // Slightly Lighter than pure black for contrast
+    const inputBg = Color(
+      0xFF1E1E1E,
+    ); // Slightly Lighter than pure black for contrast
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -82,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   neonGreen: neonGreen,
                 ),
                 const SizedBox(height: 20),
-                
+
                 _buildLabel('Email Address'),
                 _buildInput(
                   controller: _emailController,
@@ -128,7 +130,9 @@ class _SignUpPageState extends State<SignUpPage> {
                         activeColor: neonGreen,
                         checkColor: Colors.black,
                         side: BorderSide(color: Colors.grey[600]!, width: 2),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                         onChanged: (value) {
                           setState(() {
                             _agreedToTerms = value ?? false;
@@ -141,16 +145,25 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: RichText(
                         text: TextSpan(
                           text: 'I agree to the ',
-                          style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 13),
+                          style: GoogleFonts.spaceGrotesk(
+                            color: Colors.grey[400],
+                            fontSize: 13,
+                          ),
                           children: [
                             TextSpan(
                               text: 'Terms of Service',
-                              style: GoogleFonts.spaceGrotesk(color: neonGreen, fontWeight: FontWeight.bold),
+                              style: GoogleFonts.spaceGrotesk(
+                                color: neonGreen,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                             const TextSpan(text: ' and '),
                             TextSpan(
                               text: 'Privacy Policy',
-                              style: GoogleFonts.spaceGrotesk(color: neonGreen, fontWeight: FontWeight.bold),
+                              style: GoogleFonts.spaceGrotesk(
+                                color: neonGreen,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
@@ -168,54 +181,68 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate() && _agreedToTerms) {
-                         try {
-                           showDialog(
-                             context: context,
-                             barrierDismissible: false,
-                             builder: (context) => const Center(child: CircularProgressIndicator(color: neonGreen)),
-                           );
+                        try {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (context) => const Center(
+                              child: CircularProgressIndicator(
+                                color: neonGreen,
+                              ),
+                            ),
+                          );
 
-                           await AuthService().signUpClient(
-                             name: _nameController.text.trim(),
-                             email: _emailController.text.trim(),
-                             password: _passwordController.text.trim(),
-                             phone: _phoneController.text.trim(),
-                           );
+                          await AuthService().signUpClient(
+                            name: _nameController.text.trim(),
+                            email: _emailController.text.trim(),
+                            password: _passwordController.text.trim(),
+                            phone: _phoneController.text.trim(),
+                          );
 
-                           await AuthService().signOut();
+                          await AuthService().signOut();
 
-                           if (context.mounted) {
-                             Navigator.pop(context); // Close loading dialog
-                             ScaffoldMessenger.of(context).showSnackBar(
-                               const SnackBar(
-                                 content: Text(
-                                   'Account created successfully! Please log in.',
-                                   style: TextStyle(color: Colors.black),
-                                 ),
-                                 backgroundColor: neonGreen,
-                               ),
-                             );
-                             Navigator.pop(context); // Return to WelcomePage (login)
-                           }
-                         } on FirebaseAuthException catch (e) {
-                           if (context.mounted) {
-                             Navigator.pop(context); // Close loading dialog
-                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(content: Text(e.message ?? 'Sign up failed')),
-                             );
-                           }
-                         } catch (e) {
-                           if (context.mounted) {
-                             Navigator.pop(context); // Close loading dialog
-                             ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(content: Text('An unexpected error occurred')),
-                             );
-                           }
-                         }
+                          if (context.mounted) {
+                            Navigator.pop(context); // Close loading dialog
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Account created successfully! Please log in.',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                                backgroundColor: neonGreen,
+                              ),
+                            );
+                            Navigator.pop(
+                              context,
+                            ); // Return to WelcomePage (login)
+                          }
+                        } on FirebaseAuthException catch (e) {
+                          if (context.mounted) {
+                            Navigator.pop(context); // Close loading dialog
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(e.message ?? 'Sign up failed'),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            Navigator.pop(context); // Close loading dialog
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('An unexpected error occurred'),
+                              ),
+                            );
+                          }
+                        }
                       } else if (!_agreedToTerms) {
-                         ScaffoldMessenger.of(context).showSnackBar(
-                           const SnackBar(content: Text('Please agree to the Terms of Service.')),
-                         );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Please agree to the Terms of Service.',
+                            ),
+                          ),
+                        );
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -237,23 +264,29 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
 
                 const SizedBox(height: 24),
-                
+
                 const SizedBox(height: 32),
-                
+
                 // Provider Link
                 Center(
                   child: Column(
                     children: [
                       Text(
                         'Want to offer your services?',
-                        style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 13),
+                        style: GoogleFonts.spaceGrotesk(
+                          color: Colors.grey[500],
+                          fontSize: 13,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const WorkerRegistrationPage()),
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const WorkerRegistrationPage(),
+                            ),
                           );
                         },
                         child: Text(
@@ -271,9 +304,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
 
                 const SizedBox(height: 32),
-                
+
                 // Footer
-                
                 const SizedBox(height: 40),
               ],
             ),
@@ -318,17 +350,19 @@ class _SignUpPageState extends State<SignUpPage> {
         keyboardType: keyboardType,
         style: const TextStyle(color: Colors.white),
         validator: (value) {
-            if (value == null || value.isEmpty) {
-                return 'Please enter data';
-            }
-            return null;
+          if (value == null || value.isEmpty) {
+            return 'Please enter data';
+          }
+          return null;
         },
         decoration: InputDecoration(
           prefixIcon: Icon(icon, color: Colors.grey[500]),
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
-                    _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     color: Colors.grey[500],
                   ),
                   onPressed: () {

@@ -19,7 +19,7 @@ class Step2Schedule extends StatefulWidget {
 
 class _Step2ScheduleState extends State<Step2Schedule> {
   late DateTime _focusedMonth;
-  
+
   @override
   void initState() {
     super.initState();
@@ -59,7 +59,10 @@ class _Step2ScheduleState extends State<Step2Schedule> {
 
   void _moveMonth(int offset) {
     setState(() {
-      _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + offset);
+      _focusedMonth = DateTime(
+        _focusedMonth.year,
+        _focusedMonth.month + offset,
+      );
     });
   }
 
@@ -151,7 +154,10 @@ class _Step2ScheduleState extends State<Step2Schedule> {
             ),
             child: Row(
               children: [
-                Text('\$', style: TextStyle(color: Colors.grey[400], fontSize: 18)),
+                Text(
+                  '\$',
+                  style: TextStyle(color: Colors.grey[400], fontSize: 18),
+                ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: TextField(
@@ -181,14 +187,22 @@ class _Step2ScheduleState extends State<Step2Schedule> {
                   child: OutlinedButton(
                     onPressed: widget.onPrev,
                     style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: Colors.white.withValues(alpha: 0.1)),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      side: BorderSide(
+                        color: Colors.white.withValues(alpha: 0.1),
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       backgroundColor: const Color(0xFF1A1A1A),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.arrow_back, color: Colors.white, size: 18),
+                        const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                         const SizedBox(width: 8),
                         Text(
                           'PREV',
@@ -213,7 +227,9 @@ class _Step2ScheduleState extends State<Step2Schedule> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: neonGreen,
                       foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       elevation: 10,
                       shadowColor: neonGreen.withValues(alpha: 0.5),
                     ),
@@ -222,7 +238,10 @@ class _Step2ScheduleState extends State<Step2Schedule> {
                       children: [
                         Text(
                           'NEXT',
-                          style: GoogleFonts.spaceGrotesk(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: GoogleFonts.spaceGrotesk(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         const Icon(Icons.arrow_forward),
@@ -233,7 +252,7 @@ class _Step2ScheduleState extends State<Step2Schedule> {
               ),
             ],
           ),
-          
+
           const SizedBox(height: 40),
         ],
       ),
@@ -243,7 +262,11 @@ class _Step2ScheduleState extends State<Step2Schedule> {
   Widget _buildSectionTitle(String title, Color color) {
     return Row(
       children: [
-        Container(width: 6, height: 6, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        Container(
+          width: 6,
+          height: 6,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
         const SizedBox(width: 8),
         Text(
           title,
@@ -272,31 +295,45 @@ class _Step2ScheduleState extends State<Step2Schedule> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.chevron_left, color: Colors.grey),
-                onPressed: () => _moveMonth(-1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.chevron_left, color: Colors.grey),
+                    onPressed: () => _moveMonth(-1),
+                  ),
+                  Text(
+                    '${_getMonthName(_focusedMonth.month)} ${_focusedMonth.year}',
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chevron_right, color: Colors.grey),
+                    onPressed: () => _moveMonth(1),
+                  ),
+                ],
               ),
-              Text(
-                '${_getMonthName(_focusedMonth.month)} ${_focusedMonth.year}',
-                style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              IconButton(
-                icon: const Icon(Icons.chevron_right, color: Colors.grey),
-                onPressed: () => _moveMonth(1),
-              ),
-            ],
-          ),
             ],
           ),
           const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: ['S','M','T','W','T','F','S'].map((day) => 
-               SizedBox(width: 30, child: Center(child: Text(day, style: TextStyle(color: Colors.grey[600], fontSize: 12))))
-            ).toList(),
+            children: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+                .map(
+                  (day) => SizedBox(
+                    width: 30,
+                    child: Center(
+                      child: Text(
+                        day,
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      ),
+                    ),
+                  ),
+                )
+                .toList(),
           ),
           const SizedBox(height: 12),
           const SizedBox(height: 12),
@@ -308,14 +345,32 @@ class _Step2ScheduleState extends State<Step2Schedule> {
   }
 
   String _getMonthName(int month) {
-    const names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const names = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
     return names[month - 1];
   }
 
   Widget _buildDaysGrid(Color neonGreen) {
-    final daysInMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1, 0).day;
-    final firstDayOffset = DateTime(_focusedMonth.year, _focusedMonth.month, 1).weekday % 7;
-    
+    final daysInMonth = DateTime(
+      _focusedMonth.year,
+      _focusedMonth.month + 1,
+      0,
+    ).day;
+    final firstDayOffset =
+        DateTime(_focusedMonth.year, _focusedMonth.month, 1).weekday % 7;
+
     List<Widget> rows = [];
     List<Widget> currentRow = [];
 
@@ -326,15 +381,23 @@ class _Step2ScheduleState extends State<Step2Schedule> {
 
     for (int day = 1; day <= daysInMonth; day++) {
       final date = DateTime(_focusedMonth.year, _focusedMonth.month, day);
-      final isSelected = _selectedDate.year == date.year && _selectedDate.month == date.month && _selectedDate.day == date.day;
-      
+      final isSelected =
+          _selectedDate.year == date.year &&
+          _selectedDate.month == date.month &&
+          _selectedDate.day == date.day;
+
       currentRow.add(_buildDay(day.toString(), isSelected, neonGreen, date));
-      
+
       if (currentRow.length == 7) {
-        rows.add(Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: currentRow),
-        ));
+        rows.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: currentRow,
+            ),
+          ),
+        );
         currentRow = [];
       }
     }
@@ -343,10 +406,15 @@ class _Step2ScheduleState extends State<Step2Schedule> {
       while (currentRow.length < 7) {
         currentRow.add(const SizedBox(width: 36, height: 36));
       }
-      rows.add(Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: currentRow),
-      ));
+      rows.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: currentRow,
+          ),
+        ),
+      );
     }
 
     return Column(children: rows);
@@ -361,7 +429,9 @@ class _Step2ScheduleState extends State<Step2Schedule> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: isSelected ? color : Colors.transparent,
-          boxShadow: isSelected ? [BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 8)] : [],
+          boxShadow: isSelected
+              ? [BoxShadow(color: color.withValues(alpha: 0.4), blurRadius: 8)]
+              : [],
         ),
         child: Center(
           child: Text(
@@ -385,8 +455,19 @@ class _Step2ScheduleState extends State<Step2Schedule> {
         decoration: BoxDecoration(
           color: isSelected ? activeColor : const Color(0xFF0A0A0A),
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: isSelected ? activeColor : Colors.white.withValues(alpha: 0.1)),
-          boxShadow: isSelected ? [BoxShadow(color: activeColor.withValues(alpha: 0.3), blurRadius: 10)] : [],
+          border: Border.all(
+            color: isSelected
+                ? activeColor
+                : Colors.white.withValues(alpha: 0.1),
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: activeColor.withValues(alpha: 0.3),
+                    blurRadius: 10,
+                  ),
+                ]
+              : [],
         ),
         child: Text(
           time,
@@ -406,10 +487,23 @@ class _Step2ScheduleState extends State<Step2Schedule> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: isSelected ? activeColor.withValues(alpha: 0.1) : const Color(0xFF0A0A0A),
+          color: isSelected
+              ? activeColor.withValues(alpha: 0.1)
+              : const Color(0xFF0A0A0A),
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: isSelected ? activeColor : Colors.white.withValues(alpha: 0.1)),
-          boxShadow: isSelected ? [BoxShadow(color: activeColor.withValues(alpha: 0.1), blurRadius: 8)] : [],
+          border: Border.all(
+            color: isSelected
+                ? activeColor
+                : Colors.white.withValues(alpha: 0.1),
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: activeColor.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                  ),
+                ]
+              : [],
         ),
         child: Text(
           amount,

@@ -32,7 +32,8 @@ class Conversation {
   });
 
   factory Conversation.fromFirestore(DocumentSnapshot snapshot) {
-    final data = (snapshot.data() as Map<String, dynamic>?) ?? <String, dynamic>{};
+    final data =
+        (snapshot.data() as Map<String, dynamic>?) ?? <String, dynamic>{};
     final lastMessageTime = data['lastMessageTime'] as Timestamp?;
 
     return Conversation(
@@ -44,7 +45,9 @@ class Conversation {
       isUnread: data['isUnread'] as bool? ?? !(data['isRead'] as bool? ?? true),
       participants: List<String>.from(data['participants'] ?? const []),
       participantNames: List<String>.from(data['participantNames'] ?? const []),
-      participantImages: List<String>.from(data['participantImages'] ?? const []),
+      participantImages: List<String>.from(
+        data['participantImages'] ?? const [],
+      ),
       lastMessage: data['lastMessage'] as String? ?? '',
       time: data['time'] as String? ?? _formatTimestamp(lastMessageTime),
       lastMessageTime: lastMessageTime,
@@ -98,7 +101,9 @@ class Conversation {
       isUnread: json['isUnread'] as bool? ?? false,
       participants: List<String>.from(json['participants'] ?? const []),
       participantNames: List<String>.from(json['participantNames'] ?? const []),
-      participantImages: List<String>.from(json['participantImages'] ?? const []),
+      participantImages: List<String>.from(
+        json['participantImages'] ?? const [],
+      ),
       lastMessage: json['lastMessage'] as String? ?? '',
       time: json['time'] as String? ?? '',
       lastMessageTime: _timestampFromJson(json['lastMessageTime']),

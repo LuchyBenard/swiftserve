@@ -5,7 +5,8 @@ class AdminUserManagementPage extends StatefulWidget {
   const AdminUserManagementPage({super.key});
 
   @override
-  State<AdminUserManagementPage> createState() => _AdminUserManagementPageState();
+  State<AdminUserManagementPage> createState() =>
+      _AdminUserManagementPageState();
 }
 
 class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
@@ -20,7 +21,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
       'orders': 12,
       'rating': 4.8,
       'status': 'ACTIVE',
-      'avatar': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBuVtcfzXwBU4z70kX8vVBSyuBdZeWN28CRuY_7YKFfhDvXHOY3bllU7FzAf3k2pLMV08qtGkSyx5AK3-uttf9bjVudAzJLGSqr1uHiKmWHX7oSm2Dwa_ApZ7W290WcagpYgWOKCaJSUYBbeHzRf1L-UpvKCj7yMM2iDSc_B8hQJ4zg0W0-cAHH1T09wJhZdvq9kWvmLsMSeskahVP3WakotihRx1OVHmVMrCkuIlwabEHolx6o4Kp661IjQBpHMfkYlg7uhL72GFO1',
+      'avatar':
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuBuVtcfzXwBU4z70kX8vVBSyuBdZeWN28CRuY_7YKFfhDvXHOY3bllU7FzAf3k2pLMV08qtGkSyx5AK3-uttf9bjVudAzJLGSqr1uHiKmWHX7oSm2Dwa_ApZ7W290WcagpYgWOKCaJSUYBbeHzRf1L-UpvKCj7yMM2iDSc_B8hQJ4zg0W0-cAHH1T09wJhZdvq9kWvmLsMSeskahVP3WakotihRx1OVHmVMrCkuIlwabEHolx6o4Kp661IjQBpHMfkYlg7uhL72GFO1',
     },
     {
       'id': 'CUS-9102',
@@ -29,7 +31,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
       'orders': 0,
       'rating': 0.0,
       'status': 'PENDING',
-      'avatar': 'https://lh3.googleusercontent.com/aida-public/AB6AXuBn4nKIscAIOzX-Y1a_CsBioivy1ikFc3eaO1b_PgEgVToid3c0hBG-9LZ7nQ94sHK6llKVpa8bNZD3vY-LP-VxK9Qo2_S4w3MdOg6qw-mt7hdrW3vIkwlYZfkZ75yLHxIo5pmV-U4rXQkonBAPATOYIRTIJUyxK8WFVeW3uDW5YjI5bu1xgZuyNbtO0r1rUhS_-7a-zfMit5us41uR69R7mnXWK61bEu1poLwrkCyHjKtifCzcJX3TLjLso7q72NIClLBi0pi4HUSB',
+      'avatar':
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuBn4nKIscAIOzX-Y1a_CsBioivy1ikFc3eaO1b_PgEgVToid3c0hBG-9LZ7nQ94sHK6llKVpa8bNZD3vY-LP-VxK9Qo2_S4w3MdOg6qw-mt7hdrW3vIkwlYZfkZ75yLHxIo5pmV-U4rXQkonBAPATOYIRTIJUyxK8WFVeW3uDW5YjI5bu1xgZuyNbtO0r1rUhS_-7a-zfMit5us41uR69R7mnXWK61bEu1poLwrkCyHjKtifCzcJX3TLjLso7q72NIClLBi0pi4HUSB',
     },
     {
       'id': 'CUS-1102',
@@ -38,7 +41,8 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
       'orders': 5,
       'rating': 3.2,
       'status': 'SUSPENDED',
-      'avatar': 'https://lh3.googleusercontent.com/aida-public/AB6AXuDz4bd1OdZnrbYJzN88VunsqUl9YO7g79JE5PUaKbVQ2ukfITwV5tsYAMQUPtrU6CLiVQ-j8Ez-ZRhT1gIwvDz-H2xOlftMBkKqGpzdxyxVFb3u3Pa3u_5VmQlU5i3X_dYr0mcMylrmtUjAwQhD7-TdfgH6zBih9xzAw1PCQ7Vxzdpb2hSv3sFQm0Gk2kOu1-1wiedGfff0tTQ8H-npegj-8wDHr13fxK9z2JGqavWBEMKW0ITYSwvd_td1_p8U-VgH4WlPS-krTWHk',
+      'avatar':
+          'https://lh3.googleusercontent.com/aida-public/AB6AXuDz4bd1OdZnrbYJzN88VunsqUl9YO7g79JE5PUaKbVQ2ukfITwV5tsYAMQUPtrU6CLiVQ-j8Ez-ZRhT1gIwvDz-H2xOlftMBkKqGpzdxyxVFb3u3Pa3u_5VmQlU5i3X_dYr0mcMylrmtUjAwQhD7-TdfgH6zBih9xzAw1PCQ7Vxzdpb2hSv3sFQm0Gk2kOu1-1wiedGfff0tTQ8H-npegj-8wDHr13fxK9z2JGqavWBEMKW0ITYSwvd_td1_p8U-VgH4WlPS-krTWHk',
     },
   ];
 
@@ -57,9 +61,7 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
             child: Column(
               children: [
                 _buildHeader(primaryGreen),
-                Expanded(
-                  child: _buildUserList(primaryGreen, pitchBlack),
-                ),
+                Expanded(child: _buildUserList(primaryGreen, pitchBlack)),
               ],
             ),
           ),
@@ -141,8 +143,15 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
               decoration: InputDecoration(
                 hintText: 'Search users, email, ID...',
                 hintStyle: GoogleFonts.spaceGrotesk(color: Colors.grey[600]),
-                prefixIcon: Icon(Icons.search, color: primary.withValues(alpha: 0.5)),
-                suffixIcon: Icon(Icons.tune, color: primary.withValues(alpha: 0.5), size: 18),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: primary.withValues(alpha: 0.5),
+                ),
+                suffixIcon: Icon(
+                  Icons.tune,
+                  color: primary.withValues(alpha: 0.5),
+                  size: 18,
+                ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(vertical: 14),
               ),
@@ -173,7 +182,12 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
     );
   }
 
-  Widget _buildSegmentButton(String label, bool isActive, Color primary, VoidCallback onTap) {
+  Widget _buildSegmentButton(
+    String label,
+    bool isActive,
+    Color primary,
+    VoidCallback onTap,
+  ) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -183,7 +197,14 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
           decoration: BoxDecoration(
             color: isActive ? primary : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
-            boxShadow: isActive ? [BoxShadow(color: primary.withValues(alpha: 0.4), blurRadius: 10)] : null,
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: primary.withValues(alpha: 0.4),
+                      blurRadius: 10,
+                    ),
+                  ]
+                : null,
           ),
           child: Text(
             label,
@@ -212,10 +233,19 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
               children: [
                 RichText(
                   text: TextSpan(
-                    style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 13),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.grey[400],
+                      fontSize: 13,
+                    ),
                     children: [
                       const TextSpan(text: 'Showing '),
-                      TextSpan(text: '${_customers.length}', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      TextSpan(
+                        text: '${_customers.length}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       const TextSpan(text: ' customers'),
                     ],
                   ),
@@ -239,7 +269,11 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
     );
   }
 
-  Widget _buildUserCard(Map<String, dynamic> user, Color primary, Color pitchBlack) {
+  Widget _buildUserCard(
+    Map<String, dynamic> user,
+    Color primary,
+    Color pitchBlack,
+  ) {
     Color statusColor;
     if (user['status'] == 'ACTIVE') {
       statusColor = primary;
@@ -338,7 +372,11 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
             width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.transparent, primary.withValues(alpha: 0.2), Colors.transparent],
+                colors: [
+                  Colors.transparent,
+                  primary.withValues(alpha: 0.2),
+                  Colors.transparent,
+                ],
               ),
             ),
           ),
@@ -348,7 +386,11 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
             children: [
               Row(
                 children: [
-                  _buildMiniStat(Icons.history, '${user['orders']} Orders', primary),
+                  _buildMiniStat(
+                    Icons.history,
+                    '${user['orders']} Orders',
+                    primary,
+                  ),
                   const SizedBox(width: 16),
                   _buildMiniStat(Icons.star, '${user['rating']}', primary),
                 ],
@@ -356,14 +398,21 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
               GestureDetector(
                 onTap: () => setState(() => _selectedUserId = user['id']),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(color: primary.withValues(alpha: 0.4)),
                   ),
                   child: Text(
                     user['status'] == 'PENDING' ? 'Verify' : 'Manage',
-                    style: GoogleFonts.spaceGrotesk(color: primary, fontSize: 13, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: primary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
@@ -381,7 +430,10 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
         const SizedBox(width: 4),
         Text(
           label,
-          style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 12),
+          style: GoogleFonts.spaceGrotesk(
+            color: Colors.grey[400],
+            fontSize: 12,
+          ),
         ),
       ],
     );
@@ -406,15 +458,25 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   decoration: BoxDecoration(
                     color: const Color(0xFF102216),
-                    borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(32),
+                    ),
                     border: Border.all(color: primary.withValues(alpha: 0.2)),
-                    boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.8), blurRadius: 40)],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.8),
+                        blurRadius: 40,
+                      ),
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 8,
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -428,21 +490,45 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
                               ),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.close, color: Colors.grey, size: 20),
-                              onPressed: () => setState(() => _selectedUserId = null),
+                              icon: const Icon(
+                                Icons.close,
+                                color: Colors.grey,
+                                size: 20,
+                              ),
+                              onPressed: () =>
+                                  setState(() => _selectedUserId = null),
                             ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 8),
-                      _buildActionItem(Icons.visibility_outlined, 'View Full Profile', primary),
-                      _buildActionItem(Icons.receipt_long_outlined, 'Transaction History', primary),
-                      _buildActionItem(Icons.verified_user_outlined, 'Verify Documents', primary),
+                      _buildActionItem(
+                        Icons.visibility_outlined,
+                        'View Full Profile',
+                        primary,
+                      ),
+                      _buildActionItem(
+                        Icons.receipt_long_outlined,
+                        'Transaction History',
+                        primary,
+                      ),
+                      _buildActionItem(
+                        Icons.verified_user_outlined,
+                        'Verify Documents',
+                        primary,
+                      ),
                       const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 8,
+                        ),
                         child: Divider(color: Colors.white12),
                       ),
-                      _buildActionItem(Icons.block, 'Suspend Account', Colors.redAccent),
+                      _buildActionItem(
+                        Icons.block,
+                        'Suspend Account',
+                        Colors.redAccent,
+                      ),
                     ],
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/provider.dart';
 import '../models/provider_filter.dart';
 import '../services/favorites_service.dart';
+import '../services/provider_service.dart';
 import '../widgets/provider_filter_sheet.dart';
 import 'provider_details_page.dart';
 
@@ -20,12 +21,21 @@ class _ProviderListPageState extends State<ProviderListPage> {
   ProviderFilter _currentFilter = const ProviderFilter();
   final TextEditingController _searchController = TextEditingController();
   final FavoritesService _favoritesService = FavoritesService();
+  final ProviderService _providerService = ProviderService();
 
   @override
   void initState() {
     super.initState();
     _favoritesService.init();
-    _allProviders = _getMockProviders(widget.category);
+    // Show the curated seed immediately, then replace with Firestore data.
+    _allProviders = _providerService.seedForCategory(widget.category);
+    _loadProviders();
+  }
+
+  Future<void> _loadProviders() async {
+    final providers = await _providerService.fetchProviders(widget.category);
+    if (!mounted) return;
+    setState(() => _allProviders = providers);
   }
 
   @override
@@ -77,29 +87,48 @@ class _ProviderListPageState extends State<ProviderListPage> {
                           ),
                           child: TextField(
                             controller: _searchController,
-                            style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 14),
+                            style: GoogleFonts.spaceGrotesk(
+                              color: Colors.white,
+                              fontSize: 14,
+                            ),
                             onChanged: (val) {
                               setState(() {
-                                _currentFilter = _currentFilter.copyWith(searchQuery: val);
+                                _currentFilter = _currentFilter.copyWith(
+                                  searchQuery: val,
+                                );
                               });
                             },
                             decoration: InputDecoration(
                               hintText: 'Search by name or service...',
-                              hintStyle: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 13),
-                              prefixIcon: const Icon(Icons.search, color: Colors.white54, size: 20),
+                              hintStyle: GoogleFonts.spaceGrotesk(
+                                color: Colors.grey[600],
+                                fontSize: 13,
+                              ),
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: Colors.white54,
+                                size: 20,
+                              ),
                               suffixIcon: _searchController.text.isNotEmpty
                                   ? IconButton(
-                                      icon: const Icon(Icons.clear, color: Colors.white54, size: 16),
+                                      icon: const Icon(
+                                        Icons.clear,
+                                        color: Colors.white54,
+                                        size: 16,
+                                      ),
                                       onPressed: () {
                                         _searchController.clear();
                                         setState(() {
-                                          _currentFilter = _currentFilter.copyWith(searchQuery: '');
+                                          _currentFilter = _currentFilter
+                                              .copyWith(searchQuery: '');
                                         });
                                       },
                                     )
                                   : null,
                               border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                              contentPadding: const EdgeInsets.symmetric(
+                                vertical: 12,
+                              ),
                             ),
                           ),
                         ),
@@ -126,15 +155,21 @@ class _ProviderListPageState extends State<ProviderListPage> {
                               height: 48,
                               width: 48,
                               decoration: BoxDecoration(
-                                color: _currentFilter.activeCount > 0 ? neonGreen : const Color(0xFF141414),
+                                color: _currentFilter.activeCount > 0
+                                    ? neonGreen
+                                    : const Color(0xFF141414),
                                 borderRadius: BorderRadius.circular(16),
                                 border: Border.all(
-                                  color: _currentFilter.activeCount > 0 ? neonGreen : Colors.white12,
+                                  color: _currentFilter.activeCount > 0
+                                      ? neonGreen
+                                      : Colors.white12,
                                 ),
                               ),
                               child: Icon(
                                 Icons.tune,
-                                color: _currentFilter.activeCount > 0 ? Colors.black : Colors.white,
+                                color: _currentFilter.activeCount > 0
+                                    ? Colors.black
+                                    : Colors.white,
                                 size: 22,
                               ),
                             ),
@@ -166,7 +201,10 @@ class _ProviderListPageState extends State<ProviderListPage> {
                 ),
                 const SizedBox(height: 12),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 4,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -207,9 +245,13 @@ class _ProviderListPageState extends State<ProviderListPage> {
                       : ListView.separated(
                           padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
                           itemCount: filteredProviders.length,
-                          separatorBuilder: (c, i) => const SizedBox(height: 20),
-                          itemBuilder: (context, index) =>
-                              _buildProviderCard(context, filteredProviders[index], neonGreen),
+                          separatorBuilder: (c, i) =>
+                              const SizedBox(height: 20),
+                          itemBuilder: (context, index) => _buildProviderCard(
+                            context,
+                            filteredProviders[index],
+                            neonGreen,
+                          ),
                         ),
                 ),
               ],
@@ -241,7 +283,10 @@ class _ProviderListPageState extends State<ProviderListPage> {
             Text(
               'Try adjusting your search criteria, price range, or distance limits.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 13),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.grey[500],
+                fontSize: 13,
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -252,11 +297,16 @@ class _ProviderListPageState extends State<ProviderListPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: neonGreen,
                 foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: Text(
                 'Reset All Filters',
-                style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold, fontSize: 13),
+                style: GoogleFonts.spaceGrotesk(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 13,
+                ),
               ),
             ),
           ],
@@ -279,7 +329,11 @@ class _ProviderListPageState extends State<ProviderListPage> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
-              child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
           ),
           const SizedBox(width: 20),
@@ -310,12 +364,18 @@ class _ProviderListPageState extends State<ProviderListPage> {
     );
   }
 
-  Widget _buildProviderCard(BuildContext context, Provider provider, Color neonGreen) {
+  Widget _buildProviderCard(
+    BuildContext context,
+    Provider provider,
+    Color neonGreen,
+  ) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProviderDetailsPage(provider: provider)),
+          MaterialPageRoute(
+            builder: (context) => ProviderDetailsPage(provider: provider),
+          ),
         );
       },
       child: Container(
@@ -334,23 +394,33 @@ class _ProviderListPageState extends State<ProviderListPage> {
                   height: 160,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  errorBuilder: (c, e, s) => Container(height: 160, color: Colors.grey[900]),
+                  errorBuilder: (c, e, s) =>
+                      Container(height: 160, color: Colors.grey[900]),
                 ),
                 // Rating Badge
                 Positioned(
                   top: 16,
                   right: 16,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.6),
                       borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                      border: Border.all(
+                        color: Colors.white.withValues(alpha: 0.1),
+                      ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.star, color: Color(0xFF25F46A), size: 12),
+                        const Icon(
+                          Icons.star,
+                          color: Color(0xFF25F46A),
+                          size: 12,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           provider.rating.toString(),
@@ -415,7 +485,10 @@ class _ProviderListPageState extends State<ProviderListPage> {
                         const SizedBox(height: 4),
                         Text(
                           provider.role,
-                          style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 12),
+                          style: GoogleFonts.spaceGrotesk(
+                            color: Colors.grey[400],
+                            fontSize: 12,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Row(
@@ -424,23 +497,40 @@ class _ProviderListPageState extends State<ProviderListPage> {
                             const SizedBox(width: 4),
                             Text(
                               provider.distance,
-                              style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 10),
+                              style: GoogleFonts.spaceGrotesk(
+                                color: Colors.grey[500],
+                                fontSize: 10,
+                              ),
                             ),
                             const SizedBox(width: 8),
                             // Availability status
                             if (!provider.isAvailable) ...[
-                              Icon(Icons.timer_off, color: Colors.red, size: 12),
+                              Icon(
+                                Icons.timer_off,
+                                color: Colors.red,
+                                size: 12,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 'Unavailable',
-                                style: GoogleFonts.spaceGrotesk(color: Colors.red, fontSize: 9),
+                                style: GoogleFonts.spaceGrotesk(
+                                  color: Colors.red,
+                                  fontSize: 9,
+                                ),
                               ),
                             ] else ...[
-                              Icon(Icons.access_time, color: Colors.green, size: 12),
+                              Icon(
+                                Icons.access_time,
+                                color: Colors.green,
+                                size: 12,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 'Available',
-                                style: GoogleFonts.spaceGrotesk(color: Colors.green, fontSize: 9),
+                                style: GoogleFonts.spaceGrotesk(
+                                  color: Colors.green,
+                                  fontSize: 9,
+                                ),
                               ),
                             ],
                           ],
@@ -476,112 +566,5 @@ class _ProviderListPageState extends State<ProviderListPage> {
         ),
       ),
     );
-  }
-
-  List<Provider> _getMockProviders(String category) {
-    if (category == 'Stylist') {
-      return [
-        Provider(
-          id: 's1',
-          name: 'Chinelo A.',
-          role: 'Hair Stylist & Braider',
-          rating: 4.8,
-          reviewsCount: 56,
-          distance: '0.8 mi',
-          priceStart: 35,
-          imageUrl:
-              'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?auto=format&fit=crop&w=400&q=80',
-          about: 'Specialist in authentic African braids and modern hair styles in Enugu.',
-          services: ['Box Braids', 'Knotless', 'Crotchet', 'Wash & Dry'],
-        ),
-        Provider(
-          id: 's2',
-          name: 'Ngozi Boutique',
-          role: 'Professional Makeup Artist',
-          rating: 4.9,
-          reviewsCount: 120,
-          distance: '1.5 mi',
-          priceStart: 50,
-          imageUrl:
-              'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=400&q=80',
-          about: 'Bridal makeup and special occasion looks. Based in Independence Layout.',
-          services: ['Bridal Makeup', 'Photo Session', 'Gele Tying'],
-        ),
-      ];
-    }
-
-    if (category == 'Phone Tech' || category == 'Tech') {
-      return [
-        Provider(
-          id: 't1',
-          name: 'TechFix Mobile',
-          role: 'Technician',
-          rating: 5.0,
-          reviewsCount: 85,
-          distance: '1.2 mi',
-          priceStart: 85,
-          imageUrl:
-              'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
-          about: 'Certified mobile technician. Specializing in iPhone & Android repairs.',
-          services: ['Screen Repair', 'Battery Replacement', 'Diagnostic'],
-        ),
-        Provider(
-          id: 't2',
-          name: 'Kene Micro Electronics',
-          role: 'Hardware Specialist',
-          rating: 4.6,
-          reviewsCount: 34,
-          distance: '2.5 mi',
-          priceStart: 45,
-          imageUrl:
-              'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=400&q=80',
-          about: 'Board-level repairs, port soldering, and laptop diagnostics.',
-          services: ['Motherboard Repair', 'Charging Port', 'Cleaning'],
-        ),
-      ];
-    }
-
-    // Default mock data for other categories
-    return [
-      Provider(
-        id: 'p1',
-        name: 'Emeka Fix',
-        role: 'Expert $category',
-        rating: 5.0,
-        reviewsCount: 42,
-        distance: '0.9 mi',
-        priceStart: 25,
-        imageUrl:
-            'https://images.unsplash.com/photo-1540560914876-a69739489830?auto=format&fit=crop&w=400&q=80',
-        about: 'Trusted $category in the heart of Enugu.',
-        services: ['Primary Service', 'Secondary Service', 'Diagnostic'],
-      ),
-      Provider(
-        id: 'p2',
-        name: 'John D.',
-        role: 'Master Barber',
-        rating: 4.9,
-        reviewsCount: 128,
-        distance: '0.5 mi',
-        priceStart: 40,
-        imageUrl:
-            'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
-        about: 'Premium haircutting and grooming services.',
-        services: ['Haircut', 'Beard Trim', 'Hot Towel'],
-      ),
-      Provider(
-        id: 'p3',
-        name: 'Fix-It Mike',
-        role: 'Master Plumber',
-        rating: 4.7,
-        reviewsCount: 45,
-        distance: '1.8 mi',
-        priceStart: 50,
-        imageUrl:
-            'https://images.pexels.com/photos/327072/pexels-photo-327072.jpeg?auto=compress&cs=tinysrgb&w=400',
-        about: 'Emergency plumbing repairs.',
-        services: ['Leak Repair', 'Installation', 'Drain Cleaning'],
-      ),
-    ];
   }
 }

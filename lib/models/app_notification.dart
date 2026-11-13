@@ -1,9 +1,4 @@
-enum NotificationType {
-  booking,
-  payment,
-  promo,
-  alert,
-}
+enum NotificationType { booking, payment, promo, alert }
 
 class AppNotification {
   final String id;
@@ -66,7 +61,9 @@ class AppNotification {
       id: json['id'] as String,
       title: json['title'] as String,
       body: json['body'] as String,
-      timestamp: DateTime.tryParse(json['timestamp'] as String? ?? '') ?? DateTime.now(),
+      timestamp:
+          DateTime.tryParse(json['timestamp'] as String? ?? '') ??
+          DateTime.now(),
       type: NotificationType.values.firstWhere(
         (t) => t.name == json['type'],
         orElse: () => NotificationType.alert,
@@ -116,11 +113,11 @@ class NotificationSettings {
   }
 
   Map<String, dynamic> toJson() => {
-        'pushEnabled': pushEnabled,
-        'bookingAlerts': bookingAlerts,
-        'promoAlerts': promoAlerts,
-        'soundEnabled': soundEnabled,
-      };
+    'pushEnabled': pushEnabled,
+    'bookingAlerts': bookingAlerts,
+    'promoAlerts': promoAlerts,
+    'soundEnabled': soundEnabled,
+  };
 
   factory NotificationSettings.fromJson(Map<String, dynamic> json) {
     return NotificationSettings(

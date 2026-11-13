@@ -15,7 +15,8 @@ class JobTrackingPage extends StatefulWidget {
     super.key,
     this.providerName = 'Marcus Vane',
     this.serviceType = 'Master Barber',
-    this.providerImageUrl = 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2rC0jTUAzlbWZb9L6KQ87L1pOOJM3JGf2QQ5U9yc3GxyHKieh_lzQ2QwbRBLHFq86YShsjQqioBqk1WO0mn0FsfGMzJtfc7mTd5BIiid_rfQ6Vm2lqFkSYCHvfNjP_sMRBLptPVdg2tSRJ5hLdf1zUzXLb4-2OaF5Q_KsGq58Dk73VnUqWPFbBTumHh8J7JevvFKPnrtDuP0m4NaEk-9ITeRB1wrx39AbwC-8vhcy0KoLxqdbU9pGWneDYeXOkcjBaRc5AYYmRmKa',
+    this.providerImageUrl =
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuC2rC0jTUAzlbWZb9L6KQ87L1pOOJM3JGf2QQ5U9yc3GxyHKieh_lzQ2QwbRBLHFq86YShsjQqioBqk1WO0mn0FsfGMzJtfc7mTd5BIiid_rfQ6Vm2lqFkSYCHvfNjP_sMRBLptPVdg2tSRJ5hLdf1zUzXLb4-2OaF5Q_KsGq58Dk73VnUqWPFbBTumHh8J7JevvFKPnrtDuP0m4NaEk-9ITeRB1wrx39AbwC-8vhcy0KoLxqdbU9pGWneDYeXOkcjBaRc5AYYmRmKa',
   });
 
   @override
@@ -127,7 +128,11 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
-              child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+              child: const Icon(
+                Icons.arrow_back_ios_new,
+                color: Colors.white,
+                size: 18,
+              ),
             ),
           ),
           Column(
@@ -175,11 +180,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
       child: Stack(
         children: [
           // Simplified Map Background Grid/Lines
-          Positioned.fill(
-            child: CustomPaint(
-              painter: MapPainter(),
-            ),
-          ),
+          Positioned.fill(child: CustomPaint(painter: MapPainter())),
 
           // Provider Marker (Moving)
           Positioned(
@@ -199,41 +200,59 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
             left: 90,
             child: Column(
               children: [
-                 Container(
-                    width: 44,
-                    height: 44,
-                    padding: const EdgeInsets.all(2),
-                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                    child: const CircleAvatar(
-                      backgroundImage: NetworkImage('https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b'),
+                Container(
+                  width: 44,
+                  height: 44,
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: const CircleAvatar(
+                    backgroundImage: NetworkImage(
+                      'https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b',
                     ),
-                 ),
-                 const SizedBox(height: 8),
-                 Container(
-                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                   decoration: BoxDecoration(
-                     color: Colors.black.withValues(alpha: 0.6),
-                     borderRadius: BorderRadius.circular(4),
-                     border: Border.all(color: Colors.white10),
-                   ),
-                   child: Text('YOU', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold)),
-                 )
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.6),
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: Colors.white10),
+                  ),
+                  child: Text(
+                    'YOU',
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
 
           // Dashed Path line
           Positioned.fill(
-             child: CustomPaint(
-               painter: DashPathPainter(color: neonGreen),
-             ),
+            child: CustomPaint(painter: DashPathPainter(color: neonGreen)),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMarker({required IconData icon, required String label, required Color color, bool isGlowing = false}) {
+  Widget _buildMarker({
+    required IconData icon,
+    required String label,
+    required Color color,
+    bool isGlowing = false,
+  }) {
     return Column(
       children: [
         Container(
@@ -241,9 +260,15 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
-            boxShadow: isGlowing ? [
-              BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 15, spreadRadius: 2),
-            ] : null,
+            boxShadow: isGlowing
+                ? [
+                    BoxShadow(
+                      color: color.withValues(alpha: 0.5),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                    ),
+                  ]
+                : null,
           ),
           child: Icon(icon, color: Colors.black, size: 20),
         ),
@@ -254,8 +279,15 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
             color: color,
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Text(label, style: GoogleFonts.spaceGrotesk(color: Colors.black, fontSize: 8, fontWeight: FontWeight.bold)),
-        )
+          child: Text(
+            label,
+            style: GoogleFonts.spaceGrotesk(
+              color: Colors.black,
+              fontSize: 8,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -277,7 +309,10 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               height: 50,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: neonGreen.withValues(alpha: 0.3), width: 2),
+                border: Border.all(
+                  color: neonGreen.withValues(alpha: 0.3),
+                  width: 2,
+                ),
                 image: DecorationImage(
                   image: NetworkImage(widget.providerImageUrl),
                   fit: BoxFit.cover,
@@ -291,13 +326,20 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
                 children: [
                   Text(
                     widget.providerName,
-                    style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                   Row(
                     children: [
                       Icon(Icons.star, color: neonGreen, size: 14),
                       const SizedBox(width: 4),
-                      Text('4.9 • ${widget.serviceType}', style: TextStyle(color: Colors.grey[400], fontSize: 12)),
+                      Text(
+                        '4.9 • ${widget.serviceType}',
+                        style: TextStyle(color: Colors.grey[400], fontSize: 12),
+                      ),
                     ],
                   ),
                 ],
@@ -307,22 +349,33 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               children: [
                 GestureDetector(
                   onTap: _makeCall,
-                  child: _buildActionIcon(Icons.call, Colors.white.withValues(alpha: 0.1)),
+                  child: _buildActionIcon(
+                    Icons.call,
+                    Colors.white.withValues(alpha: 0.1),
+                  ),
                 ),
                 const SizedBox(width: 12),
                 GestureDetector(
                   onTap: _goToChat,
-                  child: _buildActionIcon(Icons.chat_bubble, neonGreen.withValues(alpha: 0.2), iconColor: neonGreen),
+                  child: _buildActionIcon(
+                    Icons.chat_bubble,
+                    neonGreen.withValues(alpha: 0.2),
+                    iconColor: neonGreen,
+                  ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildActionIcon(IconData icon, Color bg, {Color iconColor = Colors.white}) {
+  Widget _buildActionIcon(
+    IconData icon,
+    Color bg, {
+    Color iconColor = Colors.white,
+  }) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -348,60 +401,112 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-             Row(
-               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 Text('Service Status', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
-                 Text('EST. 8 MINS', style: GoogleFonts.spaceGrotesk(color: neonGreen.withValues(alpha: 0.6), fontWeight: FontWeight.bold, fontSize: 10, letterSpacing: 1)),
-               ],
-             ),
-             const SizedBox(height: 32),
-             _buildStatusItem('Job Accepted', 'Provider confirmed your booking', true, true, neonGreen),
-             _buildStatusItem('Provider Arriving', '${widget.providerName.split(' ')[0]} is currently 1.2 miles away', true, false, neonGreen, isActive: true),
-             _buildStatusItem('In Progress', 'Service starts upon arrival', false, false, neonGreen),
-             _buildStatusItem('Completed', 'Review your service experience', false, false, neonGreen, isLast: true),
-             const SizedBox(height: 16),
-             GestureDetector(
-               onTap: () {
-                 Navigator.push(
-                   context,
-                   MaterialPageRoute(
-                     builder: (context) => RateProviderPage(
-                       providerName: widget.providerName,
-                       providerRole: widget.serviceType,
-                       providerImageUrl: widget.providerImageUrl,
-                     ),
-                   ),
-                 );
-               },
-               child: Container(
-                 width: double.infinity,
-                 padding: const EdgeInsets.symmetric(vertical: 16),
-                 decoration: BoxDecoration(
-                   color: neonGreen,
-                   borderRadius: BorderRadius.circular(16),
-                   boxShadow: [
-                     BoxShadow(color: neonGreen.withValues(alpha: 0.3), blurRadius: 10),
-                   ],
-                 ),
-                 child: Center(
-                   child: Text(
-                     'Rate Provider',
-                     style: GoogleFonts.spaceGrotesk(
-                       color: Colors.black,
-                       fontWeight: FontWeight.bold,
-                     ),
-                   ),
-                 ),
-               ),
-             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Service Status',
+                  style: GoogleFonts.spaceGrotesk(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                Text(
+                  'EST. 8 MINS',
+                  style: GoogleFonts.spaceGrotesk(
+                    color: neonGreen.withValues(alpha: 0.6),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10,
+                    letterSpacing: 1,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            _buildStatusItem(
+              'Job Accepted',
+              'Provider confirmed your booking',
+              true,
+              true,
+              neonGreen,
+            ),
+            _buildStatusItem(
+              'Provider Arriving',
+              '${widget.providerName.split(' ')[0]} is currently 1.2 miles away',
+              true,
+              false,
+              neonGreen,
+              isActive: true,
+            ),
+            _buildStatusItem(
+              'In Progress',
+              'Service starts upon arrival',
+              false,
+              false,
+              neonGreen,
+            ),
+            _buildStatusItem(
+              'Completed',
+              'Review your service experience',
+              false,
+              false,
+              neonGreen,
+              isLast: true,
+            ),
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RateProviderPage(
+                      providerName: widget.providerName,
+                      providerRole: widget.serviceType,
+                      providerImageUrl: widget.providerImageUrl,
+                    ),
+                  ),
+                );
+              },
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: neonGreen,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: neonGreen.withValues(alpha: 0.3),
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    'Rate Provider',
+                    style: GoogleFonts.spaceGrotesk(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatusItem(String title, String desc, bool isDone, bool hasNextLine, Color neonGreen, {bool isActive = false, bool isLast = false}) {
+  Widget _buildStatusItem(
+    String title,
+    String desc,
+    bool isDone,
+    bool hasNextLine,
+    Color neonGreen, {
+    bool isActive = false,
+    bool isLast = false,
+  }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -414,14 +519,21 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
                 color: isDone ? neonGreen : Colors.white.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.black, width: 2),
-                boxShadow: isDone ? [BoxShadow(color: neonGreen.withValues(alpha: 0.5), blurRadius: 10)] : null,
+                boxShadow: isDone
+                    ? [
+                        BoxShadow(
+                          color: neonGreen.withValues(alpha: 0.5),
+                          blurRadius: 10,
+                        ),
+                      ]
+                    : null,
               ),
             ),
             if (!isLast)
               Container(
-                 width: 2,
-                 height: 40,
-                 color: isDone ? neonGreen : Colors.white.withValues(alpha: 0.1),
+                width: 2,
+                height: 40,
+                color: isDone ? neonGreen : Colors.white.withValues(alpha: 0.1),
               ),
           ],
         ),
@@ -433,7 +545,9 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               Text(
                 title,
                 style: GoogleFonts.spaceGrotesk(
-                  color: isActive ? neonGreen : (isDone ? Colors.white : Colors.grey[600]),
+                  color: isActive
+                      ? neonGreen
+                      : (isDone ? Colors.white : Colors.grey[600]),
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
@@ -449,7 +563,7 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
               const SizedBox(height: 24),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -465,7 +579,13 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
             color: const Color(0xFF0A0A0A).withValues(alpha: 0.9),
             borderRadius: BorderRadius.circular(40),
             border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.5), blurRadius: 20, offset: const Offset(0, 10))],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.5),
+                blurRadius: 20,
+                offset: const Offset(0, 10),
+              ),
+            ],
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(40),
@@ -477,8 +597,18 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
                   _buildNavItem(Icons.home, 'Home', false, Colors.grey),
                   _buildNavItem(Icons.history, 'History', true, neonGreen),
                   const SizedBox(width: 70), // Space for bolt button
-                  _buildNavItem(Icons.chat_bubble_outline, 'Chat', false, Colors.grey),
-                  _buildNavItem(Icons.person_outline, 'Profile', false, Colors.grey),
+                  _buildNavItem(
+                    Icons.chat_bubble_outline,
+                    'Chat',
+                    false,
+                    Colors.grey,
+                  ),
+                  _buildNavItem(
+                    Icons.person_outline,
+                    'Profile',
+                    false,
+                    Colors.grey,
+                  ),
                 ],
               ),
             ),
@@ -488,13 +618,25 @@ class _JobTrackingPageState extends State<JobTrackingPage> {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, bool isActive, Color color) {
+  Widget _buildNavItem(
+    IconData icon,
+    String label,
+    bool isActive,
+    Color color,
+  ) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(icon, color: color, size: 24),
         const SizedBox(height: 2),
-        Text(label, style: GoogleFonts.spaceGrotesk(color: color, fontSize: 10, fontWeight: FontWeight.w500)),
+        Text(
+          label,
+          style: GoogleFonts.spaceGrotesk(
+            color: color,
+            fontSize: 10,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ],
     );
   }
@@ -506,12 +648,13 @@ class MapPainter extends CustomPainter {
     final paint = Paint()
       ..color = Colors.white.withValues(alpha: 0.05)
       ..strokeWidth = 2;
-    
+
     // Draw some random map lines
     canvas.drawLine(const Offset(40, 100), const Offset(200, 40), paint);
     canvas.drawLine(const Offset(0, 200), const Offset(300, 220), paint);
     canvas.drawLine(const Offset(250, 0), const Offset(280, 320), paint);
   }
+
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
@@ -531,9 +674,9 @@ class DashPathPainter extends CustomPainter {
     final path = Path()
       ..moveTo(size.width * 0.8, size.height * 0.2)
       ..quadraticBezierTo(
-        size.width * 0.5, 
-        size.height * 0.4, 
-        size.width * 0.3, 
+        size.width * 0.5,
+        size.height * 0.4,
+        size.width * 0.3,
         size.height * 0.7,
       );
 
@@ -549,6 +692,7 @@ class DashPathPainter extends CustomPainter {
       }
     }
   }
+
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

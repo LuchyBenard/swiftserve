@@ -1,0 +1,62 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function isImageOrDocument() {
+      return request.resource.contentType.matches('image/.*') ||
+        request.resource.contentType == 'application/pdf';
+    }
+
+    function underSizeLimit(megabytes) {
+      return request.resource.size < megabytes * 1024 * 1024;
+    }
+
+    // Avatars and provider verification documents: users own their folder.
+    match /users/{userId}/{allPaths=**} {
+      allow read: if signedIn();
+      allow write: if signedIn() &&
+        request.auth.uid == userId &&
+        isImageOrDocument() &&
+        underSizeLimit(10);
+    }
+
+    match /verification/{userId}/{allPaths=**} {
+      allow read: if signedIn() &&
+        (request.auth.uid == userId || isAdmin());
+      allow write: if signedIn() &&
+        request.auth.uid == userId &&
+        isImageOrDocument() &&
+        underSizeLimit(10);
+    }
+
+    // Chat attachments: any signed-in participant may read/write.
+    match /chat/{conversationId}/{allPaths=**} {
+      allow read: if signedIn();
+      allow write: if signedIn() &&
+        isImageOrDocument() &&
+        underSizeLimit(15);
+    }
+
+    // Portfolio images.
+    match /providers/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if signedIn() &&
+        request.auth.uid == userId &&
+        isImageOrDocument() &&
+        underSizeLimit(10);
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

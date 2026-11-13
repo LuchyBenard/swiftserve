@@ -105,7 +105,11 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+            size: 20,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -120,7 +124,9 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
       body: ValueListenableBuilder<Set<String>>(
         valueListenable: _favoritesService.favoritesNotifier,
         builder: (context, favoriteIds, _) {
-          final savedList = _providerPool.where((p) => favoriteIds.contains(p.id)).toList();
+          final savedList = _providerPool
+              .where((p) => favoriteIds.contains(p.id))
+              .toList();
 
           if (savedList.isEmpty) {
             return _buildEmptyState(primaryGreen);
@@ -154,7 +160,11 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white10),
               ),
-              child: const Icon(Icons.favorite_border, color: Colors.white38, size: 48),
+              child: const Icon(
+                Icons.favorite_border,
+                color: Colors.white38,
+                size: 48,
+              ),
             ),
             const SizedBox(height: 24),
             Text(
@@ -169,7 +179,10 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
             Text(
               'Tap the heart icon on any provider profile to easily find and book them later.',
               textAlign: TextAlign.center,
-              style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 14),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.grey[500],
+                fontSize: 14,
+              ),
             ),
             const SizedBox(height: 28),
             ElevatedButton(
@@ -177,12 +190,20 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: primaryGreen,
                 foregroundColor: Colors.black,
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 14,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
               child: Text(
                 'Explore Providers',
-                style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold, fontSize: 14),
+                style: GoogleFonts.spaceGrotesk(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
             ),
           ],
@@ -196,7 +217,9 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ProviderDetailsPage(provider: provider)),
+          MaterialPageRoute(
+            builder: (context) => ProviderDetailsPage(provider: provider),
+          ),
         );
       },
       child: Container(
@@ -219,7 +242,11 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                   errorBuilder: (_, _, _) => Container(
                     height: 140,
                     color: Colors.grey[900],
-                    child: const Icon(Icons.person, color: Colors.white38, size: 48),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.white38,
+                      size: 48,
+                    ),
                   ),
                 ),
                 Positioned(
@@ -236,7 +263,11 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.white12),
                       ),
-                      child: const Icon(Icons.favorite, color: Colors.redAccent, size: 18),
+                      child: const Icon(
+                        Icons.favorite,
+                        color: Colors.redAccent,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ),
@@ -244,7 +275,10 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                   bottom: 12,
                   left: 12,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.black87,
                       borderRadius: BorderRadius.circular(12),
@@ -253,7 +287,11 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Icon(Icons.star, color: Color(0xFF25F46A), size: 14),
+                        const Icon(
+                          Icons.star,
+                          color: Color(0xFF25F46A),
+                          size: 14,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           provider.rating.toString(),
@@ -265,7 +303,10 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                         ),
                         Text(
                           ' (${provider.reviewsCount})',
-                          style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 11),
+                          style: GoogleFonts.spaceGrotesk(
+                            color: Colors.grey[400],
+                            fontSize: 11,
+                          ),
                         ),
                       ],
                     ),
@@ -292,16 +333,26 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                         const SizedBox(height: 4),
                         Text(
                           provider.role,
-                          style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 13),
+                          style: GoogleFonts.spaceGrotesk(
+                            color: Colors.grey[400],
+                            fontSize: 13,
+                          ),
                         ),
                         const SizedBox(height: 6),
                         Row(
                           children: [
-                            Icon(Icons.location_on, color: primaryGreen, size: 14),
+                            Icon(
+                              Icons.location_on,
+                              color: primaryGreen,
+                              size: 14,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               provider.distance,
-                              style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 12),
+                              style: GoogleFonts.spaceGrotesk(
+                                color: Colors.grey[500],
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -313,7 +364,10 @@ class _SavedProvidersPageState extends State<SavedProvidersPage> {
                     children: [
                       Text(
                         'Starts at',
-                        style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 10),
+                        style: GoogleFonts.spaceGrotesk(
+                          color: Colors.grey[500],
+                          fontSize: 10,
+                        ),
                       ),
                       Text(
                         '\$${provider.priceStart.toInt()}',

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Provider {
   final String id;
   final String name;
@@ -11,7 +13,8 @@ class Provider {
   final List<String> services;
   final bool isVerified;
   final bool isAvailable;
-  final Map<String, bool> availability; // e.g., {"monday": true, "tuesday": false}
+  final Map<String, bool>
+  availability; // e.g., {"monday": true, "tuesday": false}
   final DateTime? lastSeen;
   final String? specialty;
 
@@ -32,6 +35,61 @@ class Provider {
     this.lastSeen,
     this.specialty,
   });
+
+  factory Provider.fromFirestore(DocumentSnapshot snapshot) {
+    final data =
+        (snapshot.data() as Map<String, dynamic>?) ?? <String, dynamic>{};
+    final rawAvailability = data['availability'];
+    final availability = <String, bool>{};
+    if (rawAvailability is Map) {
+      rawAvailability.forEach((key, value) {
+        availability[key.toString()] = value == true;
+      });
+    }
+
+    final lastSeen = data['lastSeen'];
+    return Provider(
+      id: data['uid'] as String? ?? data['id'] as String? ?? snapshot.id,
+      name: data['name'] as String? ?? '',
+      role:
+          data['category'] as String? ??
+          data['specialty'] as String? ??
+          'Service Professional',
+      rating: (data['rating'] as num?)?.toDouble() ?? 0.0,
+      reviewsCount: (data['reviewsCount'] as num?)?.toInt() ?? 0,
+      distance: data['distance'] as String? ?? '',
+      priceStart: (data['priceStart'] as num?)?.toDouble() ?? 0.0,
+      imageUrl: data['imageUrl'] as String? ?? '',
+      about: data['bio'] as String? ?? data['about'] as String? ?? '',
+      services: List<String>.from(data['services'] as List? ?? const []),
+      isVerified: data['isVerified'] as bool? ?? false,
+      isAvailable: data['isAvailable'] as bool? ?? true,
+      availability: availability,
+      lastSeen: lastSeen is Timestamp ? lastSeen.toDate() : null,
+      specialty: data['specialty'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toFirestore() {
+    return {
+      'uid': id,
+      'name': name,
+      'category': role,
+      'rating': rating,
+      'reviewsCount': reviewsCount,
+      'priceStart': priceStart,
+      'imageUrl': imageUrl,
+      'bio': about,
+      'services': services,
+      'isVerified': isVerified,
+      'isAvailable': isAvailable,
+      'availability': availability,
+      'lastSeen': lastSeen == null
+          ? FieldValue.serverTimestamp()
+          : Timestamp.fromDate(lastSeen!),
+      'specialty': specialty ?? '',
+    };
+  }
 
   Provider copyWith({
     String? id,

@@ -8,7 +8,7 @@ class OTPVerificationPage extends StatefulWidget {
   final String email;
   final bool isPasswordReset;
   const OTPVerificationPage({
-    super.key, 
+    super.key,
     this.email = "swift***@gmail.com",
     this.isPasswordReset = false,
   });
@@ -18,9 +18,12 @@ class OTPVerificationPage extends StatefulWidget {
 }
 
 class _OTPVerificationPageState extends State<OTPVerificationPage> {
-  final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _controllers = List.generate(
+    6,
+    (index) => TextEditingController(),
+  );
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
-  
+
   int _secondsRemaining = 59;
   Timer? _timer;
 
@@ -132,7 +135,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                             shape: BoxShape.circle,
                             color: Colors.white.withValues(alpha: 0.05),
                           ),
-                          child: const Icon(Icons.chevron_left, color: Colors.white),
+                          child: const Icon(
+                            Icons.chevron_left,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                       Container(
@@ -168,7 +174,9 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: primaryGreen.withValues(alpha: 0.1),
+                                      color: primaryGreen.withValues(
+                                        alpha: 0.1,
+                                      ),
                                       blurRadius: 10,
                                       spreadRadius: 2,
                                     ),
@@ -177,7 +185,10 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(24),
                                   child: BackdropFilter(
-                                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                                    filter: ImageFilter.blur(
+                                      sigmaX: 12,
+                                      sigmaY: 12,
+                                    ),
                                     child: const Center(
                                       child: Icon(
                                         Icons.mark_email_read,
@@ -199,7 +210,9 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                        color: primaryGreen.withValues(alpha: 0.5),
+                                        color: primaryGreen.withValues(
+                                          alpha: 0.5,
+                                        ),
                                         blurRadius: 8,
                                         spreadRadius: 2,
                                       ),
@@ -213,7 +226,9 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                           const SizedBox(height: 32),
                           // Text Section
                           Text(
-                            widget.isPasswordReset ? "Reset Password" : "Verify Email",
+                            widget.isPasswordReset
+                                ? "Reset Password"
+                                : "Verify Email",
                             style: GoogleFonts.spaceGrotesk(
                               color: Colors.white,
                               fontSize: 32,
@@ -251,18 +266,28 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                   color: darkSurface,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
-                                    color: _focusNodes[index].hasFocus 
-                                        ? primaryGreen 
-                                        : (_controllers[index].text.isNotEmpty ? primaryGreen.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.1)),
+                                    color: _focusNodes[index].hasFocus
+                                        ? primaryGreen
+                                        : (_controllers[index].text.isNotEmpty
+                                              ? primaryGreen.withValues(
+                                                  alpha: 0.3,
+                                                )
+                                              : Colors.white.withValues(
+                                                  alpha: 0.1,
+                                                )),
                                     width: 2,
                                   ),
-                                  boxShadow: _focusNodes[index].hasFocus ? [
-                                    BoxShadow(
-                                      color: primaryGreen.withValues(alpha: 0.3),
-                                      blurRadius: 10,
-                                      spreadRadius: 1,
-                                    )
-                                  ] : [],
+                                  boxShadow: _focusNodes[index].hasFocus
+                                      ? [
+                                          BoxShadow(
+                                            color: primaryGreen.withValues(
+                                              alpha: 0.3,
+                                            ),
+                                            blurRadius: 10,
+                                            spreadRadius: 1,
+                                          ),
+                                        ]
+                                      : [],
                                 ),
                                 child: TextField(
                                   controller: _controllers[index],
@@ -273,7 +298,9 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                                     });
                                   },
                                   onTap: () {
-                                    setState(() {}); // Trigger rebuild to update border color
+                                    setState(
+                                      () {},
+                                    ); // Trigger rebuild to update border color
                                   },
                                   keyboardType: TextInputType.number,
                                   textAlign: TextAlign.center,
@@ -319,16 +346,20 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                               ),
                               const SizedBox(height: 12),
                               TextButton(
-                                onPressed: _secondsRemaining == 0 ? () {
-                                  setState(() {
-                                    _secondsRemaining = 59;
-                                    _startTimer();
-                                  });
-                                } : null,
+                                onPressed: _secondsRemaining == 0
+                                    ? () {
+                                        setState(() {
+                                          _secondsRemaining = 59;
+                                          _startTimer();
+                                        });
+                                      }
+                                    : null,
                                 child: Text(
                                   "Resend Code",
                                   style: GoogleFonts.spaceGrotesk(
-                                    color: _secondsRemaining == 0 ? Colors.white : Colors.grey[500],
+                                    color: _secondsRemaining == 0
+                                        ? Colors.white
+                                        : Colors.grey[500],
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -364,14 +395,20 @@ class _OTPVerificationPageState extends State<OTPVerificationPage> {
                           if (widget.isPasswordReset) {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const ResetPasswordPage()),
+                              MaterialPageRoute(
+                                builder: (context) => const ResetPasswordPage(),
+                              ),
                             );
                           } else {
                             // Signup success - go to home or success screen
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Account verified successfully!')),
+                              const SnackBar(
+                                content: Text('Account verified successfully!'),
+                              ),
                             );
-                            Navigator.of(context).popUntil((route) => route.isFirst);
+                            Navigator.of(
+                              context,
+                            ).popUntil((route) => route.isFirst);
                           }
                         },
                         style: ElevatedButton.styleFrom(

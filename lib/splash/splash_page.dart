@@ -13,7 +13,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
-  
+
   late AnimationController _spinController;
 
   @override
@@ -63,9 +63,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     // I will use standard TextStyle with some tweaks to keep it safe, or assume google_fonts is added as it is common.
     // ACTUALLY, the prompt had <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk...
     // I will try to use GoogleFonts.spaceGrotesk if possible, strictly fallback to 'Sans Serif'.
-    
+
     const neonGreen = Color(0xFF25F46A);
-    
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -91,7 +91,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               },
             ),
           ),
-          
+
           // Main Content
           Center(
             child: Column(
@@ -106,7 +106,8 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     children: [
                       // Distorted Shadow 'S' (Approximation)
                       Transform(
-                        transform: Matrix4.skewX(-0.1)..scaleByDouble(1.0, 1.1, 1.0, 1.0),
+                        transform: Matrix4.skewX(-0.1)
+                          ..scaleByDouble(1.0, 1.1, 1.0, 1.0),
                         child: Text(
                           'S',
                           style: TextStyle(
@@ -122,39 +123,41 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       Text(
                         'S',
                         style: TextStyle(
-                            fontSize: 120,
-                            fontWeight: FontWeight.bold,
-                            height: 1,
-                            fontStyle: FontStyle.italic,
-                            color: Colors.white,
+                          fontSize: 120,
+                          fontWeight: FontWeight.bold,
+                          height: 1,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.white,
                         ),
                       ),
                       // Lightning Bolt
                       Positioned(
-                         child: Icon(
-                           Icons.bolt,
-                           size: 100,
-                           color: neonGreen,
-                           shadows: [
-                             BoxShadow(
-                               color: neonGreen.withValues(alpha: 0.8),
-                               blurRadius: 25,
-                               spreadRadius: 5,
-                             )
-                           ],
-                         ),
+                        child: Icon(
+                          Icons.bolt,
+                          size: 100,
+                          color: neonGreen,
+                          shadows: [
+                            BoxShadow(
+                              color: neonGreen.withValues(alpha: 0.8),
+                              blurRadius: 25,
+                              spreadRadius: 5,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 // SwiftServe Title
                 Text(
                   'SwiftServe',
-                  style: TextStyle( // Fallback if GoogleFonts not present
-                    fontFamily: 'Space Grotesk', // Try this name if added cleanly
+                  style: TextStyle(
+                    // Fallback if GoogleFonts not present
+                    fontFamily:
+                        'Space Grotesk', // Try this name if added cleanly
                     fontSize: 36,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -164,7 +167,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               ],
             ),
           ),
-          
+
           // Bottom Loader & Footer
           Positioned(
             bottom: 50,
@@ -198,14 +201,18 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.transparent, // colored part handled by gradient or partial border? 
+                                  color: Colors
+                                      .transparent, // colored part handled by gradient or partial border?
                                   // Simplified:
                                 ),
                               ),
                               child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(neonGreen),
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  neonGreen,
+                                ),
                                 strokeWidth: 2,
-                                backgroundColor: Colors.transparent, // partial styling
+                                backgroundColor:
+                                    Colors.transparent, // partial styling
                               ),
                               // Or better custom painter for partial ring
                             ),
@@ -221,10 +228,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                             color: neonGreen,
                             shape: BoxShape.circle,
                             boxShadow: [
-                              BoxShadow(
-                                color: neonGreen,
-                                blurRadius: 8,
-                              )
+                              BoxShadow(color: neonGreen, blurRadius: 8),
                             ],
                           ),
                         ),
@@ -232,9 +236,9 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 24),
-                
+
                 // Footer
                 Text(
                   'POWERED BY SWIFTSERVE',
@@ -247,7 +251,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

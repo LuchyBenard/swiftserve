@@ -44,10 +44,7 @@ void main() {
       expect(user.location, 'Downtown');
       expect(user.profileImageUrl, 'https://example.com/jane.jpg');
 
-      final updatedUser = user.copyWith(
-        name: 'Jane Smith',
-        bio: 'Updated bio',
-      );
+      final updatedUser = user.copyWith(name: 'Jane Smith', bio: 'Updated bio');
 
       expect(updatedUser.id, 'usr_101');
       expect(updatedUser.name, 'Jane Smith');
@@ -100,51 +97,60 @@ void main() {
       expect(booking.price, 45.0);
     });
 
-    test('Message and Conversation models instantiate with expected defaults', () {
-      final now = DateTime.now();
-      final message = Message(
-        id: 'msg_404',
-        senderId: 'usr_101',
-        text: 'Hello, are you available tomorrow?',
-        timestamp: now,
-        isMe: true,
-      );
+    test(
+      'Message and Conversation models instantiate with expected defaults',
+      () {
+        final now = DateTime.now();
+        final message = Message(
+          id: 'msg_404',
+          senderId: 'usr_101',
+          text: 'Hello, are you available tomorrow?',
+          timestamp: now,
+          isMe: true,
+        );
 
-      expect(message.id, 'msg_404');
-      expect(message.isMe, isTrue);
-      expect(message.imageUrl, isNull);
+        expect(message.id, 'msg_404');
+        expect(message.isMe, isTrue);
+        expect(message.imageUrl, isNull);
 
-      final conversation = Conversation(
-        id: 'conv_505',
-        providerName: 'Fix-It Mike',
-        lastMessage: 'I will be there at 10 AM',
-        time: '10:00 AM',
-      );
+        final conversation = Conversation(
+          id: 'conv_505',
+          providerName: 'Fix-It Mike',
+          lastMessage: 'I will be there at 10 AM',
+          time: '10:00 AM',
+        );
 
-      expect(conversation.id, 'conv_505');
-      expect(conversation.avatarUrl, '');
-      expect(conversation.isOnline, isFalse);
-      expect(conversation.isUnread, isFalse);
-      expect(conversation.providerIcon, isNull);
-    });
+        expect(conversation.id, 'conv_505');
+        expect(conversation.avatarUrl, '');
+        expect(conversation.isOnline, isFalse);
+        expect(conversation.isUnread, isFalse);
+        expect(conversation.providerIcon, isNull);
+      },
+    );
   });
 
   group('Favorites & Saved Providers Feature Tests', () {
-    test('FavoritesService toggles and persists favorites reactively', () async {
-      final favoritesService = FavoritesService();
-      await favoritesService.init();
+    test(
+      'FavoritesService toggles and persists favorites reactively',
+      () async {
+        final favoritesService = FavoritesService();
+        await favoritesService.init();
 
-      expect(favoritesService.isFavorite('prov_1'), isFalse);
+        expect(favoritesService.isFavorite('prov_1'), isFalse);
 
-      final added = await favoritesService.toggleFavorite('prov_1');
-      expect(added, isTrue);
-      expect(favoritesService.isFavorite('prov_1'), isTrue);
-      expect(favoritesService.favoritesNotifier.value.contains('prov_1'), isTrue);
+        final added = await favoritesService.toggleFavorite('prov_1');
+        expect(added, isTrue);
+        expect(favoritesService.isFavorite('prov_1'), isTrue);
+        expect(
+          favoritesService.favoritesNotifier.value.contains('prov_1'),
+          isTrue,
+        );
 
-      final removed = await favoritesService.toggleFavorite('prov_1');
-      expect(removed, isFalse);
-      expect(favoritesService.isFavorite('prov_1'), isFalse);
-    });
+        final removed = await favoritesService.toggleFavorite('prov_1');
+        expect(removed, isFalse);
+        expect(favoritesService.isFavorite('prov_1'), isFalse);
+      },
+    );
 
     test('filterSavedProviders filters provider list correctly', () async {
       final favoritesService = FavoritesService();
@@ -272,17 +278,20 @@ void main() {
       expect(reconstructed.isDefault, isTrue);
     });
 
-    test('AddressService initializes presets and detects GPS coordinates', () async {
-      final service = AddressService();
-      await service.init();
+    test(
+      'AddressService initializes presets and detects GPS coordinates',
+      () async {
+        final service = AddressService();
+        await service.init();
 
-      expect(service.addressesNotifier.value.isNotEmpty, isTrue);
-      expect(service.selectedAddressNotifier.value, isNotNull);
+        expect(service.addressesNotifier.value.isNotEmpty, isTrue);
+        expect(service.selectedAddressNotifier.value, isNotNull);
 
-      final gpsAddr = await service.detectCurrentGPSLocation();
-      expect(gpsAddr.title.contains('GPS'), isTrue);
-      expect(service.selectedAddressNotifier.value?.id, gpsAddr.id);
-    });
+        final gpsAddr = await service.detectCurrentGPSLocation();
+        expect(gpsAddr.title.contains('GPS'), isTrue);
+        expect(service.selectedAddressNotifier.value?.id, gpsAddr.id);
+      },
+    );
   });
 
   group('Booking Cancellation & Widget Tests', () {
@@ -298,7 +307,9 @@ void main() {
       expect(clipper.shouldReclip(TopWaveClipper()), isFalse);
     });
 
-    testWidgets('TopWaveClipper renders within ClipPath widget successfully', (WidgetTester tester) async {
+    testWidgets('TopWaveClipper renders within ClipPath widget successfully', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -308,9 +319,7 @@ void main() {
                 width: 300,
                 height: 150,
                 color: const Color(0xFF25F46A),
-                child: const Center(
-                  child: Text('SwiftServe Banner'),
-                ),
+                child: const Center(child: Text('SwiftServe Banner')),
               ),
             ),
           ),
@@ -321,23 +330,29 @@ void main() {
       expect(find.byType(ClipPath), findsOneWidget);
     });
 
-    testWidgets('CancelBookingDialog renders reasons and dismisses on Keep Booking', (WidgetTester tester) async {
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: Scaffold(
-            body: CancelBookingDialog(
-              providerName: 'John D.',
-              serviceType: 'Master Barber',
+    testWidgets(
+      'CancelBookingDialog renders reasons and dismisses on Keep Booking',
+      (WidgetTester tester) async {
+        await tester.pumpWidget(
+          const MaterialApp(
+            home: Scaffold(
+              body: CancelBookingDialog(
+                providerName: 'John D.',
+                serviceType: 'Master Barber',
+              ),
             ),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('Cancel Booking'), findsNWidgets(2));
-      expect(find.text('John D. • Master Barber'), findsOneWidget);
-      expect(find.text('Schedule conflict / Need to reschedule'), findsOneWidget);
-      expect(find.text('Keep Booking'), findsOneWidget);
-    });
+        expect(find.text('Cancel Booking'), findsNWidgets(2));
+        expect(find.text('John D. • Master Barber'), findsOneWidget);
+        expect(
+          find.text('Schedule conflict / Need to reschedule'),
+          findsOneWidget,
+        );
+        expect(find.text('Keep Booking'), findsOneWidget);
+      },
+    );
   });
 
   group('Interactive Chat & Messaging Feature Tests', () {
@@ -381,211 +396,239 @@ void main() {
       expect(reconstructedConv.isUnread, isTrue);
       expect(reconstructedConv.providerIcon, 'electrical_services');
 
-      final copied = conv.copyWith(isUnread: false, lastMessage: 'Updated message');
+      final copied = conv.copyWith(
+        isUnread: false,
+        lastMessage: 'Updated message',
+      );
       expect(copied.isUnread, isFalse);
       expect(copied.lastMessage, 'Updated message');
       expect(copied.providerName, conv.providerName);
     });
 
-    test('ChatService initializes seed data and updates unread badge count', () async {
-      final service = ChatService();
-      await service.init();
+    test(
+      'ChatService initializes seed data and updates unread badge count',
+      () async {
+        final service = ChatService();
+        await service.init();
 
-      expect(service.conversationsNotifier.value.isNotEmpty, isTrue);
-      expect(service.unreadCountNotifier.value, greaterThanOrEqualTo(1));
+        expect(service.conversationsNotifier.value.isNotEmpty, isTrue);
+        expect(service.unreadCountNotifier.value, greaterThanOrEqualTo(1));
 
-      // Mark first conversation as read
-      final firstConv = service.conversationsNotifier.value.first;
-      await service.markAsRead(firstConv.id);
+        // Mark first conversation as read
+        final firstConv = service.conversationsNotifier.value.first;
+        await service.markAsRead(firstConv.id);
 
-      final updatedList = service.conversationsNotifier.value;
-      final updatedFirst = updatedList.firstWhere((c) => c.id == firstConv.id);
-      expect(updatedFirst.isUnread, isFalse);
-    });
+        final updatedList = service.conversationsNotifier.value;
+        final updatedFirst = updatedList.firstWhere(
+          (c) => c.id == firstConv.id,
+        );
+        expect(updatedFirst.isUnread, isFalse);
+      },
+    );
 
-    test('ChatService getOrCreateConversationForProvider creates new conversation when not present', () async {
-      final service = ChatService();
-      await service.init();
+    test(
+      'ChatService getOrCreateConversationForProvider creates new conversation when not present',
+      () async {
+        final service = ChatService();
+        await service.init();
 
-      final newProvider = Provider(
-        id: 'prov_custom_99',
-        name: 'Carlos Generator Specialist',
-        role: 'Generator Tech',
-        rating: 4.88,
-        reviewsCount: 32,
-        distance: '4.0 mi',
-        priceStart: 75.0,
-        imageUrl: '',
-        about: 'Expert generator maintenance.',
-        services: ['Diagnostics', 'Oil Change'],
-      );
+        final newProvider = Provider(
+          id: 'prov_custom_99',
+          name: 'Carlos Generator Specialist',
+          role: 'Generator Tech',
+          rating: 4.88,
+          reviewsCount: 32,
+          distance: '4.0 mi',
+          priceStart: 75.0,
+          imageUrl: '',
+          about: 'Expert generator maintenance.',
+          services: ['Diagnostics', 'Oil Change'],
+        );
 
-      final conv = await service.getOrCreateConversationForProvider(newProvider);
-      expect(conv.providerName, 'Carlos Generator Specialist');
-      expect(conv.id.contains('prov_custom_99'), isTrue);
+        final conv = await service.getOrCreateConversationForProvider(
+          newProvider,
+        );
+        expect(conv.providerName, 'Carlos Generator Specialist');
+        expect(conv.id.contains('prov_custom_99'), isTrue);
 
-      final msgs = await service.getMessages(conv.id);
-      expect(msgs.isNotEmpty, isTrue);
-    });
+        final msgs = await service.getMessages(conv.id);
+        expect(msgs.isNotEmpty, isTrue);
+      },
+    );
 
-    test('ChatService sendMessage adds message and updates conversation last message', () async {
-      final service = ChatService();
-      await service.init();
+    test(
+      'ChatService sendMessage adds message and updates conversation last message',
+      () async {
+        final service = ChatService();
+        await service.init();
 
-      final conv = service.conversationsNotifier.value.first;
-      final sent = await service.sendMessage(
-        conversationId: conv.id,
-        text: 'Hello from automated unit test!',
-      );
+        final conv = service.conversationsNotifier.value.first;
+        final sent = await service.sendMessage(
+          conversationId: conv.id,
+          text: 'Hello from automated unit test!',
+        );
 
-      expect(sent.text, 'Hello from automated unit test!');
-      expect(sent.isMe, isTrue);
+        expect(sent.text, 'Hello from automated unit test!');
+        expect(sent.isMe, isTrue);
 
-      final messages = await service.getMessages(conv.id);
-      expect(messages.any((m) => m.text == 'Hello from automated unit test!'), isTrue);
-    });
+        final messages = await service.getMessages(conv.id);
+        expect(
+          messages.any((m) => m.text == 'Hello from automated unit test!'),
+          isTrue,
+        );
+      },
+    );
 
-    testWidgets('ChatPage renders conversation header, input area, and quick actions', (WidgetTester tester) async {
-      final testConv = Conversation(
-        id: 'test_conv_widget',
-        providerName: 'TechFix Mobile',
-        lastMessage: 'On my way!',
-        time: 'Just now',
-        isOnline: true,
-      );
+    testWidgets(
+      'ChatPage renders conversation header, input area, and quick actions',
+      (WidgetTester tester) async {
+        final testConv = Conversation(
+          id: 'test_conv_widget',
+          providerName: 'TechFix Mobile',
+          lastMessage: 'On my way!',
+          time: 'Just now',
+          isOnline: true,
+        );
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: ChatPage(conversation: testConv),
-        ),
-      );
+        await tester.pumpWidget(
+          MaterialApp(home: ChatPage(conversation: testConv)),
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      expect(find.text('TechFix Mobile'), findsOneWidget);
-      expect(find.text('ONLINE'), findsOneWidget);
-      expect(find.byIcon(Icons.phone_outlined), findsOneWidget);
-      expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
-      expect(find.text('Type a message...'), findsOneWidget);
+        expect(find.text('TechFix Mobile'), findsOneWidget);
+        expect(find.text('ONLINE'), findsOneWidget);
+        expect(find.byIcon(Icons.phone_outlined), findsOneWidget);
+        expect(find.byIcon(Icons.arrow_forward), findsOneWidget);
+        expect(find.text('Type a message...'), findsOneWidget);
 
-      // Tap + button to open quick actions bottom sheet
-      await tester.tap(find.byIcon(Icons.add));
-      await tester.pumpAndSettle();
+        // Tap + button to open quick actions bottom sheet
+        await tester.tap(find.byIcon(Icons.add));
+        await tester.pumpAndSettle();
 
-      expect(find.text('QUICK ACTIONS'), findsOneWidget);
-      expect(find.text('Camera'), findsOneWidget);
-      expect(find.text('Gallery'), findsOneWidget);
-      expect(find.text('Location'), findsOneWidget);
-      expect(find.text('Are you on your way?'), findsOneWidget);
-    });
+        expect(find.text('QUICK ACTIONS'), findsOneWidget);
+        expect(find.text('Camera'), findsOneWidget);
+        expect(find.text('Gallery'), findsOneWidget);
+        expect(find.text('Location'), findsOneWidget);
+        expect(find.text('Are you on your way?'), findsOneWidget);
+      },
+    );
   });
 
   group('In-App Notification Center & Alerts Feature Tests', () {
-    test('AppNotification and NotificationSettings serialize and deserialize correctly', () {
-      final notif = AppNotification(
-        id: 'notif_unit_1',
-        title: 'Booking Accepted',
-        body: 'Sarah M. accepted your appointment for 2:00 PM.',
-        timestamp: DateTime(2026, 11, 7, 14, 0),
-        type: NotificationType.booking,
-        isRead: false,
-        actionRoute: 'tracking',
-        actionPayload: 'Sarah M.',
-      );
+    test(
+      'AppNotification and NotificationSettings serialize and deserialize correctly',
+      () {
+        final notif = AppNotification(
+          id: 'notif_unit_1',
+          title: 'Booking Accepted',
+          body: 'Sarah M. accepted your appointment for 2:00 PM.',
+          timestamp: DateTime(2026, 11, 7, 14, 0),
+          type: NotificationType.booking,
+          isRead: false,
+          actionRoute: 'tracking',
+          actionPayload: 'Sarah M.',
+        );
 
-      final json = notif.toJson();
-      final restored = AppNotification.fromJson(json);
+        final json = notif.toJson();
+        final restored = AppNotification.fromJson(json);
 
-      expect(restored.id, notif.id);
-      expect(restored.title, notif.title);
-      expect(restored.body, notif.body);
-      expect(restored.type, NotificationType.booking);
-      expect(restored.isRead, isFalse);
-      expect(restored.actionRoute, 'tracking');
-      expect(restored.actionPayload, 'Sarah M.');
+        expect(restored.id, notif.id);
+        expect(restored.title, notif.title);
+        expect(restored.body, notif.body);
+        expect(restored.type, NotificationType.booking);
+        expect(restored.isRead, isFalse);
+        expect(restored.actionRoute, 'tracking');
+        expect(restored.actionPayload, 'Sarah M.');
 
-      final updated = notif.copyWith(isRead: true);
-      expect(updated.isRead, isTrue);
+        final updated = notif.copyWith(isRead: true);
+        expect(updated.isRead, isTrue);
 
-      final settings = const NotificationSettings(
-        pushEnabled: true,
-        bookingAlerts: false,
-        promoAlerts: true,
-        soundEnabled: false,
-      );
-      final settingsJson = settings.toJson();
-      final restoredSettings = NotificationSettings.fromJson(settingsJson);
+        final settings = const NotificationSettings(
+          pushEnabled: true,
+          bookingAlerts: false,
+          promoAlerts: true,
+          soundEnabled: false,
+        );
+        final settingsJson = settings.toJson();
+        final restoredSettings = NotificationSettings.fromJson(settingsJson);
 
-      expect(restoredSettings.pushEnabled, isTrue);
-      expect(restoredSettings.bookingAlerts, isFalse);
-      expect(restoredSettings.promoAlerts, isTrue);
-      expect(restoredSettings.soundEnabled, isFalse);
-    });
+        expect(restoredSettings.pushEnabled, isTrue);
+        expect(restoredSettings.bookingAlerts, isFalse);
+        expect(restoredSettings.promoAlerts, isTrue);
+        expect(restoredSettings.soundEnabled, isFalse);
+      },
+    );
 
-    test('NotificationService manages seed notifications, reads, and deletes', () async {
-      final service = NotificationService();
-      await service.init();
+    test(
+      'NotificationService manages seed notifications, reads, and deletes',
+      () async {
+        final service = NotificationService();
+        await service.init();
 
-      expect(service.notificationsNotifier.value.isNotEmpty, isTrue);
-      expect(service.unreadCountNotifier.value, greaterThan(0));
+        expect(service.notificationsNotifier.value.isNotEmpty, isTrue);
+        expect(service.unreadCountNotifier.value, greaterThan(0));
 
-      final firstItem = service.notificationsNotifier.value.first;
-      await service.markAsRead(firstItem.id);
+        final firstItem = service.notificationsNotifier.value.first;
+        await service.markAsRead(firstItem.id);
 
-      final updatedList = service.notificationsNotifier.value;
-      final readItem = updatedList.firstWhere((n) => n.id == firstItem.id);
-      expect(readItem.isRead, isTrue);
+        final updatedList = service.notificationsNotifier.value;
+        final readItem = updatedList.firstWhere((n) => n.id == firstItem.id);
+        expect(readItem.isRead, isTrue);
 
-      // Add a new notification
-      final newNotif = await service.addNotification(
-        title: 'Flash Sale Today!',
-        body: '30% off all styling services.',
-        type: NotificationType.promo,
-      );
+        // Add a new notification
+        final newNotif = await service.addNotification(
+          title: 'Flash Sale Today!',
+          body: '30% off all styling services.',
+          type: NotificationType.promo,
+        );
 
-      expect(newNotif.title, 'Flash Sale Today!');
-      expect(service.notificationsNotifier.value.first.id, newNotif.id);
+        expect(newNotif.title, 'Flash Sale Today!');
+        expect(service.notificationsNotifier.value.first.id, newNotif.id);
 
-      // Delete the notification
-      await service.deleteNotification(newNotif.id);
-      expect(service.notificationsNotifier.value.any((n) => n.id == newNotif.id), isFalse);
+        // Delete the notification
+        await service.deleteNotification(newNotif.id);
+        expect(
+          service.notificationsNotifier.value.any((n) => n.id == newNotif.id),
+          isFalse,
+        );
 
-      // Mark all as read
-      await service.markAllAsRead();
-      expect(service.unreadCountNotifier.value, 0);
-    });
+        // Mark all as read
+        await service.markAllAsRead();
+        expect(service.unreadCountNotifier.value, 0);
+      },
+    );
 
-    testWidgets('NotificationCenterPage renders headers, categories, and items', (WidgetTester tester) async {
-      final service = NotificationService();
-      await service.init();
+    testWidgets(
+      'NotificationCenterPage renders headers, categories, and items',
+      (WidgetTester tester) async {
+        final service = NotificationService();
+        await service.init();
 
-      await tester.pumpWidget(
-        const MaterialApp(
-          home: NotificationCenterPage(),
-        ),
-      );
+        await tester.pumpWidget(
+          const MaterialApp(home: NotificationCenterPage()),
+        );
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      expect(find.text('Notifications'), findsOneWidget);
-      expect(find.text('ALERTS & MARKETPLACE UPDATES'), findsOneWidget);
-      expect(find.text('All'), findsOneWidget);
-      expect(find.text('Bookings'), findsOneWidget);
-      expect(find.text('Payments'), findsOneWidget);
-      expect(find.text('Promos'), findsOneWidget);
-      expect(find.text('Alerts'), findsOneWidget);
+        expect(find.text('Notifications'), findsOneWidget);
+        expect(find.text('ALERTS & MARKETPLACE UPDATES'), findsOneWidget);
+        expect(find.text('All'), findsOneWidget);
+        expect(find.text('Bookings'), findsOneWidget);
+        expect(find.text('Payments'), findsOneWidget);
+        expect(find.text('Promos'), findsOneWidget);
+        expect(find.text('Alerts'), findsOneWidget);
 
-      // Tap 'Payments' filter
-      await tester.tap(find.text('Payments'));
-      await tester.pumpAndSettle();
+        // Tap 'Payments' filter
+        await tester.tap(find.text('Payments'));
+        await tester.pumpAndSettle();
 
-      // Tap 'Mark all as read' icon
-      await tester.tap(find.byIcon(Icons.done_all));
-      await tester.pumpAndSettle();
+        // Tap 'Mark all as read' icon
+        await tester.tap(find.byIcon(Icons.done_all));
+        await tester.pumpAndSettle();
 
-      expect(find.text('All notifications marked as read'), findsOneWidget);
-    });
+        expect(find.text('All notifications marked as read'), findsOneWidget);
+      },
+    );
   });
 }
-
-

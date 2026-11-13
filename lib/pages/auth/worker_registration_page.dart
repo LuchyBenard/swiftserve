@@ -13,7 +13,7 @@ class WorkerRegistrationPage extends StatefulWidget {
 class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
   int _currentStep = 0;
   final _formKey = GlobalKey<FormState>();
-  
+
   // Form Controllers
   final TextEditingController _experienceController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -22,20 +22,44 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  
+
   String? _selectedCategory;
   String? _selectedLocation;
-  
+
   final List<String> _categories = [
-    'Phone Tech', 'Barber', 'Stylist', 'Plumber', 'Cleaner', 'Electrician', 'Carpenter'
+    'Phone Tech',
+    'Barber',
+    'Stylist',
+    'Plumber',
+    'Cleaner',
+    'Electrician',
+    'Carpenter',
   ];
-  
+
   final List<String> _enuguLocations = [
-    'Independence Layout', 'Achara Layout', 'Trans Ekulu', 'Abakpa', 'Coal Camp',
-    'Emene', 'New Haven', 'Thinkers Corner', 'GRA', 'Ogui New Layout',
-    'Awkunanaw', 'Gariki', 'Uwani', 'Obiagu', 'Maryland', 'Meniru',
-    'Agbani Road', 'Eke-Obinagu', 'Iva Valley', 'Tinker', 'Garki', 'Topland',
-    'Amechi'
+    'Independence Layout',
+    'Achara Layout',
+    'Trans Ekulu',
+    'Abakpa',
+    'Coal Camp',
+    'Emene',
+    'New Haven',
+    'Thinkers Corner',
+    'GRA',
+    'Ogui New Layout',
+    'Awkunanaw',
+    'Gariki',
+    'Uwani',
+    'Obiagu',
+    'Maryland',
+    'Meniru',
+    'Agbani Road',
+    'Eke-Obinagu',
+    'Iva Valley',
+    'Tinker',
+    'Garki',
+    'Topland',
+    'Amechi',
   ];
 
   @override
@@ -70,7 +94,9 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (context) => const Center(child: CircularProgressIndicator(color: Color(0xFF25F46A))),
+          builder: (context) => const Center(
+            child: CircularProgressIndicator(color: Color(0xFF25F46A)),
+          ),
         );
 
         await AuthService().signUpProvider(
@@ -94,16 +120,28 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
             barrierDismissible: false,
             builder: (context) => AlertDialog(
               backgroundColor: const Color(0xFF101010),
-              title: Text('Success!', style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold)),
-              content: Text('Your provider application has been submitted successfully. Please log in to your account.', style: GoogleFonts.spaceGrotesk(color: Colors.grey[400])),
+              title: Text(
+                'Success!',
+                style: GoogleFonts.spaceGrotesk(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: Text(
+                'Your provider application has been submitted successfully. Please log in to your account.',
+                style: GoogleFonts.spaceGrotesk(color: Colors.grey[400]),
+              ),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context); // Close dialog
                     Navigator.pop(context); // Go back from registration
                   },
-                  child: const Text('GREAT', style: TextStyle(color: Color(0xFF25F46A))),
-                )
+                  child: const Text(
+                    'GREAT',
+                    style: TextStyle(color: Color(0xFF25F46A)),
+                  ),
+                ),
               ],
             ),
           );
@@ -135,7 +173,14 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('BECOME A PROVIDER', style: GoogleFonts.spaceGrotesk(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white)),
+        title: Text(
+          'BECOME A PROVIDER',
+          style: GoogleFonts.spaceGrotesk(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -144,7 +189,11 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
       body: Theme(
         data: Theme.of(context).copyWith(
           canvasColor: Colors.black,
-          colorScheme: const ColorScheme.light(primary: neonGreen, onPrimary: Colors.black, secondary: neonGreen),
+          colorScheme: const ColorScheme.light(
+            primary: neonGreen,
+            onPrimary: Colors.black,
+            secondary: neonGreen,
+          ),
         ),
         child: Stepper(
           type: StepperType.horizontal,
@@ -163,9 +212,16 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                         backgroundColor: neonGreen,
                         foregroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      child: Text(_currentStep == 3 ? 'SUBMIT' : 'CONTINUE', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold)),
+                      child: Text(
+                        _currentStep == 3 ? 'SUBMIT' : 'CONTINUE',
+                        style: GoogleFonts.spaceGrotesk(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                   if (_currentStep > 0) ...[
@@ -176,9 +232,14 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                         style: OutlinedButton.styleFrom(
                           side: BorderSide(color: Colors.grey[800]!),
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                        child: Text('BACK', style: GoogleFonts.spaceGrotesk(color: Colors.white)),
+                        child: Text(
+                          'BACK',
+                          style: GoogleFonts.spaceGrotesk(color: Colors.white),
+                        ),
                       ),
                     ),
                   ],
@@ -187,7 +248,7 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
             );
           },
           steps: [
-             Step(
+            Step(
               title: const Text(''),
               isActive: _currentStep >= 0,
               state: _currentStep > 0 ? StepState.complete : StepState.indexed,
@@ -198,16 +259,32 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                   children: [
                     _buildStepTitle('Account Details'),
                     _buildLabel('Full Name'),
-                    _buildTextField(_nameController, 'Your Name', TextInputType.name),
+                    _buildTextField(
+                      _nameController,
+                      'Your Name',
+                      TextInputType.name,
+                    ),
                     const SizedBox(height: 16),
                     _buildLabel('Email Address'),
-                    _buildTextField(_emailController, 'email@example.com', TextInputType.emailAddress),
+                    _buildTextField(
+                      _emailController,
+                      'email@example.com',
+                      TextInputType.emailAddress,
+                    ),
                     const SizedBox(height: 16),
                     _buildLabel('Phone Number'),
-                    _buildTextField(_phoneController, '+123...', TextInputType.phone),
+                    _buildTextField(
+                      _phoneController,
+                      '+123...',
+                      TextInputType.phone,
+                    ),
                     const SizedBox(height: 16),
                     _buildLabel('Password'),
-                    _buildTextField(_passwordController, '••••••••', TextInputType.visiblePassword),
+                    _buildTextField(
+                      _passwordController,
+                      '••••••••',
+                      TextInputType.visiblePassword,
+                    ),
                   ],
                 ),
               ),
@@ -221,10 +298,18 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                 children: [
                   _buildStepTitle('Professional Info'),
                   _buildLabel('Select Category'),
-                  _buildDropdown(_categories, _selectedCategory, (val) => setState(() => _selectedCategory = val)),
+                  _buildDropdown(
+                    _categories,
+                    _selectedCategory,
+                    (val) => setState(() => _selectedCategory = val),
+                  ),
                   const SizedBox(height: 20),
                   _buildLabel('Experience (Years)'),
-                  _buildTextField(_experienceController, 'e.g. 5', TextInputType.number),
+                  _buildTextField(
+                    _experienceController,
+                    'e.g. 5',
+                    TextInputType.number,
+                  ),
                 ],
               ),
             ),
@@ -237,10 +322,19 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                 children: [
                   _buildStepTitle('Pricing & Bio'),
                   _buildLabel('Starting Price (\$)'),
-                  _buildTextField(_priceController, 'e.g. 40', TextInputType.number),
+                  _buildTextField(
+                    _priceController,
+                    'e.g. 40',
+                    TextInputType.number,
+                  ),
                   const SizedBox(height: 20),
                   _buildLabel('Tell us about your services'),
-                  _buildTextField(_bioController, 'Describe what you do best...', TextInputType.multiline, maxLines: 4),
+                  _buildTextField(
+                    _bioController,
+                    'Describe what you do best...',
+                    TextInputType.multiline,
+                    maxLines: 4,
+                  ),
                 ],
               ),
             ),
@@ -252,23 +346,36 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
                 children: [
                   _buildStepTitle('Location'),
                   _buildLabel('Where in Enugu are you located?'),
-                  _buildDropdown(_enuguLocations, _selectedLocation, (val) => setState(() => _selectedLocation = val)),
+                  _buildDropdown(
+                    _enuguLocations,
+                    _selectedLocation,
+                    (val) => setState(() => _selectedLocation = val),
+                  ),
                   const SizedBox(height: 20),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: neonGreen.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: neonGreen.withValues(alpha: 0.2)),
+                      border: Border.all(
+                        color: neonGreen.withValues(alpha: 0.2),
+                      ),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.info_outline, color: neonGreen, size: 20),
+                        const Icon(
+                          Icons.info_outline,
+                          color: neonGreen,
+                          size: 20,
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             'Your profile will be reviewed by our team before becoming public.',
-                            style: GoogleFonts.spaceGrotesk(color: neonGreen, fontSize: 13),
+                            style: GoogleFonts.spaceGrotesk(
+                              color: neonGreen,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
                       ],
@@ -286,18 +393,33 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
   Widget _buildStepTitle(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 24),
-      child: Text(text, style: GoogleFonts.spaceGrotesk(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white)),
+      child: Text(
+        text,
+        style: GoogleFonts.spaceGrotesk(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
     );
   }
 
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Text(text, style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 14)),
+      child: Text(
+        text,
+        style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 14),
+      ),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String hint, TextInputType type, {int maxLines = 1}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hint,
+    TextInputType type, {
+    int maxLines = 1,
+  }) {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF101010),
@@ -319,7 +441,11 @@ class _WorkerRegistrationPageState extends State<WorkerRegistrationPage> {
     );
   }
 
-  Widget _buildDropdown(List<String> items, String? value, Function(String?) onChanged) {
+  Widget _buildDropdown(
+    List<String> items,
+    String? value,
+    Function(String?) onChanged,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(

@@ -8,6 +8,7 @@ import '../models/conversation.dart';
 import '../models/message.dart';
 import '../services/chat_service.dart';
 import '../services/address_service.dart';
+import '../services/storage_service.dart';
 
 class ChatPage extends StatefulWidget {
   final Conversation conversation;
@@ -69,10 +70,15 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   Future<void> _handleAttachImage() async {
-    final XFile? image = await _imagePicker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (image != null) {
-      // In local testing, image path can be passed or mock preview
-      await _sendMessage('Attached photo for reference', image.path);
+      final url = await StorageService().uploadFile(
+        File(image.path),
+        folder: 'chat/${widget.conversation.id}',
+      );
+      await _sendMessage('Attached photo for reference', url);
     }
   }
 
@@ -109,9 +115,15 @@ class _ChatPageState extends State<ChatPage> {
                     label: 'Camera',
                     onTap: () async {
                       Navigator.pop(ctx);
-                      final XFile? photo = await _imagePicker.pickImage(source: ImageSource.camera);
+                      final XFile? photo = await _imagePicker.pickImage(
+                        source: ImageSource.camera,
+                      );
                       if (photo != null) {
-                        await _sendMessage('Captured photo', photo.path);
+                        final url = await StorageService().uploadFile(
+                          File(photo.path),
+                          folder: 'chat/${widget.conversation.id}',
+                        );
+                        await _sendMessage('Captured photo', url);
                       }
                     },
                     neonGreen: neonGreen,
@@ -130,7 +142,11 @@ class _ChatPageState extends State<ChatPage> {
                     label: 'Location',
                     onTap: () {
                       Navigator.pop(ctx);
-                      final activeAddr = AddressService().selectedAddressNotifier.value?.addressLine ??
+                      final activeAddr =
+                          AddressService()
+                              .selectedAddressNotifier
+                              .value
+                              ?.addressLine ??
                           'Independence Layout, Enugu';
                       _sendMessage('📍 Here is my location: $activeAddr');
                     },
@@ -158,7 +174,11 @@ class _ChatPageState extends State<ChatPage> {
                   _buildQuickReplyChip('Are you on your way?', neonGreen, ctx),
                   _buildQuickReplyChip("I'm waiting outside", neonGreen, ctx),
                   _buildQuickReplyChip('Please call when here', neonGreen, ctx),
-                  _buildQuickReplyChip('Can I pay with transfer?', neonGreen, ctx),
+                  _buildQuickReplyChip(
+                    'Can I pay with transfer?',
+                    neonGreen,
+                    ctx,
+                  ),
                 ],
               ),
               const SizedBox(height: 8),
@@ -212,7 +232,10 @@ class _ChatPageState extends State<ChatPage> {
           const SizedBox(height: 8),
           Text(
             label,
-            style: GoogleFonts.spaceGrotesk(color: Colors.white70, fontSize: 12),
+            style: GoogleFonts.spaceGrotesk(
+              color: Colors.white70,
+              fontSize: 12,
+            ),
           ),
         ],
       ),
@@ -231,18 +254,27 @@ class _ChatPageState extends State<ChatPage> {
             const SizedBox(width: 12),
             Text(
               'Call Provider',
-              style: GoogleFonts.spaceGrotesk(color: Colors.white, fontWeight: FontWeight.bold),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
         content: Text(
           'Connect directly with ${widget.conversation.providerName} for real-time voice instructions.',
-          style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 14),
+          style: GoogleFonts.spaceGrotesk(
+            color: Colors.grey[400],
+            fontSize: 14,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: Text('Cancel', style: GoogleFonts.spaceGrotesk(color: Colors.grey)),
+            child: Text(
+              'Cancel',
+              style: GoogleFonts.spaceGrotesk(color: Colors.grey),
+            ),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -255,9 +287,14 @@ class _ChatPageState extends State<ChatPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF25F46A),
               foregroundColor: Colors.black,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
-            child: Text('Dial Now', style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold)),
+            child: Text(
+              'Dial Now',
+              style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+            ),
           ),
         ],
       ),
@@ -324,14 +361,19 @@ class _ChatPageState extends State<ChatPage> {
                 _buildHeader(neonGreen),
                 Expanded(
                   child: ValueListenableBuilder<List<Message>>(
-                    valueListenable: _chatService.getMessageNotifier(widget.conversation.id),
+                    valueListenable: _chatService.getMessageNotifier(
+                      widget.conversation.id,
+                    ),
                     builder: (context, messages, _) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+                      WidgetsBinding.instance.addPostFrameCallback(
+                        (_) => _scrollToBottom(),
+                      );
 
                       return ListView.builder(
                         controller: _scrollController,
                         padding: const EdgeInsets.all(20),
-                        itemCount: messages.length + 1, // +1 for typing indicator
+                        itemCount:
+                            messages.length + 1, // +1 for typing indicator
                         itemBuilder: (context, index) {
                           if (index == messages.length) {
                             return _buildTypingIndicator(neonGreen);
@@ -374,7 +416,10 @@ class _ChatPageState extends State<ChatPage> {
               children: [
                 Text(
                   '${widget.conversation.providerName} is typing',
-                  style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 12),
+                  style: GoogleFonts.spaceGrotesk(
+                    color: Colors.grey[400],
+                    fontSize: 12,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 SizedBox(
@@ -398,12 +443,18 @@ class _ChatPageState extends State<ChatPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.black,
-        border: Border(bottom: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
+        border: Border(
+          bottom: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+        ),
       ),
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+              size: 20,
+            ),
             onPressed: () => Navigator.pop(context),
           ),
           const SizedBox(width: 8),
@@ -446,7 +497,9 @@ class _ChatPageState extends State<ChatPage> {
                     Text(
                       widget.conversation.isOnline ? 'ONLINE' : 'OFFLINE',
                       style: GoogleFonts.spaceGrotesk(
-                        color: widget.conversation.isOnline ? neonGreen : Colors.grey,
+                        color: widget.conversation.isOnline
+                            ? neonGreen
+                            : Colors.grey,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1,
@@ -458,7 +511,11 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.phone_outlined, color: Colors.white, size: 22),
+            icon: const Icon(
+              Icons.phone_outlined,
+              color: Colors.white,
+              size: 22,
+            ),
             onPressed: _showCallDialog,
           ),
           const SizedBox(width: 4),
@@ -475,7 +532,10 @@ class _ChatPageState extends State<ChatPage> {
         height: 40,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: const Color(0xFF25F46A).withValues(alpha: 0.2), width: 1),
+          border: Border.all(
+            color: const Color(0xFF25F46A).withValues(alpha: 0.2),
+            width: 1,
+          ),
           image: DecorationImage(
             image: NetworkImage(c.avatarUrl),
             fit: BoxFit.cover,
@@ -493,7 +553,10 @@ class _ChatPageState extends State<ChatPage> {
         decoration: BoxDecoration(
           color: Colors.grey[900],
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+          border: Border.all(
+            color: Colors.white.withValues(alpha: 0.1),
+            width: 1,
+          ),
         ),
         child: Icon(icon, color: Colors.grey[400], size: 18),
       );
@@ -504,7 +567,9 @@ class _ChatPageState extends State<ChatPage> {
     return Align(
       alignment: message.isMe ? Alignment.centerRight : Alignment.centerLeft,
       child: Column(
-        crossAxisAlignment: message.isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: message.isMe
+            ? CrossAxisAlignment.end
+            : CrossAxisAlignment.start,
         children: [
           Container(
             margin: const EdgeInsets.only(bottom: 4),
@@ -512,16 +577,22 @@ class _ChatPageState extends State<ChatPage> {
               horizontal: message.imageUrl != null ? 8 : 16,
               vertical: message.imageUrl != null ? 8 : 12,
             ),
-            constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.75),
+            constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.75,
+            ),
             decoration: BoxDecoration(
-              color: message.isMe ? const Color(0xFF1A1A1A) : neonGreen.withValues(alpha: 0.1),
+              color: message.isMe
+                  ? const Color(0xFF1A1A1A)
+                  : neonGreen.withValues(alpha: 0.1),
               borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(20),
                 topRight: const Radius.circular(20),
                 bottomLeft: Radius.circular(message.isMe ? 20 : 4),
                 bottomRight: Radius.circular(message.isMe ? 4 : 20),
               ),
-              border: message.isMe ? null : Border.all(color: neonGreen.withValues(alpha: 0.3)),
+              border: message.isMe
+                  ? null
+                  : Border.all(color: neonGreen.withValues(alpha: 0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -541,7 +612,10 @@ class _ChatPageState extends State<ChatPage> {
                                   height: 150,
                                   width: double.infinity,
                                   color: Colors.grey[900],
-                                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               )
                             : Image.file(
@@ -551,7 +625,10 @@ class _ChatPageState extends State<ChatPage> {
                                   height: 150,
                                   width: double.infinity,
                                   color: Colors.grey[900],
-                                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                       ),
@@ -589,7 +666,9 @@ class _ChatPageState extends State<ChatPage> {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 28),
       decoration: BoxDecoration(
         color: Colors.black,
-        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
+        border: Border(
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+        ),
       ),
       child: Row(
         children: [
@@ -618,10 +697,16 @@ class _ChatPageState extends State<ChatPage> {
               ),
               child: TextField(
                 controller: _messageController,
-                style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 14),
+                style: GoogleFonts.spaceGrotesk(
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
                 decoration: InputDecoration(
                   hintText: 'Type a message...',
-                  hintStyle: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 14),
+                  hintStyle: GoogleFonts.spaceGrotesk(
+                    color: Colors.grey[600],
+                    fontSize: 14,
+                  ),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
@@ -646,7 +731,11 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 ],
               ),
-              child: const Icon(Icons.arrow_forward, color: Colors.black, size: 24),
+              child: const Icon(
+                Icons.arrow_forward,
+                color: Colors.black,
+                size: 24,
+              ),
             ),
           ),
         ],

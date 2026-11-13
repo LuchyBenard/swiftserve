@@ -8,7 +8,8 @@ class FavoritesService {
   FavoritesService._internal();
 
   static const String _storageKey = 'swiftserve_favorite_providers';
-  final ValueNotifier<Set<String>> favoritesNotifier = ValueNotifier<Set<String>>({});
+  final ValueNotifier<Set<String>> favoritesNotifier =
+      ValueNotifier<Set<String>>({});
   bool _initialized = false;
 
   Future<void> init() async {

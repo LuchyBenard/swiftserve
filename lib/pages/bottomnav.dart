@@ -58,17 +58,11 @@ class _BottomNavPageState extends State<BottomNavPage> {
           // Main Content
           SafeArea(
             bottom: false,
-            child: IndexedStack(
-              index: _currentIndex,
-              children: _pages,
-            ),
+            child: IndexedStack(index: _currentIndex, children: _pages),
           ),
 
           // Floating Bottom Navigation
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _buildBottomNavBar(),
-          ),
+          Align(alignment: Alignment.bottomCenter, child: _buildBottomNavBar()),
         ],
       ),
     );
@@ -105,7 +99,9 @@ class _BottomNavPageState extends State<BottomNavPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const CreateRequestFlow()),
+                      MaterialPageRoute(
+                        builder: (context) => const CreateRequestFlow(),
+                      ),
                     );
                   },
                   child: SizedBox(
@@ -127,15 +123,24 @@ class _BottomNavPageState extends State<BottomNavPage> {
                               ),
                             ],
                           ),
-                          child: const Icon(Icons.bolt, color: Colors.black, size: 30),
+                          child: const Icon(
+                            Icons.bolt,
+                            color: Colors.black,
+                            size: 30,
+                          ),
                         ),
                         const SizedBox(height: 4),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
                           decoration: BoxDecoration(
                             color: const Color.fromRGBO(0, 0, 0, 0.8),
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+                            border: Border.all(
+                              color: const Color.fromRGBO(255, 255, 255, 0.1),
+                            ),
                           ),
                           child: Text(
                             'REQUEST',
@@ -145,7 +150,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -182,15 +187,15 @@ class _BottomNavPageState extends State<BottomNavPage> {
                   top: -4,
                   right: -8,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 1,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFF25F46A),
                       borderRadius: BorderRadius.circular(10),
                       boxShadow: const [
-                        BoxShadow(
-                          color: Color(0xFF25F46A),
-                          blurRadius: 6,
-                        ),
+                        BoxShadow(color: Color(0xFF25F46A), blurRadius: 6),
                       ],
                     ),
                     child: Text(

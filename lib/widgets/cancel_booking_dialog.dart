@@ -75,7 +75,11 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
                     color: dangerRed.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.cancel_outlined, color: dangerRed, size: 24),
+                  child: const Icon(
+                    Icons.cancel_outlined,
+                    color: dangerRed,
+                    size: 24,
+                  ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
@@ -92,7 +96,10 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
                       ),
                       Text(
                         '${widget.providerName} • ${widget.serviceType}',
-                        style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontSize: 12),
+                        style: GoogleFonts.spaceGrotesk(
+                          color: Colors.grey[400],
+                          fontSize: 12,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -105,7 +112,11 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
 
             Text(
               'Please select a reason for canceling:',
-              style: GoogleFonts.spaceGrotesk(color: Colors.grey[300], fontSize: 13, fontWeight: FontWeight.w600),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.grey[300],
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+              ),
             ),
             const SizedBox(height: 12),
 
@@ -117,18 +128,27 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
                   onTap: () => setState(() => _selectedReason = reason),
                   child: Container(
                     margin: const EdgeInsets.only(bottom: 8),
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 10,
+                    ),
                     decoration: BoxDecoration(
-                      color: isSelected ? const Color(0xFF221515) : const Color(0xFF181818),
+                      color: isSelected
+                          ? const Color(0xFF221515)
+                          : const Color(0xFF181818),
                       borderRadius: BorderRadius.circular(14),
                       border: Border.all(
-                        color: isSelected ? dangerRed.withValues(alpha: 0.6) : Colors.white10,
+                        color: isSelected
+                            ? dangerRed.withValues(alpha: 0.6)
+                            : Colors.white10,
                       ),
                     ),
                     child: Row(
                       children: [
                         Icon(
-                          isSelected ? Icons.radio_button_checked : Icons.radio_button_off,
+                          isSelected
+                              ? Icons.radio_button_checked
+                              : Icons.radio_button_off,
                           color: isSelected ? dangerRed : Colors.grey[600],
                           size: 18,
                         ),
@@ -137,9 +157,13 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
                           child: Text(
                             reason,
                             style: GoogleFonts.spaceGrotesk(
-                              color: isSelected ? Colors.white : Colors.grey[400],
+                              color: isSelected
+                                  ? Colors.white
+                                  : Colors.grey[400],
                               fontSize: 13,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.normal,
                             ),
                           ),
                         ),
@@ -155,10 +179,16 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
             TextField(
               controller: _notesController,
               maxLines: 2,
-              style: GoogleFonts.spaceGrotesk(color: Colors.white, fontSize: 13),
+              style: GoogleFonts.spaceGrotesk(
+                color: Colors.white,
+                fontSize: 13,
+              ),
               decoration: InputDecoration(
                 hintText: 'Additional details (optional)...',
-                hintStyle: GoogleFonts.spaceGrotesk(color: Colors.grey[600], fontSize: 12),
+                hintStyle: GoogleFonts.spaceGrotesk(
+                  color: Colors.grey[600],
+                  fontSize: 12,
+                ),
                 filled: true,
                 fillColor: const Color(0xFF181818),
                 contentPadding: const EdgeInsets.all(12),
@@ -192,7 +222,10 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
                   Expanded(
                     child: Text(
                       'Your booking will be released and payment refunded per cancellation terms.',
-                      style: GoogleFonts.spaceGrotesk(color: Colors.grey[500], fontSize: 11),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: Colors.grey[500],
+                        fontSize: 11,
+                      ),
                     ),
                   ),
                 ],
@@ -211,7 +244,10 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
                     ),
                     child: Text(
                       'Keep Booking',
-                      style: GoogleFonts.spaceGrotesk(color: Colors.grey[400], fontWeight: FontWeight.bold),
+                      style: GoogleFonts.spaceGrotesk(
+                        color: Colors.grey[400],
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -220,18 +256,24 @@ class _CancelBookingDialogState extends State<CancelBookingDialog> {
                   child: ElevatedButton(
                     onPressed: () {
                       final notes = _notesController.text.trim();
-                      final fullReason = notes.isNotEmpty ? '$_selectedReason ($notes)' : _selectedReason;
+                      final fullReason = notes.isNotEmpty
+                          ? '$_selectedReason ($notes)'
+                          : _selectedReason;
                       Navigator.pop(context, fullReason);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: dangerRed,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
                     ),
                     child: Text(
                       'Cancel Booking',
-                      style: GoogleFonts.spaceGrotesk(fontWeight: FontWeight.bold),
+                      style: GoogleFonts.spaceGrotesk(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),

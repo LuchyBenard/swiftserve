@@ -14,10 +14,13 @@ class ChatService {
   factory ChatService() => _instance;
   ChatService._internal();
 
-  final ValueNotifier<List<Conversation>> conversationsNotifier = ValueNotifier<List<Conversation>>([]);
+  final ValueNotifier<List<Conversation>> conversationsNotifier =
+      ValueNotifier<List<Conversation>>([]);
   final ValueNotifier<int> unreadCountNotifier = ValueNotifier<int>(0);
-  final ValueNotifier<Map<String, bool>> typingStatusNotifier = ValueNotifier<Map<String, bool>>({});
-  final Map<String, ValueNotifier<List<Message>>> _conversationMessagesNotifiers = {};
+  final ValueNotifier<Map<String, bool>> typingStatusNotifier =
+      ValueNotifier<Map<String, bool>>({});
+  final Map<String, ValueNotifier<List<Message>>>
+  _conversationMessagesNotifiers = {};
   final Set<String> _listeningConversations = {};
 
   // Lazily resolved so the service can be constructed before Firebase is ready
@@ -25,7 +28,8 @@ class ChatService {
   FirebaseFirestore? _firestoreInstance;
   FirebaseAuth? _authInstance;
 
-  FirebaseFirestore get _firestore => _firestoreInstance ??= FirebaseFirestore.instance;
+  FirebaseFirestore get _firestore =>
+      _firestoreInstance ??= FirebaseFirestore.instance;
   FirebaseAuth get _auth => _authInstance ??= FirebaseAuth.instance;
 
   bool _initialized = false;
@@ -73,7 +77,9 @@ class ChatService {
           participantImages: const ['', ''],
           lastMessage: 'I am on my way!',
           time: 'Now',
-          lastMessageTime: Timestamp.fromDate(now.subtract(const Duration(minutes: 2))),
+          lastMessageTime: Timestamp.fromDate(
+            now.subtract(const Duration(minutes: 2)),
+          ),
           createdAt: Timestamp.fromDate(now.subtract(const Duration(days: 1))),
         ),
         Conversation(
@@ -86,7 +92,9 @@ class ChatService {
           participantImages: const ['', ''],
           lastMessage: 'See you at 10 AM.',
           time: '10:00 AM',
-          lastMessageTime: Timestamp.fromDate(now.subtract(const Duration(hours: 3))),
+          lastMessageTime: Timestamp.fromDate(
+            now.subtract(const Duration(hours: 3)),
+          ),
           createdAt: Timestamp.fromDate(now.subtract(const Duration(days: 3))),
         ),
       ]);
@@ -138,8 +146,9 @@ class ChatService {
   void _notifyLocalMessages(String conversationId) {
     final notifier = _conversationMessagesNotifiers[conversationId];
     if (notifier == null) return;
-    final messages = List<Message>.from(_localMessages[conversationId] ?? const [])
-      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    final messages = List<Message>.from(
+      _localMessages[conversationId] ?? const [],
+    )..sort((a, b) => a.timestamp.compareTo(b.timestamp));
     notifier.value = messages;
   }
 
@@ -269,7 +278,9 @@ class ChatService {
       );
       _localMessages.putIfAbsent(conversationId, () => []).add(message);
 
-      final index = _localConversations.indexWhere((c) => c.id == conversationId);
+      final index = _localConversations.indexWhere(
+        (c) => c.id == conversationId,
+      );
       if (index != -1) {
         _localConversations[index] = _localConversations[index].copyWith(
           lastMessage: text.isNotEmpty ? text : '📷 Shared a photo',
@@ -292,12 +303,12 @@ class ChatService {
         .doc(conversationId)
         .collection('messages')
         .add({
-      'senderId': userId,
-      'text': text,
-      'imageUrl': imageUrl,
-      'timestamp': FieldValue.serverTimestamp(),
-      'isMe': true,
-    });
+          'senderId': userId,
+          'text': text,
+          'imageUrl': imageUrl,
+          'timestamp': FieldValue.serverTimestamp(),
+          'isMe': true,
+        });
 
     // Update conversation last message
     await _firestore.collection('conversations').doc(conversationId).update({
@@ -313,7 +324,11 @@ class ChatService {
     return Message.fromFirestore(doc);
   }
 
-  void _scheduleProviderReply(String conversationId, String userText, String? imageUrl) {
+  void _scheduleProviderReply(
+    String conversationId,
+    String userText,
+    String? imageUrl,
+  ) {
     // Show typing indicator after delay
     Timer(const Duration(milliseconds: 600), () {
       final currentTyping = Map<String, bool>.from(typingStatusNotifier.value);
@@ -334,11 +349,11 @@ class ChatService {
           .doc(conversationId)
           .collection('messages')
           .add({
-        'senderId': 'provider',
-        'text': replyText,
-        'timestamp': FieldValue.serverTimestamp(),
-        'isMe': false,
-      });
+            'senderId': 'provider',
+            'text': replyText,
+            'timestamp': FieldValue.serverTimestamp(),
+            'isMe': false,
+          });
 
       // Update conversation
       await _firestore.collection('conversations').doc(conversationId).update({
@@ -367,19 +382,37 @@ class ChatService {
     }
 
     final lower = input.toLowerCase();
-    if (lower.contains('where') || lower.contains('arrive') || lower.contains('time') || lower.contains('when') || lower.contains('soon')) {
+    if (lower.contains('where') ||
+        lower.contains('arrive') ||
+        lower.contains('time') ||
+        lower.contains('when') ||
+        lower.contains('soon')) {
       return "I'm finishing up my previous slot nearby and will be with you in about 10-15 minutes!";
     }
-    if (lower.contains('price') || lower.contains('cost') || lower.contains('charge') || lower.contains('how much') || lower.contains('cash') || lower.contains('transfer')) {
+    if (lower.contains('price') ||
+        lower.contains('cost') ||
+        lower.contains('charge') ||
+        lower.contains('how much') ||
+        lower.contains('cash') ||
+        lower.contains('transfer')) {
       return "My pricing is completely transparent as listed on my SwiftServe profile. Cash or in-app transfer both work great!";
     }
-    if (lower.contains('hello') || lower.contains('hi') || lower.contains('hey')) {
+    if (lower.contains('hello') ||
+        lower.contains('hi') ||
+        lower.contains('hey')) {
       return "Hello! Thanks for reaching out. Please let me know any specific instructions for the location.";
     }
-    if (lower.contains('leak') || lower.contains('pipe') || lower.contains('water') || lower.contains('broken') || lower.contains('fix')) {
+    if (lower.contains('leak') ||
+        lower.contains('pipe') ||
+        lower.contains('water') ||
+        lower.contains('broken') ||
+        lower.contains('fix')) {
       return "Understood. Please keep the water main valve shut if possible, I'll attend to it immediately upon arrival.";
     }
-    if (lower.contains('thank') || lower.contains('ok') || lower.contains('alright') || lower.contains('cool')) {
+    if (lower.contains('thank') ||
+        lower.contains('ok') ||
+        lower.contains('alright') ||
+        lower.contains('cool')) {
       return "You're very welcome! See you shortly.";
     }
 
@@ -394,7 +427,10 @@ class ChatService {
       return null;
     }
 
-    final doc = await _firestore.collection('conversations').doc(conversationId).get();
+    final doc = await _firestore
+        .collection('conversations')
+        .doc(conversationId)
+        .get();
     if (doc.exists) {
       return Conversation.fromFirestore(doc);
     }
@@ -402,7 +438,9 @@ class ChatService {
   }
 
   // Get or create conversation for provider
-  Future<Conversation> getOrCreateConversationForProvider(Provider provider) async {
+  Future<Conversation> getOrCreateConversationForProvider(
+    Provider provider,
+  ) async {
     if (_localMode) {
       for (final conversation in _localConversations) {
         if (conversation.participants.contains(provider.id)) {
@@ -429,7 +467,8 @@ class ChatService {
         Message(
           id: 'local_welcome_${provider.id}',
           senderId: 'provider',
-          text: 'Hello! Thanks for viewing my profile. Feel free to ask any questions about my services or availability.',
+          text:
+              'Hello! Thanks for viewing my profile. Feel free to ask any questions about my services or availability.',
           timestamp: DateTime.now(),
           isMe: false,
         ),
@@ -455,10 +494,7 @@ class ChatService {
     // Create new conversation
     final convRef = await _firestore.collection('conversations').add({
       'participants': [userId, provider.id],
-      'participantNames': [
-        userId.split('@').first,
-        provider.name,
-      ],
+      'participantNames': [userId.split('@').first, provider.name],
       'participantImages': ['', provider.imageUrl],
       'lastMessage': "Hello! Let me know how I can help with your service.",
       'lastMessageTime': FieldValue.serverTimestamp(),
@@ -468,27 +504,32 @@ class ChatService {
 
     final doc = await convRef.get();
     final conv = Conversation.fromFirestore(doc);
-    
+
     // Seed initial message
     await _firestore
         .collection('conversations')
         .doc(conv.id)
         .collection('messages')
         .add({
-      'senderId': 'provider',
-      'text': "Hello! Thanks for viewing my profile. Feel free to ask any questions about my services or availability.",
-      'timestamp': FieldValue.serverTimestamp(),
-      'isMe': false,
-    });
+          'senderId': 'provider',
+          'text':
+              "Hello! Thanks for viewing my profile. Feel free to ask any questions about my services or availability.",
+          'timestamp': FieldValue.serverTimestamp(),
+          'isMe': false,
+        });
 
     return conv;
   }
 
   Future<void> markAsRead(String conversationId) async {
     if (_localMode) {
-      final index = _localConversations.indexWhere((c) => c.id == conversationId);
+      final index = _localConversations.indexWhere(
+        (c) => c.id == conversationId,
+      );
       if (index != -1) {
-        _localConversations[index] = _localConversations[index].copyWith(isUnread: false);
+        _localConversations[index] = _localConversations[index].copyWith(
+          isUnread: false,
+        );
         _refreshLocalConversations();
       }
       return;
@@ -516,17 +557,18 @@ class ChatService {
         .collection('messages')
         .get()
         .then((snapshot) {
-      for (var doc in snapshot.docs) {
-        doc.reference.delete();
-      }
-    });
+          for (var doc in snapshot.docs) {
+            doc.reference.delete();
+          }
+        });
   }
 
   // Message methods
   Stream<List<Message>> messagesStream(String conversationId) {
     if (_localMode) {
-      final messages = List<Message>.from(_localMessages[conversationId] ?? const [])
-        ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+      final messages = List<Message>.from(
+        _localMessages[conversationId] ?? const [],
+      )..sort((a, b) => a.timestamp.compareTo(b.timestamp));
       return Stream<List<Message>>.value(messages);
     }
 
@@ -546,8 +588,9 @@ class ChatService {
     );
 
     if (_localMode) {
-      notifier.value = List<Message>.from(_localMessages[conversationId] ?? const [])
-        ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+      notifier.value = List<Message>.from(
+        _localMessages[conversationId] ?? const [],
+      )..sort((a, b) => a.timestamp.compareTo(b.timestamp));
       return notifier;
     }
 
@@ -581,12 +624,12 @@ class ChatService {
         .doc(conversationId)
         .collection('messages')
         .add({
-      'senderId': userId,
-      'text': text,
-      'imageUrl': imageUrl,
-      'timestamp': FieldValue.serverTimestamp(),
-      'isMe': true,
-    });
+          'senderId': userId,
+          'text': text,
+          'imageUrl': imageUrl,
+          'timestamp': FieldValue.serverTimestamp(),
+          'isMe': true,
+        });
 
     final doc = await messageRef.get();
     return Message.fromFirestore(doc);

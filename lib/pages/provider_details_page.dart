@@ -28,7 +28,12 @@ class ProviderDetailsPage extends StatelessWidget {
                 return const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.black, Colors.transparent, Colors.transparent, Colors.black],
+                  colors: [
+                    Colors.black,
+                    Colors.transparent,
+                    Colors.transparent,
+                    Colors.black,
+                  ],
                   stops: [0.0, 0.2, 0.6, 1.0],
                 ).createShader(rect);
               },
@@ -43,11 +48,18 @@ class ProviderDetailsPage extends StatelessWidget {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.broken_image, color: Colors.grey[700], size: 48),
+                          Icon(
+                            Icons.broken_image,
+                            color: Colors.grey[700],
+                            size: 48,
+                          ),
                           const SizedBox(height: 12),
                           Text(
                             "Image unavailable",
-                            style: GoogleFonts.spaceGrotesk(color: Colors.grey[700], fontSize: 12),
+                            style: GoogleFonts.spaceGrotesk(
+                              color: Colors.grey[700],
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -57,14 +69,17 @@ class ProviderDetailsPage extends StatelessWidget {
               ),
             ),
           ),
-          
+
           // Content
           CustomScrollView(
             slivers: [
               SliverAppBar(
                 backgroundColor: Colors.transparent,
                 leading: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new,
+                    color: Colors.white,
+                  ),
                   onPressed: () => Navigator.pop(context),
                 ),
                 actions: [
@@ -78,7 +93,9 @@ class ProviderDetailsPage extends StatelessWidget {
                           color: isFav ? Colors.redAccent : Colors.white,
                         ),
                         onPressed: () async {
-                          final added = await FavoritesService().toggleFavorite(provider.id);
+                          final added = await FavoritesService().toggleFavorite(
+                            provider.id,
+                          );
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -143,14 +160,21 @@ class ProviderDetailsPage extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color.fromRGBO(255, 255, 255, 0.1),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
                               children: [
-                                const Icon(Icons.star, color: Color(0xFF25F46A), size: 24),
+                                const Icon(
+                                  Icons.star,
+                                  color: Color(0xFF25F46A),
+                                  size: 24,
+                                ),
                                 Text(
                                   '${provider.rating}',
                                   style: GoogleFonts.spaceGrotesk(
@@ -169,7 +193,10 @@ class ProviderDetailsPage extends StatelessWidget {
                                 if (provider.isVerified) ...[
                                   const SizedBox(width: 8),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 6,
+                                      vertical: 2,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.green,
                                       borderRadius: BorderRadius.circular(8),
@@ -224,11 +251,16 @@ class ProviderDetailsPage extends StatelessWidget {
                         runSpacing: 12,
                         children: provider.services.map((service) {
                           return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 10,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color.fromRGBO(255, 255, 255, 0.05),
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: const Color.fromRGBO(255, 255, 255, 0.1)),
+                              border: Border.all(
+                                color: const Color.fromRGBO(255, 255, 255, 0.1),
+                              ),
                             ),
                             child: Text(
                               service,
@@ -247,7 +279,7 @@ class ProviderDetailsPage extends StatelessWidget {
               ),
             ],
           ),
-          
+
           // Action Buttons: Direct Message & Book Now
           Positioned(
             bottom: 32,
@@ -281,7 +313,8 @@ class ProviderDetailsPage extends StatelessWidget {
                     ),
                     tooltip: 'Message Provider',
                     onPressed: () async {
-                      final conv = await ChatService().getOrCreateConversationForProvider(provider);
+                      final conv = await ChatService()
+                          .getOrCreateConversationForProvider(provider);
                       if (context.mounted) {
                         Navigator.push(
                           context,
@@ -301,7 +334,8 @@ class ProviderDetailsPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CreateRequestFlow(provider: provider),
+                          builder: (context) =>
+                              CreateRequestFlow(provider: provider),
                         ),
                       );
                     },
@@ -312,7 +346,9 @@ class ProviderDetailsPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(32),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF25F46A).withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFF25F46A,
+                            ).withValues(alpha: 0.4),
                             blurRadius: 20,
                             offset: const Offset(0, 5),
                           ),
@@ -330,7 +366,10 @@ class ProviderDetailsPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          const Icon(Icons.arrow_forward_rounded, color: Colors.black),
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            color: Colors.black,
+                          ),
                         ],
                       ),
                     ),

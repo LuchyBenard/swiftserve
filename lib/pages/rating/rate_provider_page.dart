@@ -12,7 +12,8 @@ class RateProviderPage extends StatefulWidget {
     super.key,
     this.providerName = 'Marcus Vane',
     this.providerRole = 'Master Barber',
-    this.providerImageUrl = 'https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b',
+    this.providerImageUrl =
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuCqaZ7wk8boFIodQC_72x7gFRiF-KA6YLJuS5oG787ow5E6cLDav6l_BvN9b8MFowza2zKonigLZuY4910ShpjHQLW9A7Fj_7k6AMzI0JNMBa1EOrExgnZr_W-t9OZWd02hW3qIm5zf3KHs_Opa9s_8_0MeRGhiLbBxE2owIqQY84oOJOEsTnjK3hkyVvq9ZcrEhEgDCgilg-b8o7f2kH-IhMntmDQcIhOIU54NJFLtCj-XVoZVmtQoEdxEm2dI5zYAJ18MQ_JQ2d6b',
     this.serviceDescription = 'Platinum Cut & Style',
   });
 
@@ -29,7 +30,11 @@ class _RateProviderPageState extends State<RateProviderPage> {
     'Clean Setup',
     'Great Value',
   ];
-  final Set<String> _selectedFeedback = {'Punctual', 'Professional', 'Great Value'};
+  final Set<String> _selectedFeedback = {
+    'Punctual',
+    'Professional',
+    'Great Value',
+  };
   final TextEditingController _reviewController = TextEditingController();
 
   @override
@@ -123,7 +128,11 @@ class _RateProviderPageState extends State<RateProviderPage> {
                 shape: BoxShape.circle,
                 border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
               ),
-              child: const Icon(Icons.chevron_left, color: Colors.white, size: 24),
+              child: const Icon(
+                Icons.chevron_left,
+                color: Colors.white,
+                size: 24,
+              ),
             ),
           ),
           Text(
@@ -182,7 +191,10 @@ class _RateProviderPageState extends State<RateProviderPage> {
             Positioned(
               bottom: -5,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: neonGreen,
                   borderRadius: BorderRadius.circular(20),
@@ -213,10 +225,7 @@ class _RateProviderPageState extends State<RateProviderPage> {
         const SizedBox(height: 4),
         Text(
           'Service completed: ${widget.serviceDescription}',
-          style: TextStyle(
-            color: Colors.grey[500],
-            fontSize: 14,
-          ),
+          style: TextStyle(color: Colors.grey[500], fontSize: 14),
         ),
       ],
     );
@@ -240,7 +249,7 @@ class _RateProviderPageState extends State<RateProviderPage> {
           children: List.generate(5, (index) {
             final int starValue = index + 1;
             final bool isSelected = _currentRating >= starValue;
-            
+
             return GestureDetector(
               onTap: () => setState(() => _currentRating = starValue),
               child: Padding(
@@ -249,9 +258,14 @@ class _RateProviderPageState extends State<RateProviderPage> {
                   Icons.star,
                   size: 44,
                   color: isSelected ? neonGreen : Colors.grey[900],
-                  shadows: isSelected ? [
-                    Shadow(color: neonGreen.withValues(alpha: 0.8), blurRadius: 15),
-                  ] : null,
+                  shadows: isSelected
+                      ? [
+                          Shadow(
+                            color: neonGreen.withValues(alpha: 0.8),
+                            blurRadius: 15,
+                          ),
+                        ]
+                      : null,
                 ),
               ),
             );
@@ -279,7 +293,10 @@ class _RateProviderPageState extends State<RateProviderPage> {
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.03),
             borderRadius: BorderRadius.circular(24),
-            border: Border.all(color: neonGreen.withValues(alpha: 0.3), width: 1.5),
+            border: Border.all(
+              color: neonGreen.withValues(alpha: 0.3),
+              width: 1.5,
+            ),
             boxShadow: [
               BoxShadow(
                 color: neonGreen.withValues(alpha: 0.05),
@@ -293,7 +310,8 @@ class _RateProviderPageState extends State<RateProviderPage> {
             maxLines: 5,
             style: const TextStyle(color: Colors.white, fontSize: 14),
             decoration: InputDecoration(
-              hintText: 'Tell us about your experience with ${widget.providerName.split(' ')[0]}...',
+              hintText:
+                  'Tell us about your experience with ${widget.providerName.split(' ')[0]}...',
               hintStyle: TextStyle(color: Colors.grey[800]),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.all(20),
@@ -335,12 +353,19 @@ class _RateProviderPageState extends State<RateProviderPage> {
               },
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
-                  color: isSelected ? neonGreen.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
+                  color: isSelected
+                      ? neonGreen.withValues(alpha: 0.1)
+                      : Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(30),
                   border: Border.all(
-                    color: isSelected ? neonGreen.withValues(alpha: 0.5) : Colors.white.withValues(alpha: 0.1),
+                    color: isSelected
+                        ? neonGreen.withValues(alpha: 0.5)
+                        : Colors.white.withValues(alpha: 0.1),
                     width: isSelected ? 1.5 : 1,
                   ),
                 ),
@@ -405,14 +430,17 @@ class _RateProviderPageState extends State<RateProviderPage> {
       SnackBar(
         content: Text(
           'Review Submitted Successfully!',
-          style: GoogleFonts.spaceGrotesk(color: Colors.black, fontWeight: FontWeight.bold),
+          style: GoogleFonts.spaceGrotesk(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: neonGreen,
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
     );
-    
+
     final navigator = Navigator.of(context);
     Future.delayed(const Duration(seconds: 1), () {
       navigator.pop();

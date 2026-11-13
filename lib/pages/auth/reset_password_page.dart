@@ -11,7 +11,8 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isPasswordVisible = false;
   bool _isConfirmVisible = false;
@@ -69,7 +70,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           shape: BoxShape.circle,
                           color: Colors.white.withValues(alpha: 0.05),
                         ),
-                        child: const Icon(Icons.chevron_left, color: Colors.white),
+                        child: const Icon(
+                          Icons.chevron_left,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
 
@@ -104,13 +108,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       icon: Icons.lock_outline,
                       suffix: IconButton(
                         icon: Icon(
-                          _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: Colors.grey[500],
                         ),
-                        onPressed: () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                        onPressed: () => setState(
+                          () => _isPasswordVisible = !_isPasswordVisible,
+                        ),
                       ),
                       validator: (val) {
-                        if (val == null || val.length < 8) return "Min 8 characters required";
+                        if (val == null || val.length < 8) {
+                          return "Min 8 characters required";
+                        }
                         return null;
                       },
                     ),
@@ -126,13 +136,19 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       icon: Icons.lock_reset,
                       suffix: IconButton(
                         icon: Icon(
-                          _isConfirmVisible ? Icons.visibility : Icons.visibility_off,
+                          _isConfirmVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                           color: Colors.grey[500],
                         ),
-                        onPressed: () => setState(() => _isConfirmVisible = !_isConfirmVisible),
+                        onPressed: () => setState(
+                          () => _isConfirmVisible = !_isConfirmVisible,
+                        ),
                       ),
                       validator: (val) {
-                        if (val != _passwordController.text) return "Passwords do not match";
+                        if (val != _passwordController.text) {
+                          return "Passwords do not match";
+                        }
                         return null;
                       },
                     ),
@@ -162,7 +178,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primaryGreen,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                           elevation: 0,
                         ),
                         child: Text(
@@ -226,7 +244,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               hintText: hint,
               hintStyle: TextStyle(color: Colors.grey[700]),
               border: InputBorder.none,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 16,
+              ),
             ),
           ),
         ),
@@ -258,7 +279,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   shape: BoxShape.circle,
                   border: Border.all(color: const Color(0xFF25F46A), width: 2),
                 ),
-                child: const Icon(Icons.check, color: Color(0xFF25F46A), size: 40),
+                child: const Icon(
+                  Icons.check,
+                  color: Color(0xFF25F46A),
+                  size: 40,
+                ),
               ),
               const SizedBox(height: 24),
               Text(
@@ -289,7 +314,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF25F46A),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: Text(
                     "BACK TO LOGIN",

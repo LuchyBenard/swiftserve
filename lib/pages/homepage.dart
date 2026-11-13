@@ -12,6 +12,7 @@ import 'profile_page.dart';
 import 'saved_providers_page.dart';
 import 'notification_center_page.dart';
 import '../services/notification_service.dart';
+import '../services/provider_service.dart';
 
 const Color _kGreen = Color(0xFF25F46A);
 
@@ -34,86 +35,17 @@ class _HomePageState extends State<HomePage> {
     FavoritesService().init();
     AddressService().init();
     NotificationService().init();
+    _providers = ProviderService().featuredProviders();
+    _loadFeaturedProviders();
   }
 
-  // Mock data
-  final List<Provider> _providers = [
-    Provider(
-      id: '1',
-      name: 'John D.',
-      role: 'Master Barber',
-      rating: 4.9,
-      reviewsCount: 128,
-      distance: '0.5 mi',
-      priceStart: 40,
-      imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAQY-wJQBD18t4GYQjf_DFHRKKTDMbwPTEdf3y0G3_pnsISu96W29vq7mSX_7ZURbByCaRcP_rwjXjYO-jZ39d-I7PFbj8H7q9lk0z6UDFMsHpTKJPX0LUYEk6HZQPzr9xvCAnMpI8GxGKxTjSZNMYqcmy1Eh5VNKh3loa7SWv2WqNT7MEFGNFATRVabclMw7Qq5uPMRZcpobPAT3CZrA8ovg5y72uAKbEJ2BZxTDmO-i1v2g7Aq-imn2ikZzb3sMuRdbeEL2aXU0qS',
-      about:
-      'Experienced barber with over 10 years of experience. Specializing in fading and beard trims. I provide a premium service with hot towel shave and facial massage.',
-      services: ['Haircut', 'Beard Trim', 'Hot Towel Shave', 'Facial'],
-    ),
-    Provider(
-      id: '2',
-      name: 'TechFix Mobile',
-      role: 'Technician',
-      rating: 5.0,
-      reviewsCount: 85,
-      distance: '1.2 mi',
-      priceStart: 85,
-      imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCFQ7PW4mJq0pCsms1S5jz6jktvhtIvJQ9pCJONsOidljGYa7n-oOe3IfKlHfO8bAO2UdEGUQFcIaTidjxESclQcNwqAVjyIKdxjfQkF5l0qxfkG5_GnqCv55JJpxEb5piWICYx5fyA3b8zNi6xi5Sn8JYfwGGQEgmJW_hQWFG2K685urWWLtHgOjZkVBxQ9xxK4TOrOfOo619efYpLS_RSNTrKfwdGF9_rsCbFrv3wy1fv9nPbKlWmBLHpJsNhKJmqCGzElH2jR2uT',
-      about:
-      'Certified mobile technician. We come to you! Specializing in iPhone and Samsung repairs. Fast, reliable, and affordable.',
-      services: [
-        'Screen Repair',
-        'Battery Replacement',
-        'Water Damage',
-        'Diagnostic',
-      ],
-    ),
-    Provider(
-      id: '3',
-      name: 'Sarah M.',
-      role: 'Professional Stylist',
-      rating: 4.8,
-      reviewsCount: 92,
-      distance: '2.1 mi',
-      priceStart: 60,
-      imageUrl:
-      'https://images.pexels.com/photos/1181681/pexels-photo-1181681.jpeg?auto=compress&cs=tinysrgb&w=400',
-      about:
-      'Expert hair stylist with a focus on modern cuts and color treatments.',
-      services: ['Hair Coloring', 'Modern Cuts', 'Styling', 'Treatment'],
-    ),
-    Provider(
-      id: '4',
-      name: 'Fix-It Mike',
-      role: 'Master Plumber',
-      rating: 4.7,
-      reviewsCount: 45,
-      distance: '1.8 mi',
-      priceStart: 50,
-      imageUrl:
-      'https://images.pexels.com/photos/327072/pexels-photo-327072.jpeg?auto=compress&cs=tinysrgb&w=400',
-      about:
-      'Emergency plumbing and general maintenance for homes and offices.',
-      services: ['Leak Repair', 'Installation', 'Drain Cleaning', 'Emergency'],
-    ),
-    Provider(
-      id: '5',
-      name: 'CleanPro Enugu',
-      role: 'Professional Cleaner',
-      rating: 5.0,
-      reviewsCount: 210,
-      distance: '0.3 mi',
-      priceStart: 30,
-      imageUrl:
-      'https://images.pexels.com/photos/3768910/pexels-photo-3768910.jpeg?auto=compress&cs=tinysrgb&w=400',
-      about:
-      'Premium cleaning services for residential and commercial properties.',
-      services: ['Deep Clean', 'Office Cleaning', 'Post-Construction', 'Daily Maid'],
-    ),
-  ];
+  late List<Provider> _providers;
+
+  Future<void> _loadFeaturedProviders() async {
+    final providers = await ProviderService().fetchFeatured();
+    if (!mounted) return;
+    setState(() => _providers = providers);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +140,11 @@ class _HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.location_on, color: _kGreen, size: 12),
+                          const Icon(
+                            Icons.location_on,
+                            color: _kGreen,
+                            size: 12,
+                          ),
                           const SizedBox(width: 4),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 160),
@@ -279,10 +215,7 @@ class _HomePageState extends State<HomePage> {
                                   color: _kGreen,
                                   shape: BoxShape.circle,
                                   boxShadow: [
-                                    BoxShadow(
-                                      color: _kGreen,
-                                      blurRadius: 4,
-                                    ),
+                                    BoxShadow(color: _kGreen, blurRadius: 4),
                                   ],
                                 ),
                               ),
@@ -450,15 +383,15 @@ class _HomePageState extends State<HomePage> {
                       border: isActive
                           ? null
                           : Border.all(
-                        color: Colors.white.withValues(alpha: 0.1),
-                      ),
+                              color: Colors.white.withValues(alpha: 0.1),
+                            ),
                       boxShadow: isActive
                           ? [
-                        BoxShadow(
-                          color: _kGreen.withValues(alpha: 0.4),
-                          blurRadius: 20,
-                        ),
-                      ]
+                              BoxShadow(
+                                color: _kGreen.withValues(alpha: 0.4),
+                                blurRadius: 20,
+                              ),
+                            ]
                           : null,
                     ),
                     child: Icon(
@@ -508,7 +441,7 @@ class _HomePageState extends State<HomePage> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                      const ProviderListPage(category: 'Services'),
+                          const ProviderListPage(category: 'Services'),
                     ),
                   );
                 },
@@ -525,7 +458,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(height: 20),
           ..._providers.map(
-                (provider) => Padding(
+            (provider) => Padding(
               padding: const EdgeInsets.only(bottom: 20),
               child: _buildProviderCard(provider),
             ),

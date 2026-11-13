@@ -166,13 +166,13 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                 children: [
                   _isDetectingGps
                       ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: _kGreen,
-                    ),
-                  )
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: _kGreen,
+                          ),
+                        )
                       : const Icon(Icons.my_location, color: _kGreen, size: 22),
                   const SizedBox(width: 14),
                   Expanded(
@@ -256,8 +256,10 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                     style: const TextStyle(color: Colors.white, fontSize: 14),
                     decoration: InputDecoration(
                       hintText: "Label (e.g. Home, Studio, Mom's House)",
-                      hintStyle:
-                      TextStyle(color: Colors.grey[600], fontSize: 13),
+                      hintStyle: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                      ),
                       isDense: true,
                     ),
                   ),
@@ -267,8 +269,10 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                     style: const TextStyle(color: Colors.white, fontSize: 14),
                     decoration: InputDecoration(
                       hintText: 'Full Address & Landmark in Enugu',
-                      hintStyle:
-                      TextStyle(color: Colors.grey[600], fontSize: 13),
+                      hintStyle: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 13,
+                      ),
                       isDense: true,
                     ),
                   ),
@@ -436,7 +440,10 @@ class _AddressPickerSheetState extends State<AddressPickerSheet> {
                           ),
                           child: const Text(
                             'DEFAULT',
-                            style: TextStyle(color: Colors.white60, fontSize: 8),
+                            style: TextStyle(
+                              color: Colors.white60,
+                              fontSize: 8,
+                            ),
                           ),
                         ),
                       ],
