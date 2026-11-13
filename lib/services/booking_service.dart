@@ -32,6 +32,12 @@ class BookingService {
 
   bool get isLocalMode => _localMode;
 
+  /// Returns the signed-in uid, or null when Firebase is not configured.
+  String? get _currentUid {
+    if (Firebase.apps.isEmpty) return null;
+    return _auth.currentUser?.uid;
+  }
+
   Future<void> init() async {
     if (_initialized) return;
     if (Firebase.apps.isEmpty) {
@@ -133,14 +139,14 @@ class BookingService {
   /// Start listening to the signed-in client's bookings.
   Future<void> listenToClientBookings([String? clientId]) async {
     await init();
-    final ownerId = clientId ?? _auth.currentUser?.uid ?? 'me';
+    final ownerId = clientId ?? _currentUid ?? 'me';
     _setActive(ownerId, 'client');
   }
 
   /// Start listening to the signed-in provider's bookings.
   Future<void> listenToProviderBookings([String? providerId]) async {
     await init();
-    final ownerId = providerId ?? _auth.currentUser?.uid ?? 'me';
+    final ownerId = providerId ?? _currentUid ?? 'me';
     _setActive(ownerId, 'provider');
   }
 
@@ -187,7 +193,7 @@ class BookingService {
     String status = 'Pending',
   }) async {
     await init();
-    final clientId = _auth.currentUser?.uid ?? 'me';
+    final clientId = _currentUid ?? 'me';
 
     if (_localMode) {
       final booking = Booking(
@@ -276,6 +282,11 @@ class BookingService {
   List<Booking> get currentBookings {
     if (!_localMode) return bookingsNotifier.value;
     if (_activeOwnerId == null) return bookingsNotifier.value;
+    // The local seed uses placeholder provider ids, so show every seeded job
+    // to the provider demo instead of filtering to an empty list.
+    if (_activeRole == 'provider' && _activeOwnerId == 'me') {
+      return bookingsNotifier.value;
+    }
     final field = _activeRole == 'provider' ? 'providerId' : 'clientId';
     return bookingsNotifier.value.where((b) {
       final value = field == 'providerId' ? b.providerId : b.clientId;

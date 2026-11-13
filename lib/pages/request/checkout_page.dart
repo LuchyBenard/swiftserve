@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import '../../services/booking_service.dart';
+import '../../services/address_service.dart';
 import '../../services/payment_service.dart';
 import '../tracking/job_tracking_page.dart';
 
@@ -521,8 +523,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
       'card' => PaymentMethod.card,
       _ => PaymentMethod.cash,
     };
-    final email =
-        FirebaseAuth.instance.currentUser?.email ?? 'customer@swiftserve.app';
+    final email = Firebase.apps.isEmpty
+        ? 'customer@swiftserve.app'
+        : (FirebaseAuth.instance.currentUser?.email ??
+              'customer@swiftserve.app');
 
     final dateValue = widget.data['date'];
     final dateLabel = dateValue is DateTime
@@ -535,7 +539,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
       serviceType: widget.data['provider_role'] ?? 'Master Barber',
       date: dateLabel,
       time: widget.data['time'] ?? '10:30 AM',
-      location: widget.data['address'] ?? 'Service address',
+      location:
+          widget.data['address'] ??
+          AddressService().selectedAddressNotifier.value?.addressLine ??
+          'Service address',
       price: amount,
       imageUrl: widget.data['provider_image'] ?? '',
       providerId: widget.data['provider_id'] ?? '',

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,7 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
     setState(() => _imageFile = File(image.path));
 
-    final uid = FirebaseAuth.instance.currentUser?.uid ?? 'anonymous';
+    final uid = Firebase.apps.isEmpty
+        ? 'anonymous'
+        : (FirebaseAuth.instance.currentUser?.uid ?? 'anonymous');
     final url = await StorageService().uploadFile(
       File(image.path),
       folder: 'users/$uid/avatar',
@@ -106,7 +109,9 @@ class _ProfilePageState extends State<ProfilePage> {
       _isEditing = false;
     });
 
-    final user = FirebaseAuth.instance.currentUser;
+    final user = Firebase.apps.isEmpty
+        ? null
+        : FirebaseAuth.instance.currentUser;
     if (user != null) {
       try {
         await FirebaseFirestore.instance.collection('users').doc(user.uid).set({

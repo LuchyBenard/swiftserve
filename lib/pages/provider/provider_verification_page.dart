@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,7 +31,9 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
     if (image == null) return;
 
     setState(() => _uploadingId = true);
-    final uid = FirebaseAuth.instance.currentUser?.uid ?? 'anonymous';
+    final uid = Firebase.apps.isEmpty
+        ? 'anonymous'
+        : (FirebaseAuth.instance.currentUser?.uid ?? 'anonymous');
     final url = await StorageService().uploadFile(
       File(image.path),
       folder: 'verification/$uid',
@@ -43,7 +46,9 @@ class _ProviderVerificationPageState extends State<ProviderVerificationPage> {
   }
 
   Future<void> _completeVerification() async {
-    final user = FirebaseAuth.instance.currentUser;
+    final user = Firebase.apps.isEmpty
+        ? null
+        : FirebaseAuth.instance.currentUser;
     if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

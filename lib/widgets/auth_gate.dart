@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/bottomnav.dart';
@@ -12,6 +13,12 @@ class AuthGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Offline/demo mode: without Firebase there is no auth stream, so route
+    // straight to onboarding or the welcome screen.
+    if (Firebase.apps.isEmpty) {
+      return _buildLoggedOut();
+    }
+
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
@@ -54,27 +61,31 @@ class AuthGate extends StatelessWidget {
         }
 
         // User is NOT logged in - Check Onboarding
-        return FutureBuilder<bool>(
-          future: _checkOnboardingStatus(),
-          builder: (context, onboardingSnapshot) {
-            if (onboardingSnapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(
-                backgroundColor: Colors.black,
-                body: Center(
-                  child: CircularProgressIndicator(color: Color(0xFF25F46A)),
-                ),
-              );
-            }
+        return _buildLoggedOut();
+      },
+    );
+  }
 
-            final bool onboardingCompleted = onboardingSnapshot.data ?? false;
+  Widget _buildLoggedOut() {
+    return FutureBuilder<bool>(
+      future: _checkOnboardingStatus(),
+      builder: (context, onboardingSnapshot) {
+        if (onboardingSnapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            backgroundColor: Colors.black,
+            body: Center(
+              child: CircularProgressIndicator(color: Color(0xFF25F46A)),
+            ),
+          );
+        }
 
-            if (onboardingCompleted) {
-              return const WelcomePage();
-            } else {
-              return const OnboardingPage();
-            }
-          },
-        );
+        final bool onboardingCompleted = onboardingSnapshot.data ?? false;
+
+        if (onboardingCompleted) {
+          return const WelcomePage();
+        } else {
+          return const OnboardingPage();
+        }
       },
     );
   }
