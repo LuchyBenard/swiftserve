@@ -54,36 +54,34 @@ class _ProviderBottomNavState extends State<ProviderBottomNav> {
                 _buildNavItem(3, Icons.settings_outlined, "Settings"),
               ],
             ),
-            // Floating Action Button
+            // Floating Action Button — jumps to the availability tab so the
+            // provider can go online/offline quickly.
             Positioned(
               top: 0,
               child: GestureDetector(
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Create New Service Request (Mock UI Coming Soon!)",
-                      ),
-                      backgroundColor: Color(0xFF142216),
-                      behavior: SnackBarBehavior.floating,
+                onTap: () => setState(() => _selectedIndex = 3),
+                child: Tooltip(
+                  message: 'Manage availability',
+                  child: Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: primaryGreen,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: primaryGreen.withValues(alpha: 0.4),
+                          blurRadius: 15,
+                          spreadRadius: 2,
+                        ),
+                      ],
                     ),
-                  );
-                },
-                child: Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: primaryGreen,
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: primaryGreen.withValues(alpha: 0.4),
-                        blurRadius: 15,
-                        spreadRadius: 2,
-                      ),
-                    ],
+                    child: const Icon(
+                      Icons.toggle_on,
+                      color: Colors.black,
+                      size: 32,
+                    ),
                   ),
-                  child: const Icon(Icons.add, color: Colors.black, size: 28),
                 ),
               ),
             ),

@@ -214,7 +214,6 @@ swiftserve/
 │   │   ├── rating/                 # Review & rating submission
 │   │   ├── request/                # Multi-step service request & checkout flow
 │   │   ├── tracking/               # Job status tracking
-│   │   ├── booking_page.dart       # Bookings list page
 │   │   ├── bottomnav.dart          # Client bottom navigation shell
 │   │   ├── chat_inbox_page.dart    # Recent conversations inbox
 │   │   ├── chat_page.dart          # Direct message chat room
