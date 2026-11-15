@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Sign Up button pressed');
     return SingleChildScrollView(
       padding: const EdgeInsets.only(bottom: 120),
       child: Column(
